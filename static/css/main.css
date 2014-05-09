@@ -1,0 +1,29 @@
+body {
+    min-width: 400px;
+    margin: 25px 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 300px;
+    }
+}
+@media (min-width: 601px) {
+    .container {
+        width: 800px;
+    }
+}
+
+.nav {
+    margin: 10px;
+}
+
+a, a:hover, a:visited {
+    color: black;
+}
+
+.footer {
+    margin-top: 5px;
+}

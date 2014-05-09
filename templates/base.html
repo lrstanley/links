@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Links.ml -- URL Shortener">
+    <meta name="author" content="Liam Stanley">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+
+    <title>Links.ml &middot; {% block title %}{% endblock title %}</title>
+    <link href="/static/css/yeti.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/main.css" rel="stylesheet">
+
+    <!-- Fontawesome Icons -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    {% block head %}{% endblock head %}
+  </head>
+
+  <body>
+    {% block page %}
+    <div class="container">
+      {% block content %}{% endblock content %}
+      <div class="footer">
+        <p>
+          <span class="label label-success">&copy; Links.ml 2014</span>
+          <span class="label label-info">1234 page views</span>
+          <span class="label label-warning">2345 links shortened</span>
+        </p>
+      </div>
+    </div> <!-- /container -->
+    {% endblock page %}
+
+    <!-- About us modal -->
+    <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="About us" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="about-label">About us -- More information</h4>
+          </div>
+          <div class="modal-body">
+            <p>Links.ml is a free URL shortening service using Python-flask, Python-redis and Bootstrap. Links.ml has an API so you can easily implement it into your website/serivce/bot/script!</p>
+            <p class="text-center">
+              <a target="_blank" href="http://liamstanley.io/links.ml.git" class="btn btn-sm btn-primary">Author</a>
+              <a target="_blank" href="https://github.com/Liamraystanley/links.ml" class="btn btn-sm btn-warning">Source</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IRC Chat embed -->
+    <div class="modal fade" id="support" tabindex="-1" role="dialog" aria-labelledby="About us" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="support-label">Chat with us!</h4>
+          </div>
+          <div class="modal-body">
+            <iframe src="http://chat.liamstanley.io/" width="100%" height="500"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    {% block foot %}{% endblock foot %}
+  </body>
+</html>

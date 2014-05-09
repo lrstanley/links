@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Index{% endblock title %}
+{% block content %}
+  <div style="margin-top: 100px;"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-pills">
+        <li class="active"><a href="/"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#about"><i class="fa fa-users"></i> About us</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#support"><i class="fa fa-comment"></i> Get support</a></li>
+        <p class="navbar-text pull-right">Links.ml || Link Shortener</p>
+      </ul>
+    </div>
+  </div>
+  <div id="messages"></div>
+  <div class="input-group" id="shortener">
+    <input type="text" class="form-control input-lg" id="url" placeholder="URL to shorten here">
+    <span class="input-group-btn">
+      <a class="btn btn-primary input-lg" onclick="add();">
+        <span style="font-size: 20px;">Shorten URL</span>
+      </a>
+    </span>
+  </div>
+{% endblock content %}
