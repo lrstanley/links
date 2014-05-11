@@ -27,3 +27,7 @@ a, a:hover, a:visited {
 .footer {
     margin-top: 5px;
 }
+
+#submit-btn {
+    font-size: 20px;
+}

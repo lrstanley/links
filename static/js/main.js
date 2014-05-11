@@ -1,4 +1,6 @@
 function add() {
+    $("#submit-btn").button("loading");
+    $("#url").attr("disabled", "disabled");
     $.post("add", $("#url").val()).done(function(data) {
         var data = $.parseJSON(data);
         if (data["success"]) {
@@ -9,7 +11,9 @@ function add() {
             // Add an alert with the success/failure information
             $("#messages").removeClass();
             $("#messages").addClass("alert alert-success");
-            $("#messages").html("<strong>" + data["message"] + "<strong>");
+            $("#messages").html("<strong>" + 'Successfully shortened your URL!' +
+                '<input type="text" value="' + data["url"] + '" class="form-control tip"' +
+                'id="url-to-copy" title="Press CTRL+C to copy" readonly>' + "<strong>");
 
             // Specifically highlight the URL input-box, and select it
             $('#url-to-copy').focus();
@@ -25,6 +29,8 @@ function add() {
             $("#messages").addClass("alert alert-danger");
             $("#messages").html("<strong>" + data["message"] + "<strong>");
         }
+        $("#submit-btn").button("reset");
+        $("#url").removeAttr("disabled");
     });
 }
 
