@@ -31,8 +31,6 @@ def main(page='index'):
     # Up the global page count
     count['page'] += 1
     save('count', count)
-    if page == 'api':
-        return flask.jsonify(db), 200
     if os.path.isfile('templates/%s.html' % page):
         return flask.render_template(page + '.html')
     elif page in db:
@@ -156,10 +154,8 @@ def save(name, data):
     database.set(redis_prefix + name, data)
 
 
-
-# Debug should normally be false, so we don't display hazardous information!
 database = redis.StrictRedis(host='localhost', port=6379, db=0)
 check_db()
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = False
     app.run(host='0.0.0.0', port=5000)
