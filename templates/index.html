@@ -12,13 +12,25 @@
       </ul>
     </div>
   </div>
-  <div id="messages"></div>
-  <div class="input-group" id="shortener">
-    <input type="text" class="form-control input-lg" id="url" placeholder="URL to shorten here">
-    <span class="input-group-btn">
-      <a class="btn btn-primary input-lg" data-loading-text="Shortening..." id="submit-btn" onclick="add();">
-        Shorten URL
-      </a>
-    </span>
+  <div class="row">
+    <div class="col-md-12">
+      <div id="messages"></div>
+    </div>
+    <div class="col-md-5">
+      <div class="input-group">
+        <span class="input-group-addon">Password protected?</span>
+        <input type="password" class="form-control input-sm" id="password-box" placeholder="Password for URL">
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="input-group" id="shortener">
+        <input type="text" class="form-control input-lg" id="url" placeholder="URL to shorten here">
+        <span class="input-group-btn">
+          <a class="btn btn-primary input-lg" data-loading-text="Shortening..." id="submit-btn" onclick="add();">
+            Shorten URL
+          </a>
+        </span>
+      </div>
+    </div>
   </div>
 {% endblock content %}

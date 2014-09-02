@@ -10,17 +10,17 @@ import random
 
 app = flask.Flask(__name__)
 
-# database prefix to use in redis to organize things
+# Database prefix to use in redis to organize things
 redis_prefix = 'links.ml'
 
-# prefix that the key's are appended to
+# Prefix that the key's are appended to (needs the / at the end)
 html_prefix = 'http://links.ml/'
 
 # Length of the key you want. It's not incremental so
-#   it's recommended to have it be 4+ at least
+# it's recommended to have it be 4+ at least
 key_length = 4
 
-# this is enabled it doesn't write to the DB, and resets on reboot
+# If this is enabled it doesn't write to the DB, and resets on reboot
 temporary_mode = False
 
 
@@ -40,23 +40,61 @@ def main(page='index'):
         count['urls'] += 1
         save('main', db)
         save('count', count)
+        if 'password' in db[page]:
+            return flask.render_template('password.html')
         return flask.redirect(db[page]['url'])
     else:
         return flask.redirect('/')
 
 
+@app.route('/decrypt', methods=['POST'])
+def decrypt():
+    global db
+    form = flask.request.form
+    if 'path' not in form:
+        data = {
+            'success': False,
+            'message': 'Insufficient or malformed path!'
+        }
+        return json.dumps(data)
+    elif 'password' not in form:
+        data = {
+            'success': False,
+            'message': 'A password is required!'
+        }
+        return json.dumps(data)
+    elif form['path'].strip('/') not in db:
+        data = {
+            'success': False,
+            'message': 'That URL doesn\'t exist!'
+        }
+        return json.dumps(data)
+    elif form['password'] != db[form['path'].strip('/')]['password']:
+        data = {
+            'success': False,
+            'message': 'Incorrect password entered.'
+        }
+        return json.dumps(data)
+    else:
+        data = {
+            'success': True,
+            'url': db[form['path'].strip('/')]['url']
+        }
+        return json.dumps(data)
+
+
 @app.route('/add', methods=['POST'])
 def add():
     global db, urls
-    form = list(flask.request.form)
-    if len(form) != 1:
+    form = flask.request.form
+    if 'url' not in form:
         data = {
             'success': False,
             'message':
             'Please enter a URL'
         }
         return json.dumps(data)
-    url = form[0].strip()
+    url = form['url'].strip()
     if not is_url(url) or 'links.ml' in url:
         data = {
             'success': False,
@@ -64,8 +102,19 @@ def add():
         }
         return json.dumps(data)
 
+    passworded = False
+    if 'password' in form:
+        if len(form['password']) > 0:
+            passworded = True
+
+
     # First, see if it's already in the DB to prevent duplications
-    if url in urls:
+    # Note: Passworded URL's are unique
+    exists = False
+    if url in urls and not passworded:
+        exists = True
+
+    if exists:
         data = {'url': html_prefix + urls[url], 'success': True}
     else:
         while True:
@@ -77,23 +126,23 @@ def add():
             'time': int(time.time()),
             'url': url
         }
+        if passworded:
+            db[tmp_uuid]['password'] = form['password']
         data = {'url': html_prefix + tmp_uuid, 'success': True}
 
         # Add it to the "urls" tmp variable, for faster duplication searching
-        urls[url] = tmp_uuid
+        if not passworded:
+            urls[url] = tmp_uuid
         save('main', db)
     return json.dumps(data)
 
 
 def is_url(url):
+    if url.lower().startswith('www') or url[0].isdigit():
+        url = 'http://' + url
     regex = re.compile(
-        r'^(?:http|ftp)s?://' # http:// or https://
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' # domain...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|' # ...or ipv4
-        r'\[?[A-F0-9]*:[A-F0-9:]+\]?)' # ...or ipv6
-        r'(?::\d+)?' # optional port
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-    if re.match(regex, url):
+        r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', re.IGNORECASE)
+    if re.match(regex, url.strip()):
         return True
     else:
         return False

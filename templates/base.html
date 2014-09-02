@@ -23,13 +23,7 @@
     {% block page %}
     <div class="container">
       {% block content %}{% endblock content %}
-      <div class="footer">
-        <p>
-          <span class="label label-success">&copy; Links.ml 2014</span>
-          <span class="label label-info">{{ page_count() }} page views</span>
-          <span class="label label-warning">{{ url_count() }} links shortened</span>
-        </p>
-      </div>
+      {% include 'footer.html' %}
     </div> <!-- /container -->
     {% endblock page %}
 

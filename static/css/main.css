@@ -31,3 +31,23 @@ a, a:hover, a:visited {
 #submit-btn {
     font-size: 20px;
 }
+
+#shortener {
+    margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+    #password-container {
+        width: 90%;
+    }
+}
+@media (min-width: 601px) {
+    #password-container {
+        width: 350px;
+    }
+}
+
+#password-container {
+    margin-left: auto;
+    margin-right: auto;
+}
