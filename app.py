@@ -14,7 +14,7 @@ app = flask.Flask(__name__)
 redis_prefix = 'links.ml'
 
 # Prefix that the key's are appended to (needs the / at the end)
-html_prefix = 'http://links.ml/'
+html_prefix = 'https://links.ml/'
 
 # Length of the key you want. It's not incremental so
 # it's recommended to have it be 4+ at least
