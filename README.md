@@ -25,7 +25,7 @@ API usage
 Shortening a link is quite easy. simply send a `POST` request to `https://links.ml/add`, which will return JSON-safe information as shown below:
 
 ```
-[/root]$ curl --data "url=http://google.com" https://links.ml/add
+$ curl --data "url=http://google.com" https://links.ml/add
 {"url": "https://links.ml/BA2b", "success": true}
 ```
 
