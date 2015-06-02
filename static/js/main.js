@@ -1,19 +1,8 @@
-var app;
-
-app = angular.module('main', ['angular-loading-bar']);
+var app = angular.module('main', ['angular-loading-bar']);
 
 $(function() {
-    // Main page auto-focus
     $("#url").focus();
-    // Decrypt page auto-focus
     $("#encryption").focus();
-});
-
-$('#url').keypress(function(e) {
-    if (e.which == 13 && $("#url").val().length > 0) {
-        add();
-        return false;
-    }
 });
 
 $('#url').tooltip({placement: 'bottom', title: 'Press CTRL+C to copy', trigger: 'manual'});
@@ -24,31 +13,6 @@ function stats($http, $scope) {
         $scope.links = data.links.clean;
     });
 }
-
-// function decrypt() {
-//     // Add the password to the POST, is the user wants it
-//     if ($("#encryption").val().length == 0) {
-//         // Empty input box
-//         // Add an alert with the success/failure information
-//         return
-//     }
-//     // Assume it has a password, but we don't know if it's wrong/right yet
-//     data = {path: $(location).attr('pathname'), password: $("#encryption").val()};
-//     // POST data to the server to check...
-//     $.post("decrypt", data).done(function(data) {
-//         var data = $.parseJSON(data);
-//         if (data["success"]) {
-//             // If success, redirect the user to the URL
-//             // similar behavior as an HTTP redirect
-//             window.location.replace(data["url"]);
-//             return
-//         } else {
-//             // Change form validation state here
-//             // Add an alert with the success/failure information
-//         }
-//         $("#submit-btn").button("reset");
-//     });
-// }
 
 app.controller('pwCtrl', function($scope, $http) {
     $scope.$watch('decrypting', function() {
