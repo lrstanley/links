@@ -1,36 +1,55 @@
 {% extends 'base.html' %}
-{% block title %}Index{% endblock title %}
-{% block content %}
-  <div style="margin-top: 100px;"></div>
+{% block content %}{% raw %}
+<div class="container" id="main-container" ng-controller="mainCtrl">
   <div class="row">
     <div class="col-md-12">
       <ul class="nav nav-pills">
-        <li class="active"><a href="/"><i class="fa fa-home"></i> Home</a></li>
-        <li><a href="#" data-toggle="modal" data-target="#about"><i class="fa fa-users"></i> About us</a></li>
-        <li><a href="#" data-toggle="modal" data-target="#support"><i class="fa fa-comment"></i> Get support</a></li>
-        <p class="navbar-text pull-right">Links.ml || Link Shortener</p>
+        <li class="active"><a href="/"><i class="hidden-xs hidden-sm fa fa-home"></i> Home</a></li>
+        <li>
+          <a href="#" data-toggle="modal" data-target="#about">
+            <i class="hidden-xs hidden-sm fa fa-users"></i> About us
+          </a>
+        </li>
+        <li>
+          <a href="#" data-toggle="modal" data-target="#support">
+            <i class="hidden-xs hidden-sm fa fa-comment"></i> Get support
+          </a>
+        </li>
+        <p class="navbar-text pull-right hidden-xs hidden-sm">Links.ml || Link Shortener</p>
       </ul>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div id="messages"></div>
-    </div>
-    <div class="col-md-5">
+  <div class="row padded">
+    <div class="col-sm-12 col-md-5">
       <div class="input-group">
-        <span class="input-group-addon">Password protected?</span>
-        <input type="password" class="form-control input-sm" id="password-box" placeholder="Password for URL">
+        <span class="input-group-addon" ng-class="{'enabled': passwd}">Password protected?</span>
+        <input ng-model="passwd" type="password" class="form-control input-sm" placeholder="Encryption string">
       </div>
     </div>
+    <div class="col-sm-12 col-md-5 col-md-offset-2" ng-cloak>
+      <div ng-show="error" class="alert alert-danger notification"><b>Warning!</b> {{error}}</div>
+      <div ng-show="success" class="alert alert-success notification"><b>Success!</b> {{success}}</div>
+    </div>
     <div class="col-md-12">
-      <div class="input-group" id="shortener">
-        <input type="text" class="form-control input-lg" id="url" placeholder="URL to shorten here">
+      <div ng-class="{'has-error': error, 'has-success': success}" class="input-group" id="shortener">
+        <input
+              ng-model="url" ng-trim="false" id="url" type="text" class="form-control input-lg" ng-keypress="($event.keyCode == 13 && url) && shorten()" placeholder="Link to shorten">
         <span class="input-group-btn">
-          <a class="btn btn-primary input-lg" data-loading-text="Shortening..." id="submit-btn" onclick="add();">
+          <a
+            ng-class="{'disabled': !url || shortening}" class="btn btn-primary input-lg"
+            data-loading-text="Shortening..." id="submit-btn" ng-click="shorten()">
             Shorten URL
           </a>
         </span>
       </div>
     </div>
   </div>
-{% endblock content %}
+  <div class="footer hidden-xs hidden-sm">
+    <p>
+      <span class="label label-success"><a href="/">&copy; Links.ml 2014-2015</a></span>
+      <span class="label label-info" ng-show="views" ng-cloak>{{views}} page views</span>
+      <span class="label label-warning" ng-show="links" ng-cloak>{{links}} links shortened</span>
+    </p>
+  </div>
+</div>
+{% endraw %}{% endblock content %}

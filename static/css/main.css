@@ -1,53 +1,74 @@
-body {
-    min-width: 400px;
-    margin: 25px 0;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-@media (max-width: 600px) {
-    .container {
-        width: 300px;
-    }
-}
-@media (min-width: 601px) {
-    .container {
-        width: 800px;
-    }
-}
-
-.nav {
-    margin: 10px;
+html, body {
+    height: 100%;
+    width: 100%;
 }
 
 a, a:hover, a:visited {
     color: black;
 }
 
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+    padding-top: 100px;
+}
+
+.container .padded {
+    padding-top: 100px;
+}
+
 .footer {
     margin-top: 5px;
 }
 
-#submit-btn {
-    font-size: 20px;
+.enabled {
+    background-color: #008cba;
+    color: #FFFFFF;
+}
+
+.input-lg {
+    height: 45px;
+    font-size: 21px;
+    padding: 8px 10px;
+}
+
+.notification {
+    padding: 8px 10px;
+    margin-bottom: 0px;
+    text-align: center;
 }
 
 #shortener {
     margin-top: 5px;
 }
 
-@media (max-width: 600px) {
-    #password-container {
-        width: 90%;
-    }
-}
-@media (min-width: 601px) {
-    #password-container {
-        width: 350px;
-    }
-}
-
-#password-container {
+#pw-container {
     margin-left: auto;
     margin-right: auto;
+    width: 350px;
+}
+
+#submit-btn {
+    font-size: 20px;
+}
+
+/* more.. mobile specific */
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding-top: 20px;
+    }
+
+    .container .padded {
+        padding-top: 0px;
+    }
+
+    #pw-container {
+        width: 90%;
+    }
+
+    .nav {
+        margin: 10px 0px 100px 0px;
+    }
 }

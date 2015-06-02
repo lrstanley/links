@@ -29,11 +29,13 @@ temporary_mode = False
 def main(page='index'):
     global db, urls, count
     # Up the global page count
-    count['page'] += 1
-    save('count', count)
     if os.path.isfile('templates/%s.html' % page):
+        count['page'] += 1
+        save('count', count)
         return flask.render_template(page + '.html')
     elif page in db:
+        count['page'] += 1
+        save('count', count)
         # Up the url count
         db[page]['visit_count'] += 1
         # Up the global url count
@@ -51,62 +53,39 @@ def main(page='index'):
 def decrypt():
     global db
     form = flask.request.form
+    if flask.request.get_json():
+        form = flask.request.get_json()
+
     if 'path' not in form:
-        data = {
-            'success': False,
-            'message': 'Insufficient or malformed path!'
-        }
-        return json.dumps(data)
+        return json.dumps({'success': False, 'message': 'Insufficient or malformed path!'}), 400
     elif 'password' not in form:
-        data = {
-            'success': False,
-            'message': 'A password is required!'
-        }
-        return json.dumps(data)
+        return json.dumps({'success': False, 'message': 'A password is required!'}), 400
     elif form['path'].strip('/') not in db:
-        data = {
-            'success': False,
-            'message': 'That URL doesn\'t exist!'
-        }
-        return json.dumps(data)
+        return json.dumps({'success': False, 'message': 'That URL doesn\'t exist!'}), 400
     elif form['password'] != db[form['path'].strip('/')]['password']:
-        data = {
-            'success': False,
-            'message': 'Incorrect password entered.'
-        }
-        return json.dumps(data)
+        return json.dumps({'success': False, 'message': 'Incorrect password entered.'}), 400
     else:
-        data = {
-            'success': True,
-            'url': db[form['path'].strip('/')]['url']
-        }
-        return json.dumps(data)
+        return json.dumps({'success': True, 'url': db[form['path'].strip('/')]['url']})
 
 
 @app.route('/add', methods=['POST'])
 def add():
     global db, urls
     form = flask.request.form
+    # If headers are application/json, use this instead
+    if flask.request.get_json():
+        form = flask.request.get_json()
     if 'url' not in form:
-        data = {
-            'success': False,
-            'message':
-            'Please enter a URL'
-        }
-        return json.dumps(data)
+        return json.dumps({'success': False, 'message': 'Please enter a valid URL'}), 400
+
     url = form['url'].strip()
-    if not is_url(url) or 'links.ml' in url:
-        data = {
-            'success': False,
-            'message': 'Please enter a valid URL'
-        }
-        return json.dumps(data)
+    if not valid_url(url):
+        return json.dumps({'success': False, 'message': 'Please enter a valid URL'}), 400
 
     passworded = False
     if 'password' in form:
         if len(form['password']) > 0:
             passworded = True
-
 
     # First, see if it's already in the DB to prevent duplications
     # Note: Passworded URL's are unique
@@ -134,10 +113,13 @@ def add():
         if not passworded:
             urls[url] = tmp_uuid
         save('main', db)
-    return json.dumps(data)
+    return json.dumps(data), 200
 
 
-def is_url(url):
+def valid_url(url):
+    if '//links.ml' in url.lower() or '//www.links.ml' in url.lower() or \
+       len(url) < 1:
+        return False
     if url.lower().startswith('www') or url[0].isdigit():
         url = 'http://' + url
     regex = re.compile(
@@ -148,22 +130,21 @@ def is_url(url):
         return False
 
 def new_uuid():
-    lst = [random.choice(string.hexdigits) for n in xrange(key_length)]
-    return "".join(lst)
+    return "".join([random.choice(string.hexdigits) for n in xrange(key_length)])
 
 
-@app.context_processor
-def utility_processor():
-    def page_count():
-        return count['page']
-
-    def url_count():
-        return count['urls']
-
-    return dict(
-        page_count = page_count,
-        url_count = url_count
-    )
+@app.route('/stats')
+def stats():
+    return flask.jsonify({
+        'views': {
+            'raw': count['page'],
+            'clean': "{:,d}".format(count['page'])
+        },
+        'links': {
+            'raw': count['urls'],
+            'clean': "{:,d}".format(count['urls'])
+        },
+    })
 
 
 @app.errorhandler(404)
@@ -206,5 +187,5 @@ def save(name, data):
 database = redis.StrictRedis(host='localhost', port=6379, db=0)
 check_db()
 if __name__ == '__main__':
-    app.debug = False
-    app.run(host='0.0.0.0', port=5000)
+    app.debug = True
+    app.run(host='0.0.0.0', port=5003)

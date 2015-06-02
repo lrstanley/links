@@ -1,106 +1,143 @@
-function decrypt() {
-    // Add the password to the POST, is the user wants it
-    if ($("#encryption").val().length == 0) {
-        // Empty input box
-        $("#password").removeClass("has-success");
-        $("#password").addClass("has-error");
-        // Add an alert with the success/failure information
-        $("#messages").removeClass();
-        $("#messages").addClass("alert alert-danger");
-        $("#messages").html("<strong>Please enter a password<strong>");
-        return
-    }
-    // Assume it has a password, but we don't know if it's wrong/right yet
-    data = {path: $(location).attr('pathname'), password: $("#encryption").val()};
-    // POST data to the server to check...
-    $.post("decrypt", data).done(function(data) {
-        var data = $.parseJSON(data);
-        if (data["success"]) {
-            // If success, redirect the user to the URL
-            // similar behavior as an HTTP redirect
-            window.location.replace(data["url"]);
-            return
-        } else {
-            // Change form validation state here
-            $("#password").removeClass("has-success");
-            $("#password").addClass("has-error");
+var app;
 
-            // Add an alert with the success/failure information
-            $("#messages").removeClass();
-            $("#messages").addClass("alert alert-danger");
-            $("#messages").html("<strong>" + data["message"] + "<strong>");
-            $("#encryption").val('');
-        }
-        $("#submit-btn").button("reset");
-    });
-}
+app = angular.module('main', ['angular-loading-bar']);
 
-function add() {
-    $("#submit-btn").button("loading");
-    $("#url").attr("disabled", "disabled");
-    // Add the password to the POST, if the user wants it
-    if ($("#password-box").val().length == 0) {
-        data = {url: $("#url").val()};
-    } else {
-        data = {url: $("#url").val(), password: $("#password-box").val()};
-    }
-    $.post("add", data).done(function(data) {
-        var data = $.parseJSON(data);
-        if (data["success"]) {
-            // Change form validation state here
-            $("#shortener").removeClass("has-error");
-            $("#shortener").addClass("has-success");
-
-            // Clear out the old input boxs
-            $("#url").val('');
-            $("#password-box").val('');
-
-            // Add an alert with the success/failure information
-            $("#messages").removeClass();
-            $("#messages").addClass("alert alert-success");
-            $("#messages").html("<strong>" + 'Successfully shortened your URL!' +
-                '<input type="text" value="' + data["url"] + '" class="form-control tip"' +
-                'id="url-to-copy" title="Press CTRL+C to copy" readonly>' + "<strong>");
-
-            // Specifically highlight the URL input-box, and select it
-            $('#url-to-copy').focus();
-            $('#url-to-copy').select();
-            $('#url-to-copy').tooltip("show");
-        } else {
-            // Change form validation state here
-            $("#shortener").removeClass("has-success");
-            $("#shortener").addClass("has-error");
-
-            // Add an alert with the success/failure information
-            $("#messages").removeClass();
-            $("#messages").addClass("alert alert-danger");
-            $("#messages").html("<strong>" + data["message"] + "<strong>");
-        }
-        $("#submit-btn").button("reset");
-        $("#url").removeAttr("disabled");
-    });
-}
-
-$("input").focus(function() {
-  this.value = "";
-});
-
-
-$(function () {
-   $("#url").focus();
-   $("#encryption").focus();
+$(function() {
+    // Main page auto-focus
+    $("#url").focus();
+    // Decrypt page auto-focus
+    $("#encryption").focus();
 });
 
 $('#url').keypress(function(e) {
-    if (e.which == 13) {
+    if (e.which == 13 && $("#url").val().length > 0) {
         add();
         return false;
     }
 });
 
-$(function(){
-    $('.tip').tooltip({
-        placement: "top",
-        trigger: "manual"
+$('#url').tooltip({placement: 'bottom', title: 'Press CTRL+C to copy', trigger: 'manual'});
+
+function stats($http, $scope) {
+    $http.get('/stats').success(function(data) {
+        $scope.views = data.views.clean;
+        $scope.links = data.links.clean;
     });
+}
+
+// function decrypt() {
+//     // Add the password to the POST, is the user wants it
+//     if ($("#encryption").val().length == 0) {
+//         // Empty input box
+//         // Add an alert with the success/failure information
+//         return
+//     }
+//     // Assume it has a password, but we don't know if it's wrong/right yet
+//     data = {path: $(location).attr('pathname'), password: $("#encryption").val()};
+//     // POST data to the server to check...
+//     $.post("decrypt", data).done(function(data) {
+//         var data = $.parseJSON(data);
+//         if (data["success"]) {
+//             // If success, redirect the user to the URL
+//             // similar behavior as an HTTP redirect
+//             window.location.replace(data["url"]);
+//             return
+//         } else {
+//             // Change form validation state here
+//             // Add an alert with the success/failure information
+//         }
+//         $("#submit-btn").button("reset");
+//     });
+// }
+
+app.controller('pwCtrl', function($scope, $http) {
+    $scope.$watch('decrypting', function() {
+        if ($scope.decrypting) {
+            $("#submit-btn").button("loading");
+            $("#passwd").attr("disabled", "disabled");
+        } else {
+            $("#submit-btn").button("reset");
+            $("#passwd").removeAttr("disabled");
+        }
+    });
+
+    $scope.$watch('passwd', function() {
+        // If the pw changes, disable the styles, we assume
+        // they are fixing the pw
+        $scope.error = false;
+    });
+
+    $scope.decrypt = function() {
+        $scope.decrypting = true;
+        $scope.error = false;
+
+        $http.post('/decrypt', {path: $(location).attr('pathname'), password: $scope.passwd}).
+          success(function(data) {
+            // Redirect to the page
+            window.location.replace(data.url);
+          }).
+          error(function(data) {
+            $scope.decrypting = false;
+            $scope.error = data.message ? data.message : "An unexpected error occured.";
+            setTimeout(function(){$("#passwd").focus()}, 200);
+          });
+    };
+});
+
+app.controller('mainCtrl', function($scope, $http) {
+    stats($http, $scope);
+    $scope.$watch('shortening', function() {
+        // Disable the shorten button and input box when we're
+        // processing the url, otherwise re-enable them
+        if ($scope.shortening) {
+            $("#submit-btn").button("loading");
+            $("#url").attr("disabled", "disabled");
+        } else {
+            $("#submit-btn").button("reset");
+            $("#url").removeAttr("disabled");
+        }
+    });
+
+    $scope.$watch('url', function() {
+        // If the url changes, disable the styles, we assume
+        // they are fixing the url, and hitting shorten again
+        $scope.error = false;
+        if (!$scope.finished) {
+            $scope.success = false;
+            $('#url').tooltip('hide');
+            $("#submit-btn").removeAttr("disabled");
+        }
+        $scope.finished = false;
+    });
+
+    $scope.shorten = function() {
+        var data, pw;
+        $scope.shortening = true;
+        $scope.error = false;
+        $scope.success = false;
+
+        // Add the password to the POST, if the user wants it
+        data = $scope.passwd ? {url: $scope.url, password: $scope.passwd} : {url: $scope.url};
+
+        $http.post('/add', data).
+          success(function(data) {
+            $scope.success = "Successfully shortened url!";
+            $scope.shortening = false;
+            // Use this, so the $watch.url doesn't override
+            // our success styles
+            $scope.finished = true;
+            $scope.url = data.url;
+            setTimeout(function(){
+                $("#url").select();
+                $('#url').tooltip('show');
+                $("#submit-btn").attr("disabled", "disabled");
+            },200);
+          }).
+          error(function(data) {
+            $scope.shortening = false;
+            $scope.success = false;
+            $scope.error = data.message ? data.message : "An unexpected error occured.";
+            setTimeout(function(){$("#url").focus()}, 200);
+          });
+    };
 });
