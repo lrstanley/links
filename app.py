@@ -1,191 +1,128 @@
 #!/usr/bin/python
 import flask
-import os
-import time
-import json
-import redis
-import re
-import string
-import random
+from time import time as timenow
+from utils import *
+from thread import start_new_thread as bg
 
 app = flask.Flask(__name__)
 
-# Database prefix to use in redis to organize things
-redis_prefix = 'links.ml'
 
-# Prefix that the key's are appended to (needs the / at the end)
-html_prefix = 'https://links.ml/'
-
-# Length of the key you want. It's not incremental so
-# it's recommended to have it be 4+ at least
-key_length = 4
-
-# If this is enabled it doesn't write to the DB, and resets on reboot
-temporary_mode = False
+@app.route("/")
+def main():
+    # We don't need to increment counters in the foreground
+    bg(counter, (None,))
+    return flask.render_template("index.html")
 
 
-@app.route('/')
-@app.route('/<page>')
-def main(page='index'):
-    global db, urls, count
-    # Up the global page count
-    if os.path.isfile('templates/%s.html' % page):
-        count['page'] += 1
-        save('count', count)
-        return flask.render_template(page + '.html')
-    elif page in db:
-        count['page'] += 1
-        save('count', count)
-        # Up the url count
-        db[page]['visit_count'] += 1
-        # Up the global url count
-        count['urls'] += 1
-        save('main', db)
-        save('count', count)
-        if 'password' in db[page]:
-            return flask.render_template('password.html')
-        return flask.redirect(db[page]['url'])
-    else:
-        return flask.redirect('/')
+@app.route("/<link>")
+def route(link=None):
+    if not link:
+        return flask.redirect("/")
+    if not valid_uri(link):
+        return flask.redirect("/")
+
+    # We don't need to increment counters in the foreground
+    bg(counter, (None,))
+
+    link = table("urls").find_one(id=link)
+
+    # If it doesn't exist
+    if not link:
+        return flask.redirect("/")
+
+    # Increment it in the background
+    bg(counter, (link.id, link.hits))
+
+    # If it's password protected
+    if link.password:
+        return flask.render_template("password.html")
+
+    return flask.redirect(link.url)
 
 
-@app.route('/decrypt', methods=['POST'])
+@app.route("/decrypt", methods=["POST"])
 def decrypt():
-    global db
-    form = flask.request.form
-    if flask.request.get_json():
-        form = flask.request.get_json()
+    required = [
+        {"name": "path", "error": "No ID supplied"},
+        {"name": "password", "error": "A password is required"}
+    ]
+    form = flask.request.get_json() if flask.request.get_json() else flask.request.form
 
-    if 'path' not in form:
-        return json.dumps({'success': False, 'message': 'Insufficient or malformed path!'}), 400
-    elif 'password' not in form:
-        return json.dumps({'success': False, 'message': 'A password is required!'}), 400
-    elif form['path'].strip('/') not in db:
-        return json.dumps({'success': False, 'message': 'That URL doesn\'t exist!'}), 400
-    elif form['password'] != db[form['path'].strip('/')]['password']:
-        return json.dumps({'success': False, 'message': 'Incorrect password entered.'}), 400
-    else:
-        return json.dumps({'success': True, 'url': db[form['path'].strip('/')]['url']})
+    for item in required:
+        if item["name"] not in form:
+            return err(item["error"])
+    link = form["path"].strip("/")
+    if not valid_uri(link):
+        return err("Insufficient or malformed ID")
+    link = table("urls").find_one(id=link)
+
+    # If it doesn't actually exist
+    if not link:
+        return err("ID provided does not exist")
+
+    if hash(form["password"]) != link.password:
+        return err("Incorrect password entered")
+    return success(url=link.url)
 
 
-@app.route('/add', methods=['POST'])
+@app.route("/add", methods=["POST"])
 def add():
-    global db, urls
-    form = flask.request.form
-    # If headers are application/json, use this instead
-    if flask.request.get_json():
-        form = flask.request.get_json()
-    if 'url' not in form:
-        return json.dumps({'success': False, 'message': 'Please enter a valid URL'}), 400
-
+    max_uuid_fails = 20
+    form = flask.request.get_json() if flask.request.get_json() else flask.request.form
+    if "url" not in form:
+        return err("Please enter a valid URL")
     url = form['url'].strip()
+    passwd = form["password"] if "password" in form else None
+    passwd = hash(passwd) if passwd and len(passwd) > 0 else None
+    if not url.startswith("http") or url[0].isdigit():
+        url = "http://" + url
     if not valid_url(url):
-        return json.dumps({'success': False, 'message': 'Please enter a valid URL'}), 400
+        return err("Please enter a valid URL")
 
-    passworded = False
-    if 'password' in form:
-        if len(form['password']) > 0:
-            passworded = True
+    # First, see if it's already in the database to prevent dups
+    # Also note: Passworded links are unique
+    link = table("urls").find_one(url=url, password=passwd)
 
-    # First, see if it's already in the DB to prevent duplications
-    # Note: Passworded URL's are unique
-    exists = False
-    if url in urls and not passworded:
-        exists = True
+    if link:
+        return success(url=cnf("General", "url", "https://links.ml").rstrip("/") + "/" + link.id)
 
-    if exists:
-        data = {'url': html_prefix + urls[url], 'success': True}
-    else:
-        while True:
-            tmp_uuid = new_uuid()
-            if tmp_uuid not in db:
-                break
-        db[tmp_uuid] = {
-            'visit_count': 0,
-            'time': int(time.time()),
-            'url': url
-        }
-        if passworded:
-            db[tmp_uuid]['password'] = form['password']
-        data = {'url': html_prefix + tmp_uuid, 'success': True}
-
-        # Add it to the "urls" tmp variable, for faster duplication searching
-        if not passworded:
-            urls[url] = tmp_uuid
-        save('main', db)
-    return json.dumps(data), 200
+    _uuid_count = 0
+    try:
+        current_uuids = [x.id for x in list(db().query("SELECT id FROM urls"))]
+    except:
+        current_uuids = []
+    while True:
+        _uuid_count += 1
+        if _uuid_count > max_uuid_fails:
+            # It's been checked too many times, and performance is likely degrading
+            msg = "ERROR: While attempting to generate a new UUID, it failed %s times. If this message re-occurs, this is likely a sign that key-generation is failing. Consult the main.cfg file."
+            print(msg % str(max_uuid_fails))
+            return err("Failed to generate UUID")
+        uuid = new_uuid()
+        if uuid not in current_uuids:
+            table("urls").insert(dict(id=uuid, url=url, hits=0, password=passwd, time=int(timenow())))
+            return success(url=cnf("General", "url", "https://links.ml").rstrip("/") + "/" + uuid)
 
 
-def valid_url(url):
-    if '//links.ml' in url.lower() or '//www.links.ml' in url.lower() or \
-       len(url) < 1:
-        return False
-    if url.lower().startswith('www') or url[0].isdigit():
-        url = 'http://' + url
-    regex = re.compile(
-        r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', re.IGNORECASE)
-    if re.match(regex, url.strip()):
-        return True
-    else:
-        return False
-
-def new_uuid():
-    return "".join([random.choice(string.hexdigits) for n in xrange(key_length)])
-
-
-@app.route('/stats')
+@app.route("/stats")
 def stats():
+    count = table("stats").find_one(id="hits")
+    count = int(count.count) if count else 1
+    shortened = sum([int(link.hits) for link in list(table("urls").all())])
     return flask.jsonify({
-        'views': {
-            'raw': count['page'],
-            'clean': "{:,d}".format(count['page'])
-        },
-        'links': {
-            'raw': count['urls'],
-            'clean': "{:,d}".format(count['urls'])
-        },
+        "success": True,
+        "views": {"raw": count, "clean": "{:,d}".format(count)},
+        "links": {"raw": shortened, "clean": "{:,d}".format(shortened)},
     })
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return flask.render_template('404.html'), 404
+    return flask.render_template("404.html"), 404
 
 
-db, urls, count = {}, {}, {}
-def check_db():
-    # Done on website-initialization
-    global db, urls, count
-    if temporary_mode:
-        db, urls, count = {}, {}, {'page': 0, 'urls': 0}
-        return
-    db = database.get(redis_prefix  + 'main')
-    if not db:
-        db = {}
-    else:
-        db = json.loads(db)
-        for uuid in db:
-            uuid_url = db[uuid]['url']
-            urls[uuid_url] = uuid
-
-    count = database.get(redis_prefix + 'count')
-    if not count:
-        count = {'page': 0, 'urls': 0}
-    else:
-        count = json.loads(count)
-
-
-def save(name, data):
-    if temporary_mode:
-        return
-    if isinstance(data, dict):
-        data = json.dumps(data)
-
-    database.set(redis_prefix + name, data)
-
-
-database = redis.StrictRedis(host='localhost', port=6379, db=0)
-check_db()
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.debug = True
-    app.run(host='0.0.0.0', port=5003)
+    host = cnf("General", "bindhost", "0.0.0.0")
+    port = int(cnf("General", "port", 3333))
+    app.run(host=host, port=port)
