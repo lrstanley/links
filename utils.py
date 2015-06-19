@@ -74,11 +74,9 @@ def valid_url(url):
         many different characters can be contained in a URL, this
         also includes IP-based links.
     """
-    if re.match(r'(?i)\/\/(?:www)?\.links\.ml', url) or len(url) < 1:
+    if re.search(r'(?i)\/\/(?:www\.)?links\.ml', url) or len(url) < 1 or "." not in url:
         return False
-    regex = re.compile(
-        r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
-        re.IGNORECASE)
+    regex = re.compile(r'(?i)^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+$')
     if re.match(regex, url.strip()):
         return True
     else:

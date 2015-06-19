@@ -74,8 +74,6 @@ def add():
     url = form['url'].strip()
     passwd = form["password"] if "password" in form else None
     passwd = hash(passwd) if passwd and len(passwd) > 0 else None
-    if not url.startswith("http") or url[0].isdigit():
-        url = "http://" + url
     if not valid_url(url):
         return err("Please enter a valid URL")
 
