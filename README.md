@@ -47,7 +47,7 @@ $ sudo apt-get install python-pip git-core
 Install necessary Python libs:
 
 ```
-$ sudo pip install mysql-python gunicorn dataset
+$ sudo pip install mysql-python gunicorn dataset stuf
 ```
 
 If you happen to run into an error when installing **mysql-python**, closely
