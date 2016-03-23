@@ -57,18 +57,10 @@ a, a:hover, a:visited {
 @media (max-width: 600px) {
     .container {
         width: 100%;
-        padding-top: 20px;
-    }
-
-    .container .padded {
-        padding-top: 0px;
+        padding-top: 100px;
     }
 
     #pw-container {
         width: 90%;
-    }
-
-    .nav {
-        margin: 10px 0px 100px 0px;
     }
 }

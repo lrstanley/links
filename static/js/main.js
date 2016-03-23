@@ -5,7 +5,7 @@ $(function() {
     $("#encryption").focus();
 });
 
-$('#url').tooltip({placement: 'bottom', title: 'Press CTRL+C to copy', trigger: 'manual'});
+$('#url').tooltip({placement: 'bottom', title: 'Press CTRL+C to copy (or hold if mobile)', trigger: 'manual'});
 
 function stats($http, $scope) {
     $http.get('/stats').success(function(data) {
