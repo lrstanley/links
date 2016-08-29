@@ -9,8 +9,7 @@ $('#url').tooltip({placement: 'bottom', title: 'Press CTRL+C to copy (or hold if
 
 function stats($http, $scope) {
     $http.get('/stats').success(function(data) {
-        $scope.views = data.views.clean;
-        $scope.links = data.links.clean;
+        $scope.stats = data;
     });
 }
 
@@ -96,6 +95,7 @@ app.controller('mainCtrl', function($scope, $http) {
                 $('#url').tooltip('show');
                 $("#submit-btn").attr("disabled", "disabled");
             },200);
+            stats($http, $scope);
           }).
           error(function(data) {
             $scope.shortening = false;

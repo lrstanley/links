@@ -28,9 +28,10 @@
   </div>
   <div class="footer hidden-xs hidden-sm">
     <p>
-      <span class="label label-success"><a href="/">&copy; Links.ml 2014-2015</a></span>
-      <span class="label label-info" ng-show="views" ng-cloak>{{views}} page views</span>
-      <span class="label label-warning" ng-show="links" ng-cloak>{{links}} links shortened</span>
+      <span class="label label-success"><a href="/">&copy; Liam Stanley 2016</a></span>
+      <span class="label label-info" ng-show="stats" ng-cloak>{{stats.views.clean}} views</span>
+      <span class="label label-warning" ng-show="stats" ng-cloak>{{stats.shortened.clean}} shortened</span>
+      <span class="label label-primary" ng-show="stats" ng-cloak>{{stats.created.clean}} generated</span>
       <span class="pull-right">Links.ml || Link Shortener</span>
     </p>
   </div>

@@ -104,13 +104,17 @@ def add():
 
 @app.route("/stats")
 def stats():
-    count = table("stats").find_one(id="hits")
-    count = int(count.count) if count else 1
+    count = int(table("stats").find_one(id="hits").get('count', 0))
     shortened = sum([int(link.hits) for link in list(table("urls").all())])
+    total = int(table("urls").count())
     return flask.jsonify({
         "success": True,
+        # page views
         "views": {"raw": count, "clean": "{:,d}".format(count)},
-        "links": {"raw": shortened, "clean": "{:,d}".format(shortened)},
+        # how many times did someone click a shortened link
+        "shortened": {"raw": shortened, "clean": "{:,d}".format(shortened)},
+        # how many shorted urls have been created
+        "created": {"raw": total, "clean": "{:,d}".format(total)}
     })
 
 
