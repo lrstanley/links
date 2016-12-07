@@ -60,7 +60,7 @@ $ sudo apt-get install libmysqlclient-dev python-dev
 Once everythings installed, you should be able to download the latest **links.ml**:
 
 ```
-$ git clone https://github.com/Liamraystanley/links.ml.git
+$ git clone https://github.com/lrstanley/links.ml.git
 $ cd links.ml
 ```
 
@@ -94,4 +94,4 @@ $ curl --data "url=http://google.com&password=test" https://links.ml/add
 ```
 
 If you happen to have any further issues, feel free to submit it with more
-information [here](https://github.com/Liamraystanley/links.ml/issues)
+information [here](https://github.com/lrstanley/links.ml/issues)
