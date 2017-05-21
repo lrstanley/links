@@ -1,9 +1,23 @@
-# Settings file
-main.cfg
+*.log
+*.db
+*journal
+~*
+*.tmp
+*.txt
+BUILD
+rice-box*
+# *.yaml
+# !example.yaml
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
+*.exe
+*.test
+*.prof
 
-.coverage
-.cache
+# go version deps
+vendor/*
+!vendor/*.json
+.glide
+*.lock
+
+links
+links.ml
