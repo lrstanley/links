@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	Quiet bool   `short:"q" long:"quiet" description:"don't log to stdout"`
 	HTTP  string `short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
 	Proxy bool   `short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
 	TLS   struct {
@@ -15,6 +16,8 @@ type Config struct {
 		Cert   string `short:"c" long:"cert" description:"path to ssl cert file"`
 		Key    string `short:"k" long:"key" description:"path to ssl key file"`
 	} `group:"TLS Options" namespace:"tls"`
+	DBPath    string `short:"d" long:"db" default:"store.db" description:"path to database file"`
+	KeyLength int    `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
 }
 
 var conf Config
@@ -37,8 +40,19 @@ func main() {
 		os.Exit(1)
 	}
 
+	if conf.HTTP == "" {
+		debug.Fatalf("invalid http flag supplied: %s", conf.HTTP)
+	}
+
+	if conf.KeyLength < 4 {
+		conf.KeyLength = 4
+	}
+
 	initLogger()
 
-	// Initialize the http/
+	// Verify db is accessible.
+	verifyDB()
+
+	// Initialize the http/https server.
 	httpServer()
 }

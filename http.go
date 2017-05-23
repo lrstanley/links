@@ -34,7 +34,7 @@ func httpServer() {
 	r.FileServer("/static", rice.MustFindBox("static").HTTPBox())
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("ohai"))
+		tmpl.Load(w, r, "tmpl/index.html", nil)
 	})
 
 	if conf.TLS.Enable {

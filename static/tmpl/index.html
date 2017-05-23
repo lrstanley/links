@@ -1,0 +1,37 @@
+{{> header title="Shorten a link"}}
+
+<div class="main flex-ct">
+    <div class="card">
+        <div class="card-block">
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" name="encrypt_string" id="encrypt_string" class="form-control form-control-lg" placeholder="Encryption">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-9">
+                    <div class="input-group">
+                        <input type="text" name="url" id="url_box" class="form-control form-control-lg" placeholder="Shorten a link" required autofocus>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">Shorten</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <span class="pull-left">
+                <span class="badge badge-primary">1,234,567 views</span>
+                <span class="badge badge-info">12,345 redirected</span>
+                <span class="badge badge-success">1,234,567 links generated</span>
+            </span>
+
+            <span class="pull-right">
+                <a href="https://github.com/lrstanley/links.ml">links.ml</a>
+            </span>
+        </div>
+    </div>
+</div>
+
+{{> footer}}

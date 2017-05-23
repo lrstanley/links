@@ -1,0 +1,29 @@
+html, body, .main {
+    height: 100%;
+    width: 100%;
+}
+
+.flex-ct {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main > .card {
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main .card-footer {
+    padding: 6px 13px 9px;
+}
+
+.main .card-footer a, .main .card-footer a:link, .main .card-footer a:visited, .main .card-footer a:hover {
+    color: #383838;
+}
