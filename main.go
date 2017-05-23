@@ -3,11 +3,13 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/jessevdk/go-flags"
 )
 
 type Config struct {
+	Site  string `short:"s" long:"site-name" default:"https://links.ml" description:"site url, used for url generation"`
 	Quiet bool   `short:"q" long:"quiet" description:"don't log to stdout"`
 	HTTP  string `short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
 	Proxy bool   `short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
@@ -40,13 +42,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Do some configuration validation.
 	if conf.HTTP == "" {
 		debug.Fatalf("invalid http flag supplied: %s", conf.HTTP)
 	}
-
 	if conf.KeyLength < 4 {
 		conf.KeyLength = 4
 	}
+	conf.Site = strings.TrimRight(conf.Site, "/")
 
 	initLogger()
 
