@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -18,8 +19,10 @@ type Config struct {
 		Cert   string `short:"c" long:"cert" description:"path to ssl cert file"`
 		Key    string `short:"k" long:"key" description:"path to ssl key file"`
 	} `group:"TLS Options" namespace:"tls"`
-	DBPath    string `short:"d" long:"db" default:"store.db" description:"path to database file"`
-	KeyLength int    `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
+	DBPath     string `short:"d" long:"db" default:"store.db" description:"path to database file"`
+	KeyLength  int    `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
+	ExportFile string `short:"e" long:"export-file" default:"links.export" description:"file to export db to"`
+	ExportJSON bool   `long:"export-json" description:"export db to json elements"`
 }
 
 var conf Config
@@ -55,6 +58,13 @@ func main() {
 
 	// Verify db is accessible.
 	verifyDB()
+
+	if conf.ExportJSON {
+		fmt.Printf("%s", hash("test"))
+		dbExportJSON(conf.ExportFile)
+		debug.Print("export complete")
+		return
+	}
 
 	// Initialize the http/https server.
 	httpServer()

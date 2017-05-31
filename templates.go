@@ -5,31 +5,19 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/aymerick/raymond"
-	humanize "github.com/dustin/go-humanize"
-	"github.com/gorilla/sessions"
 )
 
+type FlashMessage struct {
+	Type string
+	Text string
+}
+
+const defaultSessionID = "sessionid"
+
 func init() {
-	raymond.RegisterHelper("hrt", func(t time.Time) string {
-		if t.IsZero() {
-			return ""
-		}
-
-		return humanize.Time(t)
-	})
-
-	raymond.RegisterHelper("ellipsis", func(max int, text string) string {
-		if len(text) > max {
-			return text[0:max] + "..."
-		}
-
-		return text
-	})
-
 	raymond.RegisterHelper("ne", func(a interface{}, b interface{}, options *raymond.Options) interface{} {
 		if raymond.Str(a) != raymond.Str(b) {
 			return options.Fn()
@@ -100,45 +88,35 @@ func (l *Loader) Load(w http.ResponseWriter, r *http.Request, path string, ctx i
 	w.Write([]byte(l.Get(path).MustExec(out)))
 }
 
+func (_ *Loader) Flash(w http.ResponseWriter, r *http.Request, status, message string) {
+	session, _ := sess.Get(r, defaultSessionID)
+	session.AddFlash(FlashMessage{status, message}, "messages")
+	err := session.Save(r, w)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func defaultCtx(w http.ResponseWriter, r *http.Request) map[string]interface{} {
-	session := getSession(r)
-	// messages := session.Flashes("messages")
+	session, _ := sess.Get(r, defaultSessionID)
+	messages := session.Flashes("messages")
 
 	// We have to save the session, otherwise the flashes aren't properly
 	// cleared either.
-	// err := session.Save(r, w)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err := session.Save(r, w)
+	if err != nil {
+		panic(err)
+	}
+
+	cachedGlobalStats.mu.RLock()
+	stats := cachedGlobalStats
+	cachedGlobalStats.mu.RUnlock()
 
 	return map[string]interface{}{
 		"full_url": r.URL.String(),
 		"url":      r.URL,
 		"sess":     session.Values,
-		// "messages": messages,
+		"messages": messages,
+		"stats":    &stats,
 	}
-}
-
-// func flashMessage(w http.ResponseWriter, r *http.Request, status, message string) {
-// 	session := getSession(r)
-// 	session.AddFlash(Message{status, message}, "messages")
-// 	err := session.Save(r, w)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// }
-
-func getSession(r *http.Request) *sessions.Session {
-	session, _ := sess.Get(r, "sessionid")
-
-	return session
-}
-
-func getSessionString(r *http.Request, key string) string {
-	val, ok := getSession(r).Values[key]
-	if ok {
-		return val.(string)
-	}
-
-	return ""
 }

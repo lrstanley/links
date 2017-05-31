@@ -1,38 +1,40 @@
 {{> header title="Shorten a link"}}
 
 <div class="main flex-ct">
-    <div class="card">
-        <div class="card-block">
-            <form method="POST" action="/add">
-                <input type="hidden" name="location" value="html">
-                <div class="row">
-                    <div class="col-sm-12 col-md-3">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                            <input type="password" name="encrypt" id="encrypt_string" class="form-control form-control-lg" placeholder="Encryption">
+    <div class="wrap flex-column">
+        <div class="card">
+            <div class="card-block">
+                <form method="POST" action="/">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                <input type="password" name="encrypt" id="encrypt_string" class="form-control form-control-lg" placeholder="Encryption">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-9">
+                            <div class="input-group">
+                                <input type="text" name="url" class="form-control form-control-lg input-focus" placeholder="Shorten a link" required autofocus>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit">Shorten</button>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-9">
-                        <div class="input-group">
-                            <input type="text" name="url" id="url_box" class="form-control form-control-lg" placeholder="Shorten a link" required autofocus>
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary" type="submit">Shorten</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="card-footer text-muted">
-            <span class="pull-left">
-                <span class="badge badge-primary">12,345 redirected</span>
-                <span class="badge badge-info">1,234,567 links generated</span>
-            </span>
+                </form>
+            </div>
 
-            <span class="pull-right">
-                <a href="https://github.com/lrstanley/links.ml">links.ml</a>
-            </span>
+            {{> card_footer}}
         </div>
+
+        {{#if ctx.link.UID}}
+            <div class="alert alert-success show mt-2 text-center" role="alert">
+                <strong>Successfully</strong> shortened link <code>{{ctx.link.URL}}</code> -&gt; <code><a href="{{ctx.link.Short}}">{{ctx.link.Short}}</a></code>
+                <button class="btn btn-sm btn-primary clip" data-clipboard-text="{{ctx.link.Short}}">copy to clipboard</button>
+            </div>
+        {{/if}}
+
+        {{#each messages}}<div class="alert alert-{{this.Type}} text-center mt-2" role="alert">{{this.Text}}</div>{{/each}}
     </div>
 </div>
 

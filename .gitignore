@@ -4,6 +4,7 @@
 ~*
 *.tmp
 *.txt
+*.export
 BUILD
 rice-box*
 # *.yaml

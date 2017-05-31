@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
+
+	"encoding/gob"
 
 	rice "github.com/GeertJohan/go.rice"
 	gctx "github.com/gorilla/context"
@@ -19,14 +20,15 @@ import (
 )
 
 var tmpl *Loader
-
 var sess *sessions.CookieStore
 
 func httpServer() {
 	tmpl = NewLoader("partials/*", defaultCtx)
+	gob.Register(FlashMessage{})
+	updateGlobalStats(nil)
 
 	sess = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
-	sess.MaxAge(86400 * 2)
+	sess.MaxAge(86400)
 
 	r := chi.NewRouter()
 
@@ -42,7 +44,11 @@ func httpServer() {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Load(w, r, "tmpl/index.html", nil)
 	})
-	r.Post("/add", addLink)
+
+	r.Get("/:uid", expand)
+	r.Post("/:uid", expand)
+	r.Post("/", addForm)
+	r.Post("/add", addAPI)
 
 	if conf.TLS.Enable {
 		debug.Printf("initializing https server on %s", conf.HTTP)
@@ -62,99 +68,98 @@ func mustJSON(input interface{}) []byte {
 	return out
 }
 
-func render(w http.ResponseWriter, log string, resp *HTTPResp) {
-	if log == "" {
-		w.Write(mustJSON(resp))
-		return
-	}
-
-	// TODO: render html, add messages as flashes and links as ctx.
-}
-
 type HTTPResp struct {
 	Success bool   `json:"success"`
-	Message string `json:"message,ommitempty"`
+	Message string `json:"message,omitempty"`
 	URL     string `json:"url,omitempty"`
 }
 
-func addLink(w http.ResponseWriter, r *http.Request) {
-	raw := r.PostFormValue("url")
-	passwd := r.PostFormValue("encrypt")
-	// r.PostFormValue("location")
+func expand(w http.ResponseWriter, r *http.Request) {
+	db := newDB(true)
 
-	// Check for old password supplying method.
-	if passwd == "" {
-		passwd = r.PostFormValue("password")
+	var link Link
+	err := db.Get(chi.URLParam(r, "uid"), &link)
+	db.Close()
+
+	if err != nil {
+		if err == bolthold.ErrNotFound {
+			http.Redirect(w, r, "/", http.StatusFound)
+			return
+		}
+
+		panic(err)
 	}
 
-	if len(raw) < 1 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(mustJSON(HTTPResp{Success: false, Message: "please supply a url to shorten"}))
-		return
+	if link.EncryptionHash != "" {
+		if r.Method == http.MethodGet {
+			w.WriteHeader(http.StatusForbidden)
+			tmpl.Load(w, r, "tmpl/auth.html", nil)
+			return
+		}
+
+		decrypt := r.PostFormValue("decrypt")
+
+		if hash(decrypt) != link.EncryptionHash {
+			tmpl.Flash(w, r, "danger", "invalid decryption string provided")
+			w.WriteHeader(http.StatusForbidden)
+			tmpl.Load(w, r, "tmpl/auth.html", nil)
+			return
+		}
+
+		// Assume at this point they have provided authentication for the
+		// link, and we can redirect them.
 	}
 
-	uri, err := url.Parse(raw)
-	if err != nil || uri.Host == "" {
-		w.WriteHeader(http.StatusNotAcceptable)
-		w.Write(mustJSON(HTTPResp{Success: false, Message: "unable to parse url: " + raw}))
-		return
-	}
+	link.AddHit()
 
-	if !isValidScheme(uri.Scheme) {
-		w.WriteHeader(http.StatusNotAcceptable)
-		w.Write(mustJSON(HTTPResp{Success: false, Message: "invalid url scheme. allowed schemes: " + strings.Join(validSchemes, ", ")}))
-		return
-	}
+	http.Redirect(w, r, link.URL, http.StatusFound)
+}
 
-	link := Link{URL: uri.String(), Created: time.Now(), Hits: 0}
+func addForm(w http.ResponseWriter, r *http.Request) {
+	link := &Link{
+		URL:            r.PostFormValue("url"),
+		EncryptionHash: hash(r.PostFormValue("encrypt")),
+	}
 
 	link.Author, _, _ = net.SplitHostPort(r.RemoteAddr)
 	if link.Author == "" {
 		link.Author = r.RemoteAddr
 	}
 
-	if passwd != "" {
-		link.EncryptionHash = hash(passwd)
-	}
-
-	db := newDB(false)
-	defer db.Close()
-
-	// Check for dups.
-	var result []Link
-	err = db.Find(&result, bolthold.Where("URL").Eq(link.URL).And("EncryptionHash").Eq(link.EncryptionHash).Limit(1))
-	if err != nil {
-		panic(err)
-	}
-
-	// Assume there is a dup, just return it to the user.
-	if len(result) > 0 {
-		w.WriteHeader(http.StatusOK)
-		w.Write(mustJSON(HTTPResp{Success: true, URL: result[0].Short()}))
+	if err := link.Create(); err != nil {
+		w.WriteHeader(http.StatusNotAcceptable)
+		tmpl.Flash(w, r, "danger", err.Error())
+		tmpl.Load(w, r, "tmpl/index.html", nil)
 		return
 	}
 
-	// Store it.
-	for {
-		link.UID = uuid(4)
-		err = db.Insert(link.UID, link)
-		if err != nil {
-			if err == bolthold.ErrKeyExists {
-				// Keep looping through until we're able to store one which
-				// doesn't collide with a pre-existing key.
-				continue
-			}
+	tmpl.Load(w, r, "tmpl/index.html", map[string]interface{}{"link": link})
+}
 
-			panic(err)
-		}
+func addAPI(w http.ResponseWriter, r *http.Request) {
+	link := Link{
+		URL:            r.PostFormValue("url"),
+		EncryptionHash: hash(r.PostFormValue("encrypt")),
+	}
 
-		break
+	// Check for old password supplying method.
+	if link.EncryptionHash == "" {
+		link.EncryptionHash = hash(r.PostFormValue("password"))
+	}
+
+	link.Author, _, _ = net.SplitHostPort(r.RemoteAddr)
+	if link.Author == "" {
+		link.Author = r.RemoteAddr
+	}
+
+	if err := link.Create(); err != nil {
+		w.WriteHeader(http.StatusNotAcceptable)
+		w.Write(mustJSON(HTTPResp{Success: false, Message: err.Error()}))
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(mustJSON(HTTPResp{Success: true, URL: link.Short()}))
-
-	debug.Printf("%#v", link)
 }
 
 var validSchemes = []string{

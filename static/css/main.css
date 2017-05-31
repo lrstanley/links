@@ -14,10 +14,28 @@ html, body, .main {
     height: 100vh;
 }
 
-.main > .card {
+.wrap {
     width: 1000px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.wrap-sm{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 1050px) {
+    .wrap {
+        max-width: 900px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.main .card-header {
+    padding: 7px 13px;
 }
 
 .main .card-footer {

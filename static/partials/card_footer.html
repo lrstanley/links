@@ -1,0 +1,12 @@
+<div class="card-footer text-muted">
+    <span class="pull-left">
+        <span class="badge badge-primary">{{stats.Redirects}} redirected</span>
+        <span class="badge badge-info">{{stats.Shortened}} links generated</span>
+    </span>
+
+    <span class="pull-right">
+        {{#ne url.Path "/"}}<a href="/">home</a> |{{/ne}}
+        <a href="https://github.com/lrstanley/links.ml#api-usage">api</a> |
+        <a href="https://github.com/lrstanley/links.ml">links.ml</a>
+    </span>
+</div>
