@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
-
 	"runtime"
+	"strings"
 
 	"github.com/jessevdk/go-flags"
 )
@@ -32,6 +31,9 @@ type Config struct {
 
 	ExportFile string `short:"e" long:"export-file" default:"links.export" description:"file to export db to"`
 	ExportJSON bool   `long:"export-json" description:"export db to json elements"`
+
+	MigrateFlag bool   `long:"migrate" description:"begin migration from links.ml running MySQL"`
+	MigrateInfo string `long:"migrate-info" default:"user:passwd@tcp(localhost:3306)/links_db" description:"connection url used to connect to the old mysql instance"`
 
 	VersionFlag bool `short:"v" long:"version" description:"display the version of links.ml and exit"`
 }
@@ -74,6 +76,11 @@ func main() {
 
 	// Verify db is accessible.
 	verifyDB()
+
+	if conf.MigrateFlag {
+		migrateDB(conf.MigrateInfo)
+		return
+	}
 
 	if conf.ExportJSON {
 		fmt.Printf("%s", hash("test"))

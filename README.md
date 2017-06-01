@@ -49,6 +49,18 @@ For example:
 $ links -s "http://your-domain.com" -b "0.0.0.0:80" -d links.db
 ```
 
+## Migrating
+
+If you were using links.ml before it was rewritten in Go (and was using
+MySQL), then this is how you can migrate the database:
+
+```
+$ links --migrate --migrate-info "user:passwd@tcp(your-server:3306)/links_db"
+```
+
+Depending on the amount of links within the old database, this may take a while
+to complete. I would recommend backing things up prior just in case as well.
+
 ## Contributing
 
 Below are a few guidelines if you would like to contribute. Keep the code

@@ -1,24 +1,25 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
+	"database/sql"
+	"encoding/gob"
+	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
 	"net/url"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
 
-	"bytes"
-	"encoding/gob"
-	"encoding/hex"
-
-	"encoding/json"
-
 	"github.com/boltdb/bolt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/timshannon/bolthold"
 )
 
@@ -250,4 +251,61 @@ func dbExportJSON(path string) {
 		})
 		return nil
 	})
+}
+
+func migrateDB(mysqlAuth string) {
+	sdb, err := sql.Open("mysql", mysqlAuth)
+	if err != nil {
+		debug.Fatalf("unable to open sql connection: %s", err)
+	}
+	defer sdb.Close()
+
+	if err = sdb.Ping(); err != nil {
+		debug.Fatalf("unable to ping mysql server: %s", err)
+	}
+
+	var rows *sql.Rows
+	rows, err = sdb.Query("SELECT id, url, hits, COALESCE(password, '') as password, time FROM urls")
+	if err != nil {
+		debug.Fatal(err)
+	}
+	defer rows.Close()
+
+	db := newDB(false)
+	defer db.Close()
+
+	var count, hits, errors int
+
+	for rows.Next() {
+		link := Link{}
+		var ts []uint8
+		if err = rows.Scan(&link.UID, &link.URL, &link.Hits, &link.EncryptionHash, &ts); err != nil {
+			debug.Printf("error scanning row: %s", err)
+			errors++
+			continue
+		}
+
+		tsNano, _ := strconv.ParseInt(string(ts), 10, 64)
+		link.Created = time.Unix(tsNano, 0)
+
+		hits += link.Hits
+
+		err = db.Insert(link.UID, &link)
+		if err != nil {
+			debug.Printf("error inserting exported link into db: %s", err)
+			errors++
+			continue
+		}
+
+		count++
+		debug.Printf("count[%4d]: importing %s -> %s", count, link.UID, link.URL)
+	}
+	if err = rows.Err(); err != nil {
+		debug.Fatal(err)
+	}
+
+	incGlobalStats(db, hits, count)
+
+	debug.Print("complete")
+	debug.Printf("%d imported, %d errors", count, errors)
 }

@@ -1,14 +1,13 @@
 package main
 
 import (
+	"encoding/gob"
 	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
 	"strings"
 	"time"
-
-	"encoding/gob"
 
 	rice "github.com/GeertJohan/go.rice"
 	gctx "github.com/gorilla/context"
