@@ -25,6 +25,13 @@ func init() {
 
 		return ""
 	})
+	raymond.RegisterHelper("ellipsis", func(max int, text string) string {
+		if len(text) > max {
+			return text[0:max] + "..."
+		}
+
+		return text
+	})
 }
 
 func ListPartials(path string) map[string]string {
@@ -113,6 +120,8 @@ func defaultCtx(w http.ResponseWriter, r *http.Request) map[string]interface{} {
 	cachedGlobalStats.mu.RUnlock()
 
 	return map[string]interface{}{
+		"commit":   commit,
+		"version":  version,
 		"full_url": r.URL.String(),
 		"url":      r.URL,
 		"sess":     session.Values,

@@ -16,7 +16,7 @@
                             <div class="input-group">
                                 <input type="text" name="url" class="form-control form-control-lg input-focus" placeholder="Shorten a link" required autofocus>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="submit">Shorten</button>
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-compress"></i> Shorten</button>
                                 </span>
                             </div>
                         </div>
@@ -27,10 +27,10 @@
             {{> card_footer}}
         </div>
 
-        {{#if ctx.link.UID}}
+        {{#if ctx.link}}
             <div class="alert alert-success show mt-2 text-center" role="alert">
-                <strong>Successfully</strong> shortened link <code>{{ctx.link.URL}}</code> -&gt; <code><a href="{{ctx.link.Short}}">{{ctx.link.Short}}</a></code>
-                <button class="btn btn-sm btn-primary clip" data-clipboard-text="{{ctx.link.Short}}">copy to clipboard</button>
+                <strong>Shortened link</strong>: <code><a href="{{ctx.link.URL}}">{{ellipsis 30 ctx.link.URL}}</a></code> -&gt; <code><a href="{{ctx.link.Short}}">{{ctx.link.Short}}</a></code>
+                <button class="btn btn-sm btn-primary clip" data-clipboard-text="{{ctx.link.Short}}"><i class="fa fa-clipboard"></i> copy to clipboard</button>
             </div>
         {{/if}}
 
