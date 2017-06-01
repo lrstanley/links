@@ -6,7 +6,15 @@ import (
 	"os"
 	"strings"
 
+	"runtime"
+
 	"github.com/jessevdk/go-flags"
+)
+
+var (
+	version = "master"
+	commit  = "latest"
+	date    = "-"
 )
 
 type Config struct {
@@ -19,10 +27,13 @@ type Config struct {
 		Cert   string `short:"c" long:"cert" description:"path to ssl cert file"`
 		Key    string `short:"k" long:"key" description:"path to ssl key file"`
 	} `group:"TLS Options" namespace:"tls"`
-	DBPath     string `short:"d" long:"db" default:"store.db" description:"path to database file"`
-	KeyLength  int    `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
+	DBPath    string `short:"d" long:"db" default:"store.db" description:"path to database file"`
+	KeyLength int    `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
+
 	ExportFile string `short:"e" long:"export-file" default:"links.export" description:"file to export db to"`
 	ExportJSON bool   `long:"export-json" description:"export db to json elements"`
+
+	VersionFlag bool `short:"v" long:"version" description:"display the version of links.ml and exit"`
 }
 
 var conf Config
@@ -43,6 +54,11 @@ func main() {
 
 		// go-flags should print to stderr/stdout as necessary, so we won't.
 		os.Exit(1)
+	}
+
+	if conf.VersionFlag {
+		fmt.Printf("links.ml version: %s [%s] (%s, %s), compiled %s\n", version, commit, runtime.GOOS, runtime.GOARCH, date)
+		os.Exit(0)
 	}
 
 	// Do some configuration validation.

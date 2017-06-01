@@ -6,19 +6,13 @@
 *.txt
 *.export
 BUILD
+dist
 rice-box*
-# *.yaml
-# !example.yaml
-
-*.exe
 *.test
 *.prof
-
-# go version deps
 vendor/*
 !vendor/*.json
 .glide
 *.lock
-
 links
 links.ml

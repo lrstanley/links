@@ -87,7 +87,7 @@ func updateGlobalStats(db *bolthold.Store) {
 
 // Link represents a url that we are shortening.
 type Link struct {
-	UID            string
+	UID            string    `boltholdKey`
 	URL            string    // The URL we're expanding.
 	Created        time.Time // When the link was submitted.
 	Hits           int       // How many times we've expanded for users.
