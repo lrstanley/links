@@ -32,6 +32,8 @@ Application Options:
       --key-length=   default length of key (uuid) for generated urls (default: 4)
   -e, --export-file=  file to export db to (default: links.export)
       --export-json   export db to json elements
+      --migrate       begin migration from links.ml running MySQL
+      --migrate-info= connection url used to connect to the old mysql instance (default: user:passwd@tcp(localhost:3306)/links_db)
   -v, --version       display the version of links.ml and exit
 
 TLS Options:
