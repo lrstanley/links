@@ -1,0 +1,13 @@
+links.ml {
+	proxy / localhost:8080 {
+		transparent
+	}
+	expires {
+		match .css$ 1d
+		match .js$ 1d
+		match .png$ 1d
+		match .jpg$ 1d
+		match .pdf$ 1d
+		match .txt$ 1d
+	}
+}

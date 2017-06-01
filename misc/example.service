@@ -1,0 +1,18 @@
+; can go in /etc/systemd/system/links.service
+; make sure to:
+;  $ systemctl enable links
+;  $ systemctl start links
+[Unit]
+Description=links
+
+[Service]
+ExecStart=/path/to/links.ml/links -s "http://your-domain.com" -b "0.0.0.0:80"
+WorkingDirectory=/path/to/links.ml/
+LimitNOFILE=4096
+; change this
+User=youruser
+Group=youruser
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
