@@ -16,17 +16,6 @@ build:
   hooks:
     pre: make prep
 archive:
-  # You can change the name of the archive.
-  # This is parsed with Golang template engine and the following variables
-  # are available:
-  # - Binary
-  # - Tag
-  # - Version (Tag with the `v` prefix stripped)
-  # - Os
-  # - Arch
-  # - Arm (ARM version)
-  # The default is `{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}`
-  # name_template: "{{.Binary}}_{{.Version}}_{{.Os}}_{{.Arch}}"
   format_overrides:
     - goos: windows
       format: zip
