@@ -1,0 +1,19 @@
+language: go
+go:
+- 1.8
+- tip
+script:
+- make build
+branches:
+  only:
+  - master
+notifications:
+  irc:
+    channels:
+    - irc.byteirc.org#L
+    template:
+    - "%{repository} #%{build_number} %{branch}/%{commit}: %{author} -- %{message}
+      %{build_url}"
+    on_success: change
+    on_failure: change
+    skip_join: false
