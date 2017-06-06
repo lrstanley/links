@@ -51,7 +51,7 @@ For example:
 $ links -s "http://your-domain.com" -b "0.0.0.0:80" -d links.db
 ```
 
-## Using as a library:
+## Using as a library
 
 Links.ml also has a Go client library which you can use, which adds a simple
 wrapper around an http call, to make shortening links simpler. Download it
@@ -62,6 +62,21 @@ $ go get -u github.com/lrstanley/links.ml/client
 ```
 
 View the documentation [here](https://godoc.org/github.com/lrstanley/links.ml/client)
+
+### Example
+
+```go
+package main
+
+import links "github.com/lrstanley/links.ml/client"
+
+func main() {
+    uri, err := links.Shorten("https://your-long-link.com/longer/link", "", nil)
+    if err != nil {
+        log.Fatalf("unable to shorten link: %s")
+    }
+}
+```
 
 ## Migrating
 

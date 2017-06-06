@@ -40,7 +40,7 @@ func Shorten(link, passwd string, httpClient *http.Client) (uri *url.URL, err er
 		httpClient = &http.Client{Timeout: 4 * time.Second}
 	}
 
-	var params url.Values
+	params := url.Values{}
 
 	params.Set("url", link)
 	if passwd != "" {
