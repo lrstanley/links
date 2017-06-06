@@ -51,6 +51,18 @@ For example:
 $ links -s "http://your-domain.com" -b "0.0.0.0:80" -d links.db
 ```
 
+## Using as a library:
+
+Links.ml also has a Go client library which you can use, which adds a simple
+wrapper around an http call, to make shortening links simpler. Download it
+using the following `go get` command:
+
+```
+$ go get -u github.com/lrstanley/links.ml/client
+```
+
+View the documentation [here](https://godoc.org/github.com/lrstanley/links.ml/client)
+
 ## Migrating
 
 If you were using links.ml before it was rewritten in Go (and was using
