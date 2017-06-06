@@ -68,13 +68,20 @@ View the documentation [here](https://godoc.org/github.com/lrstanley/links.ml/cl
 ```go
 package main
 
-import links "github.com/lrstanley/links.ml/client"
+import (
+	"fmt"
+	"log"
+
+	links "github.com/lrstanley/links.ml/client"
+)
 
 func main() {
-    uri, err := links.Shorten("https://your-long-link.com/longer/link", "", nil)
-    if err != nil {
-        log.Fatalf("unable to shorten link: %s")
-    }
+	uri, err := links.Shorten("https://your-long-link.com/longer/link", "", nil)
+	if err != nil {
+		log.Fatalf("unable to shorten link: %s", err)
+	}
+
+	fmt.Printf("shortened: %s\n", uri.String())
 }
 ```
 

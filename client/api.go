@@ -47,7 +47,7 @@ func Shorten(link, passwd string, httpClient *http.Client) (uri *url.URL, err er
 		params.Set("encrypt", passwd)
 	}
 
-	resp, err := httpClient.PostForm(URI, params)
+	resp, err := httpClient.PostForm(URI+"/add", params)
 	if err != nil {
 		return nil, err
 	}
