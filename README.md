@@ -136,7 +136,7 @@ $ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://link
 
 ```
 LICENSE: The MIT License (MIT)
-Copyright (c) Liam Stanley <me@liamstanley.io>
+Copyright (c) 2017 Liam Stanley <me@liamstanley.io>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
