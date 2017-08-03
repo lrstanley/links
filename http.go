@@ -22,12 +22,11 @@ import (
 	"github.com/timshannon/bolthold"
 )
 
-var tmpl *Loader
 var sess *sessions.CookieStore
 
 func httpServer() {
-	tmpl = NewLoader("partials/*", defaultCtx)
 	gob.Register(FlashMessage{})
+	setupTmpl()
 	updateGlobalStats(nil)
 
 	sess = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
@@ -42,10 +41,13 @@ func httpServer() {
 	r.Use(middleware.DefaultLogger)
 	r.Use(middleware.Timeout(30 * time.Second))
 	r.Use(middleware.Recoverer)
-	r.FileServer("/static", rice.MustFindBox("static").HTTPBox())
+	FileServer(r, "/static", rice.MustFindBox("static").HTTPBox())
+	if conf.Debug {
+		r.Mount("/debug", middleware.Profiler())
+	}
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Load(w, r, "tmpl/index.html", nil)
+		tmpl(w, r, "tmpl/index.html", nil)
 	})
 
 	r.Get("/:uid", expand)
@@ -96,16 +98,16 @@ func expand(w http.ResponseWriter, r *http.Request) {
 	if link.EncryptionHash != "" {
 		if r.Method == http.MethodGet {
 			w.WriteHeader(http.StatusForbidden)
-			tmpl.Load(w, r, "tmpl/auth.html", nil)
+			tmpl(w, r, "tmpl/auth.html", nil)
 			return
 		}
 
 		decrypt := r.PostFormValue("decrypt")
 
 		if hash(decrypt) != link.EncryptionHash {
-			tmpl.Flash(w, r, "danger", "invalid decryption string provided")
+			flashMessage(w, r, "danger", "invalid decryption string provided")
 			w.WriteHeader(http.StatusForbidden)
-			tmpl.Load(w, r, "tmpl/auth.html", nil)
+			tmpl(w, r, "tmpl/auth.html", nil)
 			return
 		}
 
@@ -131,12 +133,12 @@ func addForm(w http.ResponseWriter, r *http.Request) {
 
 	if err := link.Create(); err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
-		tmpl.Flash(w, r, "danger", err.Error())
-		tmpl.Load(w, r, "tmpl/index.html", nil)
+		flashMessage(w, r, "danger", err.Error())
+		tmpl(w, r, "tmpl/index.html", nil)
 		return
 	}
 
-	tmpl.Load(w, r, "tmpl/index.html", map[string]interface{}{"link": link})
+	tmpl(w, r, "tmpl/index.html", map[string]interface{}{"link": link})
 }
 
 func addAPI(w http.ResponseWriter, r *http.Request) {

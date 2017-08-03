@@ -191,6 +191,7 @@ func hash(input string) string {
 func newDB(readOnly bool) *bolthold.Store {
 	store, err := bolthold.Open(conf.DBPath, 0660, &bolthold.Options{Options: &bolt.Options{
 		ReadOnly: readOnly,
+		Timeout:  10 * time.Second,
 	}})
 	if err != nil {
 		panic(fmt.Sprintf("unable to open db: %s", err))

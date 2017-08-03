@@ -1,5 +1,6 @@
-{{> header title="Shorten a link"}}
-
+{% extends "/partials/base.html" %}
+{% block title %}Shorten a list{% endblock title %}
+{% block content %}
 <div class="main flex-ct">
     <div class="wrap flex-column">
         <div class="card">
@@ -24,18 +25,17 @@
                 </form>
             </div>
 
-            {{> card_footer}}
+            {% include "/partials/card_footer.html" %}
         </div>
 
-        {{#if ctx.link}}
+        {% if link %}
             <div class="alert alert-success show mt-2 text-center" role="alert">
-                <strong>Shortened link</strong>: <code><a href="{{ctx.link.URL}}">{{ellipsis 30 ctx.link.URL}}</a></code> -&gt; <code><a href="{{ctx.link.Short}}">{{ctx.link.Short}}</a></code>
-                <button class="btn btn-sm btn-primary clip" data-clipboard-text="{{ctx.link.Short}}"><i class="fa fa-clipboard"></i> copy to clipboard</button>
+                <strong>Shortened link</strong>: <code><a href="{{link.URL}}">{{link.URL|truncatechars:30}}</a></code> -&gt; <code><a href="{{link.Short}}">{{link.Short}}</a></code>
+                <button class="btn btn-sm btn-primary clip" data-clipboard-text="{{link.Short}}"><i class="fa fa-clipboard"></i> copy to clipboard</button>
             </div>
-        {{/if}}
+        {% endif %}
 
-        {{#each messages}}<div class="alert alert-{{this.Type}} text-center mt-2" role="alert">{{this.Text}}</div>{{/each}}
+        {% for msg in messages %}<div class="alert alert-{{msg.Type}} text-center mt-2" role="alert">{{msg.Text}}</div>{% endfor %}
     </div>
 </div>
-
-{{> footer}}
+{% endblock content %}

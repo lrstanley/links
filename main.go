@@ -23,6 +23,7 @@ var (
 type Config struct {
 	Site  string `short:"s" long:"site-name" default:"https://links.ml" description:"site url, used for url generation"`
 	Quiet bool   `short:"q" long:"quiet" description:"don't log to stdout"`
+	Debug bool   `long:"debug" description:"enable debugging (pprof endpoints)"`
 	HTTP  string `short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
 	Proxy bool   `short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
 	TLS   struct {

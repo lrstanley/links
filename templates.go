@@ -6,12 +6,12 @@ package main
 
 import (
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/aymerick/raymond"
+	"github.com/flosch/pongo2"
+	"github.com/pressly/chi"
+	"github.com/sharpner/pobin"
 )
 
 type FlashMessage struct {
@@ -21,94 +21,14 @@ type FlashMessage struct {
 
 const defaultSessionID = "sessionid"
 
-func init() {
-	raymond.RegisterHelper("ne", func(a interface{}, b interface{}, options *raymond.Options) interface{} {
-		if raymond.Str(a) != raymond.Str(b) {
-			return options.Fn()
-		}
+var assetfs *pongo2.TemplateSet
 
-		return ""
-	})
-	raymond.RegisterHelper("ellipsis", func(max int, text string) string {
-		if len(text) > max {
-			return text[0:max] + "..."
-		}
+func setupTmpl() {
+	assetfs = pongo2.NewSet("", pobin.NewMemoryTemplateLoader(rice.MustFindBox("static").Bytes))
 
-		return text
-	})
 }
 
-func ListPartials(path string) map[string]string {
-	globs := []string{}
-
-	rice.MustFindBox("static").Walk("", func(path string, info os.FileInfo, err error) error {
-		if strings.HasPrefix(path, "partials/") {
-			globs = append(globs, path)
-		}
-
-		return nil
-	})
-
-	var j int
-	var name string
-
-	out := make(map[string]string)
-	for i := 0; i < len(globs); i++ {
-		name = filepath.Base(globs[i])
-		j = strings.Index(name, ".")
-		if j > -1 {
-			name = name[0:j]
-		}
-
-		out[name] = rice.MustFindBox("static").MustString(globs[i])
-	}
-
-	return out
-}
-
-type Loader struct {
-	Partials string
-
-	ctx func(w http.ResponseWriter, r *http.Request) map[string]interface{}
-}
-
-func NewLoader(partials string, defaultCtx func(w http.ResponseWriter, r *http.Request) map[string]interface{}) *Loader {
-	return &Loader{Partials: partials, ctx: defaultCtx}
-}
-
-func (l *Loader) Get(path string) *raymond.Template {
-	tmpl := raymond.MustParse(rice.MustFindBox("static").MustString(path))
-	tmpl.RegisterPartials(ListPartials(l.Partials))
-
-	return tmpl
-}
-
-func (l *Loader) Load(w http.ResponseWriter, r *http.Request, path string, ctx interface{}) {
-	if l.ctx == nil {
-		w.Write([]byte(l.Get(path).MustExec(ctx)))
-		return
-	}
-
-	out := l.ctx(w, r)
-	if out == nil {
-		panic("default context returned nil")
-	}
-
-	out["ctx"] = ctx
-
-	w.Write([]byte(l.Get(path).MustExec(out)))
-}
-
-func (_ *Loader) Flash(w http.ResponseWriter, r *http.Request, status, message string) {
-	session, _ := sess.Get(r, defaultSessionID)
-	session.AddFlash(FlashMessage{status, message}, "messages")
-	err := session.Save(r, w)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func defaultCtx(w http.ResponseWriter, r *http.Request) map[string]interface{} {
+func tmpl(w http.ResponseWriter, r *http.Request, path string, ctx map[string]interface{}) {
 	session, _ := sess.Get(r, defaultSessionID)
 	messages := session.Flashes("messages")
 
@@ -119,17 +39,59 @@ func defaultCtx(w http.ResponseWriter, r *http.Request) map[string]interface{} {
 		panic(err)
 	}
 
-	cachedGlobalStats.mu.RLock()
-	stats := cachedGlobalStats
-	cachedGlobalStats.mu.RUnlock()
+	tpl := pongo2.Must(assetfs.FromFile(path))
 
-	return map[string]interface{}{
-		"commit":   commit,
-		"version":  version,
-		"full_url": r.URL.String(),
-		"url":      r.URL,
-		"sess":     session.Values,
-		"messages": messages,
-		"stats":    &stats,
+	if ctx == nil {
+		ctx = make(map[string]interface{})
+	}
+
+	// cachedGlobalStats.mu.RLock()
+	// // Note that this copies a mutex, but it should never be re-locked, as
+	// // it's only being used in a template.
+	// stats := cachedGlobalStats
+	// cachedGlobalStats.mu.RUnlock()
+
+	ctx["full_url"] = r.URL.String()
+	ctx["url"] = r.URL
+	ctx["sess"] = session.Values
+	ctx["messages"] = messages
+	ctx["commit"] = commit
+	ctx["version"] = version
+	// ctx["stats"] = &stats
+
+	out, err := tpl.ExecuteBytes(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	w.Write(out)
+}
+
+// FileServer conveniently sets up a http.FileServer handler to serve
+// static files from a http.FileSystem.
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("url params not allowed in file server")
+	}
+
+	fs := http.StripPrefix(path, http.FileServer(root))
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}))
+}
+
+func flashMessage(w http.ResponseWriter, r *http.Request, status, message string) {
+	session, _ := sess.Get(r, defaultSessionID)
+	session.AddFlash(FlashMessage{status, message}, "messages")
+	err := session.Save(r, w)
+	if err != nil {
+		panic(err)
 	}
 }

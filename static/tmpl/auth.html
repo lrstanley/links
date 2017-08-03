@@ -1,8 +1,9 @@
-{{> header title="Decrypt link"}}
-
+{% extends "/partials/base.html" %}
+{% block title %}Decrypt link{% endblock title %}
+{% block content %}
 <div class="main flex-ct">
     <div class="wrap-sm flex-column">
-        {{#each messages}}<div class="alert alert-{{this.Type}} text-center mt-2" role="alert">{{this.Text}}</div>{{/each}}
+        {% for msg in messages %}<div class="alert alert-{{msg.Type}} text-center mt-2" role="alert">{{msg.Text}}</div>{% endfor %}
 
         <div class="card">
             <div class="card-header text-center"><i class="fa fa-lock"></i> Authentication Required</div>
@@ -17,9 +18,8 @@
                 </form>
             </div>
 
-            {{> card_footer}}
+            {% include "/partials/card_footer.html" %}
         </div>
     </div>
 </div>
-
-{{> footer}}
+{% endblock content %}
