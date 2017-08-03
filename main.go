@@ -21,12 +21,13 @@ var (
 )
 
 type Config struct {
-	Site  string `short:"s" long:"site-name" default:"https://links.ml" description:"site url, used for url generation"`
-	Quiet bool   `short:"q" long:"quiet" description:"don't log to stdout"`
-	Debug bool   `long:"debug" description:"enable debugging (pprof endpoints)"`
-	HTTP  string `short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
-	Proxy bool   `short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
-	TLS   struct {
+	Site       string `short:"s" long:"site-name" default:"https://links.ml" description:"site url, used for url generation"`
+	SessionDir string `long:"session-dir" description:"optional location to store temporary sessions"`
+	Quiet      bool   `short:"q" long:"quiet" description:"don't log to stdout"`
+	Debug      bool   `long:"debug" description:"enable debugging (pprof endpoints)"`
+	HTTP       string `short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
+	Proxy      bool   `short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
+	TLS        struct {
 		Enable bool   `long:"enable" description:"run tls server rather than standard http"`
 		Cert   string `short:"c" long:"cert" description:"path to ssl cert file"`
 		Key    string `short:"k" long:"key" description:"path to ssl key file"`

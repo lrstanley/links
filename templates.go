@@ -10,6 +10,7 @@ import (
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/flosch/pongo2"
+	gctx "github.com/gorilla/context"
 	"github.com/pressly/chi"
 	"github.com/sharpner/pobin"
 )
@@ -30,6 +31,7 @@ func setupTmpl() {
 
 func tmpl(w http.ResponseWriter, r *http.Request, path string, ctx map[string]interface{}) {
 	session, _ := sess.Get(r, defaultSessionID)
+	defer gctx.Clear(r)
 	messages := session.Flashes("messages")
 
 	// We have to save the session, otherwise the flashes aren't properly
@@ -45,11 +47,11 @@ func tmpl(w http.ResponseWriter, r *http.Request, path string, ctx map[string]in
 		ctx = make(map[string]interface{})
 	}
 
-	// cachedGlobalStats.mu.RLock()
-	// // Note that this copies a mutex, but it should never be re-locked, as
-	// // it's only being used in a template.
-	// stats := cachedGlobalStats
-	// cachedGlobalStats.mu.RUnlock()
+	cachedGlobalStats.mu.RLock()
+	// Note that this copies a mutex, but it should never be re-locked, as
+	// it's only being used in a template.
+	stats := cachedGlobalStats
+	cachedGlobalStats.mu.RUnlock()
 
 	ctx["full_url"] = r.URL.String()
 	ctx["url"] = r.URL
@@ -57,7 +59,7 @@ func tmpl(w http.ResponseWriter, r *http.Request, path string, ctx map[string]in
 	ctx["messages"] = messages
 	ctx["commit"] = commit
 	ctx["version"] = version
-	// ctx["stats"] = &stats
+	ctx["stats"] = &stats
 
 	out, err := tpl.ExecuteBytes(ctx)
 	if err != nil {

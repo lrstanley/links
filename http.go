@@ -22,15 +22,18 @@ import (
 	"github.com/timshannon/bolthold"
 )
 
-var sess *sessions.CookieStore
+var sess sessions.Store
 
 func httpServer() {
 	gob.Register(FlashMessage{})
 	setupTmpl()
 	updateGlobalStats(nil)
 
-	sess = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
-	sess.MaxAge(86400)
+	if conf.SessionDir != "" {
+		sess = sessions.NewFilesystemStore(conf.SessionDir, securecookie.GenerateRandomKey(32))
+	} else {
+		sess = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
+	}
 
 	r := chi.NewRouter()
 
@@ -55,13 +58,20 @@ func httpServer() {
 	r.Post("/", addForm)
 	r.Post("/add", addAPI)
 
+	srv := &http.Server{
+		Addr:         conf.HTTP,
+		Handler:      gctx.ClearHandler(r),
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
 	if conf.TLS.Enable {
 		debug.Printf("initializing https server on %s", conf.HTTP)
-		debug.Fatal(http.ListenAndServeTLS(conf.HTTP, conf.TLS.Cert, conf.TLS.Key, gctx.ClearHandler(r)))
+		debug.Fatal(srv.ListenAndServeTLS(conf.TLS.Cert, conf.TLS.Key))
 	}
 
 	debug.Printf("initializing http server on %s", conf.HTTP)
-	debug.Fatal(http.ListenAndServe(conf.HTTP, gctx.ClearHandler(r)))
+	debug.Fatal(srv.ListenAndServe())
 }
 
 func mustJSON(input interface{}) []byte {
