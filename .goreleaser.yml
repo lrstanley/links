@@ -2,9 +2,9 @@
 build:
   binary: links
   goos:
-    - windows
+    # - windows
     - linux
-    - freebsd
+    # - freebsd
   goarch:
     - amd64
     - 386
