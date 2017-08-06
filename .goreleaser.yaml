@@ -2,19 +2,12 @@
 build:
   binary: links
   goos:
-    - darwin
     - windows
     - linux
-    # - freebsd
+    - freebsd
   goarch:
     - amd64
-    - arm
-    - arm64
-  goarm:
-    - 6
-    - 7
-  hooks:
-    pre: make prep
+    - 386
 archive:
   format_overrides:
     - goos: windows
