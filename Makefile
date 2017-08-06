@@ -8,38 +8,34 @@ export $(PATH)
 BINARY=links
 LD_FLAGS += -s -w
 
-release: fetch
+release: clean fetch generate
 	$(GOPATH)/bin/goreleaser --skip-publish
 
-publish: fetch
+publish: clean fetch generate
 	$(GOPATH)/bin/goreleaser
 
-snapshot: fetch
+snapshot: clean fetch generate
 	$(GOPATH)/bin/goreleaser --snapshot --skip-validate --skip-publish
 
 update-deps: fetch
-	@echo -e "\n\033[0;36m [ Updating dependencies ]\033[0;m"
 	$(GOPATH)/bin/govendor add +external
 	$(GOPATH)/bin/govendor remove +unused
 	$(GOPATH)/bin/govendor update +external
 
 fetch:
-	@echo -e "\n\033[0;36m [ Fetching dependencies ]\033[0;m"
 	test -f $(GOPATH)/bin/govendor || go get -u -v github.com/kardianos/govendor
 	test -f $(GOPATH)/bin/goreleaser || go get -u -v github.com/goreleaser/goreleaser
 	test -f $(GOPATH)/bin/rice || go get -u -v github.com/GeertJohan/go.rice/rice
 	$(GOPATH)/bin/govendor sync
 
 clean:
-	@echo -e "\n\033[0;36m [ Removing previously compiled binaries, and cleaning up ]\033[0;m"
-	/bin/rm -rfv "dist/"
-	/bin/rm -fv "${BINARY}"
-	/bin/rm -fv "rice-box.go"
+	/bin/rm -rfv "dist/" ${BINARY} rice-box.go
 
-prep: clean
+generate:
 	$(GOPATH)/bin/rice -v embed-go
 
-build: fetch prep
-	@echo -e "\n\033[0;36m [ Building ${BINARY} ]\033[0;m"
-	go build -ldflags "${LD_FLAGS}" -i -x -v -o ${BINARY}
-	# @$(MAKE) -f $(THIS_FILE) clean
+compress:
+	(which /usr/bin/upx > /dev/null && find dist/*/* | xargs -I{} -n1 -P 4 /usr/bin/upx --best "{}") || echo "not using upx for binary compression"
+
+build: fetch generate
+	go build -ldflags "${LD_FLAGS}" -i -v -o ${BINARY}
