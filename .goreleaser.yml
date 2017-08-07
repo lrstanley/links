@@ -17,3 +17,10 @@ release:
   draft: true
 snapshot:
   name_template: snapshot-{{.Commit}}
+snapcraft:
+  name: linksml
+  summary: URL Shortener
+  description: Simple, fast link shortener
+  apps:
+    links:
+      plugs: [network, network-bind, home]
