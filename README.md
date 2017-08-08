@@ -13,8 +13,13 @@ page to get the latest available version of links.ml
 
 ### Build from source
 
-    $ go get -u github.com/lrstanley/links.ml
-    $ $GOPATH/bin/link.ml --help
+Note that you must have [Go](https://golang.org/doc/install) installed and
+a fully working `$GOPATH` setup.
+
+    $ go get -d -u github.com/lrstanley/links.ml
+    $ cd $GOPATH/src/github.com/lrstanley/links.ml
+    $ make
+    $ ./links --help
 
 ## Usage
 
@@ -136,7 +141,7 @@ $ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://link
 
 ```
 LICENSE: The MIT License (MIT)
-Copyright (c) 2017 Liam Stanley <me@liamstanley.io>
+Copyright (c) 2016 Liam Stanley <me@liamstanley.io>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
