@@ -4,6 +4,20 @@
   <a href="http://byteirc.org/channel/L"><img src="https://img.shields.io/badge/ByteIRC-%23L-blue.svg" alt="IRC Chat"></a>
 </p>
 
+## Table of Contents
+- [Installing](#installing)
+  - [Prebuilt archives/binaries](#prebuilt-archivesbinaries)
+  - [Build from source](#build-from-source)
+- [Usage](#usage)
+  - [Example](#example)
+- [Using as a library](#using-as-a-library)
+  - [Example](#example-1)
+- [Migrating](#migrating)
+- [Contributing](#contributing)
+- [API](#api)
+    - [Password protection](#password-protection)
+- [License](#license)
+
 ## Installing
 
 ### Prebuilt archives/binaries
@@ -50,7 +64,7 @@ Help Options:
   -h, --help          Show this help message
 ```
 
-For example:
+### Example
 
 ```
 $ links -s "http://your-domain.com" -b "0.0.0.0:80" -d links.db
