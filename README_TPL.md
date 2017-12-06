@@ -1,7 +1,7 @@
 <p align="center">links -- Simple, fast link shortener</p>
 <p align="center">
   <a href="https://travis-ci.org/lrstanley/links"><img src="https://travis-ci.org/lrstanley/links.svg?branch=master" alt="Build Status"></a>
-  <a href="http://byteirc.org/channel/L"><img src="https://img.shields.io/badge/ByteIRC-%23L-blue.svg" alt="IRC Chat"></a>
+  <a href="https://byteirc.org/channel/%23%2Fdev%2Fnull"><img src="https://img.shields.io/badge/ByteIRC-%23%2Fdev%2Fnull-blue.svg" alt="IRC Chat"></a>
 </p>
 
 ## Table of Contents
@@ -33,23 +33,23 @@ update the service files to the correct user.
 ### Ubuntu/Debian
 
 ```bash
-$ wget https://liam.sh/ghr/links_0.2.3_linux_amd64.deb
-$ dpkg -i links_0.2.3_linux_amd64.deb
+$ wget https://liam.sh/ghr/links_[[tag]]_[[os]]_[[arch]].deb
+$ dpkg -i links_[[tag]]_[[os]]_[[arch]].deb
 $ links --help
 ```
 
 ### CentOS/Redhat
 
 ```bash
-$ yum localinstall https://liam.sh/ghr/links_0.2.3_linux_amd64.rpm
+$ yum localinstall https://liam.sh/ghr/links_[[tag]]_[[os]]_[[arch]].rpm
 $ links --help
 ```
 
 ### Manual Install
 
 ```bash
-$ wget https://liam.sh/ghr/links_0.2.3_linux_amd64.tar.gz
-$ tar -C /usr/bin/ -xzvf links_0.2.3_linux_amd64.tar.gz links
+$ wget https://liam.sh/ghr/links_[[tag]]_[[os]]_[[arch]].tar.gz
+$ tar -C /usr/bin/ -xzvf links_[[tag]]_[[os]]_[[arch]].tar.gz links
 $ chmod +x /usr/bin/links
 $ links --help
 ```

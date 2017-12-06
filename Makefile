@@ -7,6 +7,13 @@ export $(PATH)
 
 BINARY=links
 LD_FLAGS += -s -w
+VERSION=$(shell git describe --tags --abbrev=0 2>/dev/null | sed -r "s:^v::g")
+RSRC=README_TPL.md
+ROUT=README.md
+
+readme-gen:
+	cp -av "${RSRC}" "${ROUT}"
+	sed -ri -e "s:\[\[tag\]\]:${VERSION}:g" -e "s:\[\[os\]\]:linux:g" -e "s:\[\[arch\]\]:amd64:g" "${ROUT}"
 
 release: clean fetch generate
 	$(GOPATH)/bin/goreleaser --skip-publish

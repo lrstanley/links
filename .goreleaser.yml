@@ -2,12 +2,10 @@
 build:
   binary: links
   goos:
-    - windows
     - linux
     - freebsd
   goarch:
     - amd64
-    - 386
   ldflags: -s -w -X main.version=v{{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
 archive:
   format_overrides:
