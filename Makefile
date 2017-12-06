@@ -16,10 +16,10 @@ readme-gen:
 	sed -ri -e "s:\[\[tag\]\]:${VERSION}:g" -e "s:\[\[os\]\]:linux:g" -e "s:\[\[arch\]\]:amd64:g" "${ROUT}"
 
 release: clean fetch generate
-	$(GOPATH)/bin/goreleaser --skip-publish
+	$(GOPATH)/bin/goreleaser --skip-validate --skip-publish
 
 publish: clean fetch generate
-	$(GOPATH)/bin/goreleaser
+	$(GOPATH)/bin/goreleaser --skip-validate
 
 snapshot: clean fetch generate
 	$(GOPATH)/bin/goreleaser --snapshot --skip-validate --skip-publish
