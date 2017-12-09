@@ -27,9 +27,6 @@ page for prebuilt versions. Links should work on ubuntu/debian,
 centos/redhat/fedora, etc. Below are example commands of how you would install
 the utility.
 
-**NOTE**: If you are running nagios as a different user, you _will_ need to
-update the service files to the correct user.
-
 ### Ubuntu/Debian
 
 ```bash
