@@ -14,11 +14,11 @@ import (
 	"time"
 
 	rice "github.com/GeertJohan/go.rice"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	gctx "github.com/gorilla/context"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	"github.com/pressly/chi"
-	"github.com/pressly/chi/middleware"
 	"github.com/timshannon/bolthold"
 )
 
@@ -44,6 +44,8 @@ func httpServer() {
 	r.Use(middleware.DefaultLogger)
 	r.Use(middleware.Timeout(30 * time.Second))
 	r.Use(middleware.Recoverer)
+	r.Use(middleware.GetHead)
+
 	FileServer(r, "/static", rice.MustFindBox("static").HTTPBox())
 	if conf.Debug {
 		r.Mount("/debug", middleware.Profiler())
@@ -53,8 +55,8 @@ func httpServer() {
 		tmpl(w, r, "tmpl/index.html", nil)
 	})
 
-	r.Get("/:uid", expand)
-	r.Post("/:uid", expand)
+	r.Get("/{uid}", expand)
+	r.Post("/{uid}", expand)
 	r.Post("/", addForm)
 	r.Post("/add", addAPI)
 

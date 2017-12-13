@@ -3,22 +3,26 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "6xRcrOO03m/jXeopXDvcqL3/Zz0=",
+			"path": "appengine/cloudsql",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "c4dFBfQ1TiTG3CAp6MpMen/nWXU=",
 			"path": "github.com/GeertJohan/go.rice",
-			"revision": "4bbccbfa39e784796e483270451217d3369ecfbe",
-			"revisionTime": "2017-01-23T13:54:25Z"
+			"revision": "c02ca9a983da5807ddf7d796784928f5be4afd09",
+			"revisionTime": "2017-04-20T13:57:05Z"
 		},
 		{
 			"checksumSHA1": "xECV8VmnSwtMPugLqB1OAXwOs48=",
 			"path": "github.com/GeertJohan/go.rice/embedded",
-			"revision": "4bbccbfa39e784796e483270451217d3369ecfbe",
-			"revisionTime": "2017-01-23T13:54:25Z"
+			"revision": "c02ca9a983da5807ddf7d796784928f5be4afd09",
+			"revisionTime": "2017-04-20T13:57:05Z"
 		},
 		{
-			"checksumSHA1": "J+kVue/HTH4sELlqMO4z0tx9DiA=",
+			"checksumSHA1": "lbE4q2dpUgue10EEx8eutP36vzo=",
 			"path": "github.com/boltdb/bolt",
-			"revision": "e9cf4fae01b5a8ff89d0ec6b32f0d9c9f79aefdd",
-			"revisionTime": "2017-01-31T19:20:18Z"
+			"revision": "9da31745363232bc1e27dbab3569e77383a51585",
+			"revisionTime": "2017-11-20T01:03:07Z"
 		},
 		{
 			"checksumSHA1": "8i+beEgcVf0q/I7lTqo2ERZM/OU=",
@@ -27,16 +31,28 @@
 			"revisionTime": "2015-03-29T02:31:25Z"
 		},
 		{
-			"checksumSHA1": "vcR9HImZw1XWy962zufkuqA5OyA=",
+			"checksumSHA1": "+aDUSZ9oT3Oh6FpmSAZhpim1j00=",
 			"path": "github.com/flosch/pongo2",
-			"revision": "58f1f3387f7c57843ff829d92a759d08abe5a63f",
-			"revisionTime": "2017-07-04T12:34:20Z"
+			"revision": "1f4be1efe3b3529b7e58861f75d70120a9567dc4",
+			"revisionTime": "2017-09-06T22:20:41Z"
 		},
 		{
-			"checksumSHA1": "Ube1AAmhqrtUybqayzBTI7qWo/4=",
+			"checksumSHA1": "2T3sb2ZthMry+Tyng2oWGRjSFv0=",
+			"path": "github.com/go-chi/chi",
+			"revision": "f2aed534ddaae0ec331ea305ef9a804b67b672f6",
+			"revisionTime": "2017-12-13T20:22:12Z"
+		},
+		{
+			"checksumSHA1": "biZUshk6kZIfFAyL9pT5FDg2pwA=",
+			"path": "github.com/go-chi/chi/middleware",
+			"revision": "f2aed534ddaae0ec331ea305ef9a804b67b672f6",
+			"revisionTime": "2017-12-13T20:22:12Z"
+		},
+		{
+			"checksumSHA1": "Z6rD6bmF8InGLXM7EHr8TMxMXNY=",
 			"path": "github.com/go-sql-driver/mysql",
-			"revision": "e3f0fdcf52770a162d5a4540ddb8d9957ff456d1",
-			"revisionTime": "2017-06-01T06:26:16Z"
+			"revision": "9181e3a86a19bacd63e68d43ae8b7b36320d8092",
+			"revisionTime": "2017-12-04T00:43:26Z"
 		},
 		{
 			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
@@ -51,16 +67,16 @@
 			"revisionTime": "2017-02-24T19:38:04Z"
 		},
 		{
-			"checksumSHA1": "qmq72HOuwQQ87E3WKFh/Wl/SE9c=",
+			"checksumSHA1": "dxwmtflRNX8Q+gtB5EchmMwFnpQ=",
 			"path": "github.com/gorilla/sessions",
-			"revision": "ba78acc856fe7c79891d516131b3d903cc8d9367",
-			"revisionTime": "2017-03-07T00:35:30Z"
+			"revision": "a3acf13e802c358d65f249324d14ed24aac11370",
+			"revisionTime": "2017-10-08T21:47:40Z"
 		},
 		{
-			"checksumSHA1": "HyzJVpU83/duL9rjkQ4fGE0cw5Q=",
+			"checksumSHA1": "VrHSM9dRBPL3ufyl8qTnHCnF/cg=",
 			"path": "github.com/jessevdk/go-flags",
-			"revision": "460c7bb0abd6e927f2767cadc91aa6ef776a98b4",
-			"revisionTime": "2017-02-12T22:02:46Z"
+			"revision": "f88afde2fa19a30cf50ba4b05b3d13bc6bae3079",
+			"revisionTime": "2017-09-26T14:47:05Z"
 		},
 		{
 			"checksumSHA1": "HpnVP25yXZys8uwdVe25MKMIwn8=",
@@ -69,22 +85,10 @@
 			"revisionTime": "2017-07-03T01:00:42Z"
 		},
 		{
-			"checksumSHA1": "eWtEV0iBNTL6DRJVqEeniS+thHA=",
+			"checksumSHA1": "gEjGS03N1eysvpQ+FCHTxPcbxXc=",
 			"path": "github.com/kardianos/osext",
-			"revision": "9d302b58e975387d0b4d9be876622c86cefe64be",
-			"revisionTime": "2017-03-09T17:28:38Z"
-		},
-		{
-			"checksumSHA1": "BvfT3pAC+s5qn5nEDf0N7lxpBNg=",
-			"path": "github.com/pressly/chi",
-			"revision": "34bf22a9fefc49fa5885d981cd1febfa25aa9060",
-			"revisionTime": "2017-03-13T18:58:56Z"
-		},
-		{
-			"checksumSHA1": "9HdWzw76EiC7Hwn+Y2QgNST1Lqc=",
-			"path": "github.com/pressly/chi/middleware",
-			"revision": "34bf22a9fefc49fa5885d981cd1febfa25aa9060",
-			"revisionTime": "2017-03-13T18:58:56Z"
+			"revision": "ae77be60afb1dcacde03767a8c37337fad28ac14",
+			"revisionTime": "2017-05-10T13:15:34Z"
 		},
 		{
 			"checksumSHA1": "IaSCVanHwRdLIUhWLDJ9KwbWwxo=",
@@ -93,11 +97,23 @@
 			"revisionTime": "2015-11-04T21:18:29Z"
 		},
 		{
-			"checksumSHA1": "UNlUQbKtKiRp3m6gV4uH5afkY9g=",
+			"checksumSHA1": "BI2wWTGWOdOWmgW0HCkXLydcIT4=",
 			"path": "github.com/timshannon/bolthold",
-			"revision": "86fabb5a318023405272b7a689a5c1e2a960e4db",
-			"revisionTime": "2017-04-05T23:25:18Z"
+			"revision": "bb7fe75fc693a8d6d182c31fe6e42e3e89e3889a",
+			"revisionTime": "2017-09-29T22:12:03Z"
+		},
+		{
+			"checksumSHA1": "qAJWic1vstVFwW7+aEE0X68qjDI=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "0131e684e801af603bb75e5d7f959b32442f327a",
+			"revisionTime": "2017-12-13T20:31:17Z"
+		},
+		{
+			"checksumSHA1": "LiyXfqOzaeQ8vgYZH3t2hUEdVTw=",
+			"path": "google.golang.org/appengine/cloudsql",
+			"revision": "5bee14b453b4c71be47ec1781b0fa61c2ea182db",
+			"revisionTime": "2017-12-12T22:30:47Z"
 		}
 	],
-	"rootPath": "github.com/lrstanley/links.ml"
+	"rootPath": "github.com/lrstanley/links"
 }
