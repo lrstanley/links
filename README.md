@@ -15,9 +15,9 @@
 - [Using as a library](#using-as-a-library)
   - [Example](#example-1)
 - [Migrating](#migrating)
-- [Contributing](#contributing)
 - [API](#api)
     - [Password protection](#password-protection)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Installation
@@ -176,6 +176,11 @@ You can also password protect a link, simply by adding a `password` variable to 
 $ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://links.ml/add
 {"url": "https://links.ml/abc123", "success": true}
 ```
+
+## Contributing
+
+Please review the [CONTRIBUTING](CONTRIBUTING.md) doc for submitting issues/a guide
+on submitting pull requests and helping out.
 
 ## License
 
