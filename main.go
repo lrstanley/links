@@ -21,7 +21,7 @@ var (
 )
 
 type Config struct {
-	Site       string `short:"s" long:"site-name" default:"https://links.ml" description:"site url, used for url generation"`
+	Site       string `short:"s" long:"site-name" default:"https://links.wtf" description:"site url, used for url generation"`
 	SessionDir string `long:"session-dir" description:"optional location to store temporary sessions"`
 	Quiet      bool   `short:"q" long:"quiet" description:"don't log to stdout"`
 	Debug      bool   `long:"debug" description:"enable debugging (pprof endpoints)"`
@@ -38,10 +38,10 @@ type Config struct {
 	ExportFile string `short:"e" long:"export-file" default:"links.export" description:"file to export db to"`
 	ExportJSON bool   `long:"export-json" description:"export db to json elements"`
 
-	MigrateFlag bool   `long:"migrate" description:"begin migration from links.ml running MySQL"`
+	MigrateFlag bool   `long:"migrate" description:"begin migration from links.wtf running MySQL"`
 	MigrateInfo string `long:"migrate-info" default:"user:passwd@tcp(localhost:3306)/links_db" description:"connection url used to connect to the old mysql instance"`
 
-	VersionFlag bool `short:"v" long:"version" description:"display the version of links.ml and exit"`
+	VersionFlag bool `short:"v" long:"version" description:"display the version of links.wtf and exit"`
 }
 
 var conf Config
@@ -65,7 +65,7 @@ func main() {
 	}
 
 	if conf.VersionFlag {
-		fmt.Printf("links.ml version: %s [%s] (%s, %s), compiled %s\n", version, commit, runtime.GOOS, runtime.GOARCH, date)
+		fmt.Printf("links version: %s [%s] (%s, %s), compiled %s\n", version, commit, runtime.GOOS, runtime.GOARCH, date)
 		os.Exit(0)
 	}
 

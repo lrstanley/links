@@ -69,7 +69,7 @@ Usage:
   links [OPTIONS]
 
 Application Options:
-  -s, --site-name=    site url, used for url generation (default: https://links.ml)
+  -s, --site-name=    site url, used for url generation (default: https://links.wtf)
   -q, --quiet         don't log to stdout
   -b, --http=         ip:port pair to bind to (default: :8080)
   -p, --behind-proxy  if X-Forwarded-For headers should be trusted
@@ -160,12 +160,12 @@ library and common idioms.
 
 ## API
 
-Shortening a link is quite easy. simply send a `POST` request to `https://links.ml/add`,
+Shortening a link is quite easy. simply send a `POST` request to `https://links.wtf/add`,
 which will return JSON-safe information as shown below:
 
 ```
-$ curl --data "url=http://google.com" https://links.ml/add
-{"url": "https://links.ml/27f4", "success": true}
+$ curl --data "url=http://google.com" https://links.wtf/add
+{"url": "https://links.wtf/27f4", "success": true}
 ```
 
 #### Password protection
@@ -173,8 +173,8 @@ $ curl --data "url=http://google.com" https://links.ml/add
 You can also password protect a link, simply by adding a `password` variable to the payload:
 
 ```
-$ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://links.ml/add
-{"url": "https://links.ml/abc123", "success": true}
+$ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://links.wtf/add
+{"url": "https://links.wtf/abc123", "success": true}
 ```
 
 ## Contributing

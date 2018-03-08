@@ -3,7 +3,7 @@
 // the LICENSE file.
 
 // Package links provides a higher level interface to shortening links using
-// the links.ml shortener service (with support for using your custom links.ml
+// the links.wtf shortener service (with support for using your custom links.wtf
 // service as well.)
 package links
 
@@ -18,8 +18,8 @@ import (
 )
 
 // URI is the endpoint which we use to shorten the link. Must be stripped of
-// trailing slashes. Defaults to "https://links.ml".
-var URI = "https://links.ml"
+// trailing slashes. Defaults to "https://links.wtf".
+var URI = "https://links.wtf"
 
 type apiResponse struct {
 	URL     string `json:"url"`
@@ -27,8 +27,8 @@ type apiResponse struct {
 	Message string `json:"message"`
 }
 
-// Shorten shortens a supplied URL with the given links.ml service, optionally
-// with a given encryption string. If you run a custom links.ml service,
+// Shorten shortens a supplied URL with the given links.wtf service, optionally
+// with a given encryption string. If you run a custom links.wtf service,
 // make sure to update the links.URL variable with the URI of where that
 // service is located.
 //

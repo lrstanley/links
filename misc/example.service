@@ -6,8 +6,8 @@
 Description=links
 
 [Service]
-ExecStart=/path/to/links.ml/links -s "http://your-domain.com" -b "0.0.0.0:80"
-WorkingDirectory=/path/to/links.ml/
+ExecStart=/path/to/links.wtf/links -s "http://your-domain.com" -b "0.0.0.0:80"
+WorkingDirectory=/path/to/links.wtf/
 LimitNOFILE=4096
 ; change this
 User=youruser
