@@ -4,21 +4,21 @@
 <div class="main flex-ct">
     <div class="wrap flex-column">
         <div class="card">
-            <div class="card-block">
+            <div class="card-body">
                 <form method="POST" action="/">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-lock"></i></span></div>
                                 <input type="password" name="encrypt" id="encrypt_string" class="form-control form-control-lg" placeholder="Encryption">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-9">
                             <div class="input-group">
                                 <input type="text" name="url" class="form-control form-control-lg input-focus" placeholder="Shorten a link" required autofocus>
-                                <span class="input-group-btn">
+                                <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit"><i class="fa fa-compress"></i> Shorten</button>
-                                </span>
+                                </div>
                             </div>
                         </div>
                     </div>
