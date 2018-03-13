@@ -1,0 +1,22 @@
+{% extends "/partials/base.html" %}
+{% block title %}Abuse{% endblock title %}
+{% block content %}
+<div class="main flex-ct">
+    <div class="wrap-sm flex-column">
+        <div class="card">
+            <div class="card-header text-center"><i class="fa fa-ban"></i> Abuse Information &amp; Contact</div>
+            <div class="card-body">
+                This site is a hosted version of <a href="https://github.com/lrstanley/links" target="_blank">Links</a>,
+                a link shortening http service. This service does not host and user-provided
+                content.
+                <br><br>
+                Any shortened links, redirecting to malicious or otherwise
+                illegal content, should be forwarded to the provider and host of the target
+                domains server.
+            </div>
+
+            {% include "/partials/card_footer.html" %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
