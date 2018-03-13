@@ -42,6 +42,13 @@ $ yum localinstall https://liam.sh/ghr/links_[[tag]]_[[os]]_[[arch]].rpm
 $ links --help
 ```
 
+Some older CentOS versions may require (if you get `Cannot open: <url>. Skipping.`):
+
+```console
+$ wget https://liam.sh/ghr/links_[[tag]]_[[os]]_[[arch]].rpm
+$ yum localinstall links_[[tag]]_[[os]]_[[arch]].rpm
+```
+
 ### Manual Install
 
 ```bash
