@@ -142,22 +142,6 @@ $ links --migrate --migrate-info "user:passwd@tcp(your-server:3306)/links_db"
 Depending on the amount of links within the old database, this may take a while
 to complete. I would recommend backing things up prior just in case as well.
 
-## Contributing
-
-Below are a few guidelines if you would like to contribute. Keep the code
-clean, standardized, and much of the quality should match Golang's standard
-library and common idioms.
-
-   * Always test using the latest Go version.
-   * Always use `gofmt` before committing anything.
-   * Always have proper documentation before committing.
-   * Keep the same whitespacing, documentation, and newline format as the
-     rest of the project.
-   * Only use 3rd party libraries if necessary. If only a small portion of
-     the library is needed, simply rewrite it within the library to prevent
-     useless imports.
-   * Also see [golang/go/wiki/CodeReviewComments](https://github.com/golang/go/wiki/CodeReviewComments)
-
 ## API
 
 Shortening a link is quite easy. simply send a `POST` request to `https://links.wtf/add`,
