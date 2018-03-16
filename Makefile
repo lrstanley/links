@@ -5,7 +5,6 @@ PATH := $(GOPATH)/bin:$(PATH)
 export $(PATH)
 
 BINARY=links
-LD_FLAGS += -s -w
 VERSION=$(shell git describe --tags --abbrev=0 2>/dev/null | sed -r "s:^v::g")
 COMPRESS_CONC ?= $(shell nproc)
 RSRC=README_TPL.md
@@ -51,7 +50,7 @@ compress: ## Uses upx to compress release binaries (if installed, uses all cores
 	(which upx > /dev/null && find dist/*/* | xargs -I{} -n1 -P ${COMPRESS_CONC} upx --best "{}") || echo "not using upx for binary compression"
 
 build: fetch generate ## Compile and generate a binary with static assets embedded.
-	go build -ldflags "${LD_FLAGS}" -x -v -o ${BINARY}
+	go build -ldflags '-d -s -w' -tags netgo -installsuffix netgo -v -x -o "${BINARY}"
 
 debug:
 	go run -x -v *.go --site-name "http://localhost:8080" --debug --http ":8080"
