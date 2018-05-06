@@ -100,7 +100,7 @@ type Link struct {
 	EncryptionHash string    // Used to password protect (sha256).
 }
 
-func (l *Link) Create() error {
+func (l *Link) Create(db *bolthold.Store) error {
 	if len(l.URL) < 1 {
 		return errors.New("please supply a url to shorten")
 	}
@@ -121,25 +121,31 @@ func (l *Link) Create() error {
 	l.URL = uri.String()
 	l.Created = time.Now()
 
-	db := newDB(false)
-	defer db.Close()
+	if db == nil {
+		db := newDB(false)
+		defer db.Close()
+	}
 
 	// Check for dups.
 	if !conf.DisableDupCheck {
-	var result []Link
-	err = db.Find(&result, bolthold.Where("URL").Eq(l.URL).And("EncryptionHash").Eq(l.EncryptionHash).Limit(1))
-	if err != nil {
-		panic(err)
+		var result []Link
+		err = db.Find(&result, bolthold.Where("URL").Eq(l.URL).And("EncryptionHash").Eq(l.EncryptionHash).Limit(1))
+		if err != nil {
+			panic(err)
+		}
+
+		// Assume there is a dup, just return it to the user.
+		if len(result) > 0 {
+			l.UID = result[0].UID
+			return nil
+		}
 	}
 
-	// Assume there is a dup, just return it to the user.
-	if len(result) > 0 {
-		l.UID = result[0].UID
-		return nil
-	}
+	// Store it. If the UID was pre-defined, don't generate one.
+	if l.UID != "" {
+		return db.Insert(l.UID, l)
 	}
 
-	// Store it.
 	for {
 		l.UID = uuid(4)
 		err = db.Insert(l.UID, l)

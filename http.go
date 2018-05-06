@@ -143,7 +143,7 @@ func addForm(w http.ResponseWriter, r *http.Request) {
 		link.Author = r.RemoteAddr
 	}
 
-	if err := link.Create(); err != nil {
+	if err := link.Create(nil); err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
 		flashMessage(w, r, "danger", err.Error())
 		tmpl(w, r, "tmpl/index.html", nil)
@@ -169,7 +169,7 @@ func addAPI(w http.ResponseWriter, r *http.Request) {
 		link.Author = r.RemoteAddr
 	}
 
-	if err := link.Create(); err != nil {
+	if err := link.Create(nil); err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
 		w.Write(mustJSON(HTTPResp{Success: false, Message: err.Error()}))
 		return

@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/jessevdk/go-flags"
+	flags "github.com/jessevdk/go-flags"
 )
 
 var (
@@ -43,6 +43,9 @@ type Config struct {
 	MigrateInfo string `long:"migrate-info" default:"user:passwd@tcp(localhost:3306)/links_db" description:"connection url used to connect to the old mysql instance"`
 
 	VersionFlag bool `short:"v" long:"version" description:"display the version of links.wtf and exit"`
+
+	CommandAdd    CommandAdd    `command:"add" description:"add a link"`
+	CommandDelete CommandDelete `command:"delete" description:"delete a link, id, or link matching an author"`
 }
 
 var conf Config
@@ -55,14 +58,16 @@ func initLogger() {
 }
 
 func main() {
-	_, err := flags.Parse(&conf)
+	parser := flags.NewParser(&conf, flags.HelpFlag)
+	parser.SubcommandsOptional = true
+	_, err := parser.Parse()
 	if err != nil {
-		if FlagErr, ok := err.(*flags.Error); ok && FlagErr.Type == flags.ErrHelp {
-			os.Exit(0)
-		}
-
-		// go-flags should print to stderr/stdout as necessary, so we won't.
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
+	}
+
+	if parser.Active != nil {
+		os.Exit(0)
 	}
 
 	if conf.VersionFlag {
