@@ -10,7 +10,7 @@ build:
   ldflags: -s -w -X main.version=v{{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
   hooks:
     post: make compress
-fpm:
+nfpm:
   homepage: https://github.com/lrstanley/links
   maintainer: Liam Stanley <me@liamstanley.io>
   description: Links -- Link shortening service.
@@ -20,9 +20,6 @@ fpm:
     - rpm
 archive:
   format: tar.gz
-  format_overrides:
-    - goos: windows
-      format: zip
 release:
   draft: true
 snapshot:
