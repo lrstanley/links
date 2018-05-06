@@ -19,10 +19,10 @@
 			"revisionTime": "2017-04-20T13:57:05Z"
 		},
 		{
-			"checksumSHA1": "lbE4q2dpUgue10EEx8eutP36vzo=",
+			"checksumSHA1": "20Pind5XCrfZL/F0oibWfd9gotA=",
 			"path": "github.com/boltdb/bolt",
-			"revision": "9da31745363232bc1e27dbab3569e77383a51585",
-			"revisionTime": "2017-11-20T01:03:07Z"
+			"revision": "fd01fc79c553a8e99d512a07e8e0c63d4a3ccfc5",
+			"revisionTime": "2018-03-02T18:00:52Z"
 		},
 		{
 			"checksumSHA1": "8i+beEgcVf0q/I7lTqo2ERZM/OU=",
@@ -31,28 +31,22 @@
 			"revisionTime": "2015-03-29T02:31:25Z"
 		},
 		{
-			"checksumSHA1": "+aDUSZ9oT3Oh6FpmSAZhpim1j00=",
+			"checksumSHA1": "zv+lVBRMDzZtIEGgvUXVK2ZXxK8=",
 			"path": "github.com/flosch/pongo2",
-			"revision": "1f4be1efe3b3529b7e58861f75d70120a9567dc4",
-			"revisionTime": "2017-09-06T22:20:41Z"
+			"revision": "e7cf9ea5ca9c574f3fd5f83f7eed4a6162a67dea",
+			"revisionTime": "2018-04-12T21:51:50Z"
 		},
 		{
-			"checksumSHA1": "2T3sb2ZthMry+Tyng2oWGRjSFv0=",
+			"checksumSHA1": "9fH2Wod5bN3E4GWNBFPVWPj25wM=",
 			"path": "github.com/go-chi/chi",
-			"revision": "f2aed534ddaae0ec331ea305ef9a804b67b672f6",
-			"revisionTime": "2017-12-13T20:22:12Z"
+			"revision": "cca4135d8dddff765463feaf1118047a9e506b4a",
+			"revisionTime": "2018-04-24T17:23:50Z"
 		},
 		{
-			"checksumSHA1": "biZUshk6kZIfFAyL9pT5FDg2pwA=",
+			"checksumSHA1": "1Xlo4sCR+zeOzjslXc/NAOmkgXg=",
 			"path": "github.com/go-chi/chi/middleware",
-			"revision": "f2aed534ddaae0ec331ea305ef9a804b67b672f6",
-			"revisionTime": "2017-12-13T20:22:12Z"
-		},
-		{
-			"checksumSHA1": "Z6rD6bmF8InGLXM7EHr8TMxMXNY=",
-			"path": "github.com/go-sql-driver/mysql",
-			"revision": "9181e3a86a19bacd63e68d43ae8b7b36320d8092",
-			"revisionTime": "2017-12-04T00:43:26Z"
+			"revision": "cca4135d8dddff765463feaf1118047a9e506b4a",
+			"revisionTime": "2018-04-24T17:23:50Z"
 		},
 		{
 			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
@@ -67,16 +61,16 @@
 			"revisionTime": "2017-02-24T19:38:04Z"
 		},
 		{
-			"checksumSHA1": "dxwmtflRNX8Q+gtB5EchmMwFnpQ=",
+			"checksumSHA1": "/jOLCzAcN8p1GakgUYaWOs4tjw8=",
 			"path": "github.com/gorilla/sessions",
-			"revision": "a3acf13e802c358d65f249324d14ed24aac11370",
-			"revisionTime": "2017-10-08T21:47:40Z"
+			"revision": "a2f2a3de9a4a575047f73e3e36bc85ecc3546391",
+			"revisionTime": "2018-03-21T16:38:55Z"
 		},
 		{
-			"checksumSHA1": "VrHSM9dRBPL3ufyl8qTnHCnF/cg=",
+			"checksumSHA1": "OH94abBdbmoVqyRqYBfgUT9N494=",
 			"path": "github.com/jessevdk/go-flags",
-			"revision": "f88afde2fa19a30cf50ba4b05b3d13bc6bae3079",
-			"revisionTime": "2017-09-26T14:47:05Z"
+			"revision": "1c38ed7ad0cc3d9e66649ac398c30e45f395c4eb",
+			"revisionTime": "2018-03-31T12:42:32Z"
 		},
 		{
 			"checksumSHA1": "HpnVP25yXZys8uwdVe25MKMIwn8=",
@@ -91,28 +85,28 @@
 			"revisionTime": "2017-05-10T13:15:34Z"
 		},
 		{
+			"checksumSHA1": "ArNZVLzZQhj8uhuGrM5A9tjKlq8=",
+			"path": "github.com/lrstanley/go-sempool",
+			"revision": "452b3850c1f08107ae8fd674e82e0a4dc9c4da05",
+			"revisionTime": "2017-10-29T05:03:54Z"
+		},
+		{
 			"checksumSHA1": "IaSCVanHwRdLIUhWLDJ9KwbWwxo=",
 			"path": "github.com/sharpner/pobin",
 			"revision": "a1ad054245353a07192d6ff7d5c993d3e17b9d0f",
 			"revisionTime": "2015-11-04T21:18:29Z"
 		},
 		{
-			"checksumSHA1": "BI2wWTGWOdOWmgW0HCkXLydcIT4=",
+			"checksumSHA1": "pAwMUi9Q6ByulRtHdxdmkzxs7aw=",
 			"path": "github.com/timshannon/bolthold",
-			"revision": "bb7fe75fc693a8d6d182c31fe6e42e3e89e3889a",
-			"revisionTime": "2017-09-29T22:12:03Z"
+			"revision": "3e2483455dacf50351c62a9abb6bb153b4f032b6",
+			"revisionTime": "2018-05-01T13:37:41Z"
 		},
 		{
-			"checksumSHA1": "qAJWic1vstVFwW7+aEE0X68qjDI=",
+			"checksumSHA1": "jrksV/s1xy858I+FMS3kh0FwI+c=",
 			"path": "golang.org/x/sys/unix",
-			"revision": "0131e684e801af603bb75e5d7f959b32442f327a",
-			"revisionTime": "2017-12-13T20:31:17Z"
-		},
-		{
-			"checksumSHA1": "LiyXfqOzaeQ8vgYZH3t2hUEdVTw=",
-			"path": "google.golang.org/appengine/cloudsql",
-			"revision": "5bee14b453b4c71be47ec1781b0fa61c2ea182db",
-			"revisionTime": "2017-12-12T22:30:47Z"
+			"revision": "6f686a352de66814cdd080d970febae7767857a3",
+			"revisionTime": "2018-05-02T15:14:59Z"
 		}
 	],
 	"rootPath": "github.com/lrstanley/links"
