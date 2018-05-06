@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="/static/css/main.css">
         {% if http_pre_include %}
             <!-- start custom http pre include -->
-            {{ http_pre_include }}
+            {{ http_pre_include|safe }}
             <!-- end custom http pre include -->
         {% endif %}
     </head>
@@ -26,7 +26,7 @@
         <script src="/static/js/main.js"></script>
         {% if http_post_include %}
             <!-- start custom http post include -->
-            {{ http_post_include }}
+            {{ http_post_include|safe }}
             <!-- end custom http post include -->
         {% endif %}
     </body>
