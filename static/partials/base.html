@@ -11,6 +11,11 @@
         <link rel="stylesheet" href="/static/css/font-awesome.min.css">
         <link rel="stylesheet" href="/static/css/notie.min.css">
         <link rel="stylesheet" href="/static/css/main.css">
+        {% if http_pre_include %}
+            <!-- start custom http pre include -->
+            {{ http_pre_include }}
+            <!-- end custom http pre include -->
+        {% endif %}
     </head>
 
     <body>
@@ -19,5 +24,10 @@
         <script src="/static/js/clipboard.min.js"></script>
         <script src="/static/js/notie.min.js"></script>
         <script src="/static/js/main.js"></script>
+        {% if http_post_include %}
+            <!-- start custom http post include -->
+            {{ http_post_include }}
+            <!-- end custom http post include -->
+        {% endif %}
     </body>
 </html>

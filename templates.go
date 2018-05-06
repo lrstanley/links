@@ -60,6 +60,8 @@ func tmpl(w http.ResponseWriter, r *http.Request, path string, ctx map[string]in
 	ctx["commit"] = commit
 	ctx["version"] = version
 	ctx["stats"] = &stats
+	ctx["http_pre_include"] = conf.HTTPPreInclude
+	ctx["http_post_include"] = conf.HTTPPostInclude
 
 	out, err := tpl.ExecuteBytes(ctx)
 	if err != nil {
