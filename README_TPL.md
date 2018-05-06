@@ -14,7 +14,6 @@
   - [Example](#example)
 - [Using as a library](#using-as-a-library)
   - [Example](#example-1)
-- [Migrating](#migrating)
 - [API](#api)
     - [Password protection](#password-protection)
 - [Contributing](#contributing)
@@ -73,28 +72,37 @@ a fully working `$GOPATH` setup.
 ```
 $ links --help
 Usage:
-  links [OPTIONS]
+  links [OPTIONS] [add | delete]
 
 Application Options:
-  -s, --site-name=    site url, used for url generation (default: https://links.wtf)
-  -q, --quiet         don't log to stdout
-  -b, --http=         ip:port pair to bind to (default: :8080)
-  -p, --behind-proxy  if X-Forwarded-For headers should be trusted
-  -d, --db=           path to database file (default: store.db)
-      --key-length=   default length of key (uuid) for generated urls (default: 4)
-  -e, --export-file=  file to export db to (default: links.export)
-      --export-json   export db to json elements
-      --migrate       begin migration from Links running MySQL
-      --migrate-info= connection url used to connect to the old mysql instance (default: user:passwd@tcp(localhost:3306)/links_db)
-  -v, --version       display the version of Links and exit
+  -s, --site-name=     site url, used for url generation (default: https://links.wtf)
+      --session-dir=   optional location to store temporary sessions
+  -q, --quiet          don't log to stdout
+      --debug          enable debugging (pprof endpoints)
+  -b, --http=          ip:port pair to bind to (default: :8080)
+  -p, --behind-proxy   if X-Forwarded-For headers should be trusted
+  -d, --db=            path to database file (default: store.db)
+      --key-length=    default length of key (uuid) for generated urls (default: 4)
+      --http-preclude= HTTP include which is included directly after css is included
+                       (near top of the page)
+      --http-include=  HTTP include which is included directly after js is included
+                       (near bottom of the page)
+  -e, --export-file=   file to export db to (default: links.export)
+      --export-json    export db to json elements
+  -v, --version        display the version of links.wtf and exit
 
 TLS Options:
-      --tls.enable    run tls server rather than standard http
-  -c, --tls.cert=     path to ssl cert file
-  -k, --tls.key=      path to ssl key file
+      --tls.enable     run tls server rather than standard http
+  -c, --tls.cert=      path to ssl cert file
+  -k, --tls.key=       path to ssl key file
 
 Help Options:
-  -h, --help          Show this help message
+  -h, --help           Show this help message
+
+Available commands:
+  add     add a link
+  delete  delete a link, id, or link matching an author
+
 ```
 
 ### Example
@@ -136,18 +144,6 @@ func main() {
 	fmt.Printf("shortened: %s\n", uri.String())
 }
 ```
-
-## Migrating
-
-If you were using Links before it was rewritten in Go (and was using
-MySQL), then this is how you can migrate the database:
-
-```
-$ links --migrate --migrate-info "user:passwd@tcp(your-server:3306)/links_db"
-```
-
-Depending on the amount of links within the old database, this may take a while
-to complete. I would recommend backing things up prior just in case as well.
 
 ## API
 
