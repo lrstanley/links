@@ -125,6 +125,7 @@ func (l *Link) Create() error {
 	defer db.Close()
 
 	// Check for dups.
+	if !conf.DisableDupCheck {
 	var result []Link
 	err = db.Find(&result, bolthold.Where("URL").Eq(l.URL).And("EncryptionHash").Eq(l.EncryptionHash).Limit(1))
 	if err != nil {
@@ -135,6 +136,7 @@ func (l *Link) Create() error {
 	if len(result) > 0 {
 		l.UID = result[0].UID
 		return nil
+	}
 	}
 
 	// Store it.
