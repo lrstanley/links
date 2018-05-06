@@ -119,7 +119,7 @@ func (l *Link) Create(db *bolthold.Store) error {
 	l.Created = time.Now()
 
 	if db == nil {
-		db := newDB(false)
+		db = newDB(false)
 		defer db.Close()
 	}
 
