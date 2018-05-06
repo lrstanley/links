@@ -49,8 +49,8 @@ generate: ## Generates the Go files that allow assets to be embedded.
 compress: ## Uses upx to compress release binaries (if installed, uses all cores/parallel comp.)
 	(which upx > /dev/null && find dist/*/* | xargs -I{} -n1 -P ${COMPRESS_CONC} upx --best "{}") || echo "not using upx for binary compression"
 
-build: fetch generate ## Compile and generate a binary with static assets embedded.
+build: fetch clean generate ## Compile and generate a binary with static assets embedded.
 	go build -ldflags '-d -s -w' -tags netgo -installsuffix netgo -v -x -o "${BINARY}"
 
-debug:
+debug: clean
 	go run -x -v *.go --site-name "http://localhost:8080" --debug --http ":8080"
