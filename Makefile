@@ -3,8 +3,8 @@
 DIRS=bin dist
 BINARY=links
 
-VERSION=$(shell git describe --tags --always --abbrev=0 --match=v* 2> /dev/null || echo v0)
-VERSION_FULL=$(shell git describe --tags --always --dirty --match=v* 2> /dev/null || echo v0)
+VERSION=$(shell git describe --tags --always --abbrev=0 --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
+VERSION_FULL=$(shell git describe --tags --always --dirty --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
 
 COMPRESS_CONC ?= $(shell nproc)
 
