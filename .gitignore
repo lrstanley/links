@@ -5,13 +5,10 @@
 *.tmp
 *.txt
 *.export
-BUILD
 dist
+bin
 rice-box*
 *.test
 *.prof
 vendor/*
-!vendor/*.json
-.glide
-*.lock
 links

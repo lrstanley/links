@@ -20,8 +20,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/boltdb/bolt"
 	"github.com/timshannon/bolthold"
+	bolt "go.etcd.io/bbolt"
 )
 
 func init() {

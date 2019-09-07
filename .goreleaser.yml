@@ -10,16 +10,17 @@ build:
   ldflags: -s -w -X main.version=v{{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
   hooks:
     post: make compress
-nfpm:
-  homepage: https://github.com/lrstanley/links
-  maintainer: Liam Stanley <me@liamstanley.io>
-  description: Links -- Link shortening service.
-  license: MIT
-  formats:
-    - deb
-    - rpm
-archive:
-  format: tar.gz
+nfpms:
+  - homepage: https://github.com/lrstanley/links
+    maintainer: Liam Stanley <me@liamstanley.io>
+    description: Links -- Link shortening service.
+    license: MIT
+    formats:
+      - deb
+      - rpm
+archives:
+  - id: tgz
+    format: tar.gz
 release:
   draft: true
 snapshot:

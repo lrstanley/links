@@ -6,10 +6,9 @@ package main
 
 import (
 	"encoding/gob"
-	"encoding/json"
-	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -19,14 +18,25 @@ import (
 	gctx "github.com/gorilla/context"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	"github.com/lrstanley/pt"
 	"github.com/timshannon/bolthold"
 )
 
-var sess sessions.Store
+var (
+	sess sessions.Store
+	tmpl *pt.Loader
+)
 
 func httpServer() {
+	tmpl = pt.New("", pt.Config{
+		CacheParsed:     !conf.Debug,
+		Loader:          rice.MustFindBox("static").Bytes,
+		ErrorLogger:     os.Stderr,
+		DefaultCtx:      tmplDefaultCtx,
+		NotFoundHandler: http.NotFound,
+	})
+
 	gob.Register(FlashMessage{})
-	setupTmpl()
 	updateGlobalStats(nil)
 
 	if conf.SessionDir != "" {
@@ -46,15 +56,17 @@ func httpServer() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.GetHead)
 
-	FileServer(r, "/static", rice.MustFindBox("static").HTTPBox())
+	// Mount the static directory (in-memory and disk) to the /static route.
+	pt.FileServer(r, "/static", rice.MustFindBox("static").HTTPBox())
+
 	if conf.Debug {
 		r.Mount("/debug", middleware.Profiler())
 	}
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl(w, r, "tmpl/index.html", nil)
+		tmpl.Render(w, r, "tmpl/index.html", nil)
 	})
-	r.Get("/abuse", func(w http.ResponseWriter, r *http.Request) { tmpl(w, r, "tmpl/abuse.html", nil) })
+	r.Get("/abuse", func(w http.ResponseWriter, r *http.Request) { tmpl.Render(w, r, "tmpl/abuse.html", nil) })
 	r.Get("/{uid}", expand)
 	r.Post("/{uid}", expand)
 	r.Post("/", addForm)
@@ -76,16 +88,60 @@ func httpServer() {
 	debug.Fatal(srv.ListenAndServe())
 }
 
-func mustJSON(input interface{}) []byte {
-	out, err := json.Marshal(input)
+func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]interface{}) {
+	session, _ := sess.Get(r, defaultSessionID)
+	defer gctx.Clear(r)
+	messages := session.Flashes("messages")
+
+	// We have to save the session, otherwise the flashes aren't properly
+	// cleared either.
+	err := session.Save(r, w)
 	if err != nil {
-		panic(fmt.Sprintf("unable to marshal json: %s", input))
+		panic(err)
 	}
 
-	return out
+	if ctx == nil {
+		ctx = make(map[string]interface{})
+	}
+
+	cachedGlobalStats.mu.RLock()
+	// Note that this copies a mutex, but it should never be re-locked, as
+	// it's only being used in a template.
+	stats := cachedGlobalStats
+	cachedGlobalStats.mu.RUnlock()
+
+	ctx = pt.M{
+		"full_url":          r.URL.String(),
+		"url":               r.URL,
+		"sess":              session.Values,
+		"messages":          messages,
+		"commit":            commit,
+		"version":           version,
+		"stats":             &stats,
+		"http_pre_include":  conf.HTTPPreInclude,
+		"http_post_include": conf.HTTPPostInclude,
+	}
+
+	return ctx
 }
 
-type HTTPResp struct {
+type FlashMessage struct {
+	Type string
+	Text string
+}
+
+const defaultSessionID = "sessionid"
+
+func flashMessage(w http.ResponseWriter, r *http.Request, status, message string) {
+	session, _ := sess.Get(r, defaultSessionID)
+	session.AddFlash(FlashMessage{status, message}, "messages")
+	err := session.Save(r, w)
+	if err != nil {
+		panic(err)
+	}
+}
+
+type httpResp struct {
 	Success bool   `json:"success"`
 	Message string `json:"message,omitempty"`
 	URL     string `json:"url,omitempty"`
@@ -110,7 +166,7 @@ func expand(w http.ResponseWriter, r *http.Request) {
 	if link.EncryptionHash != "" {
 		if r.Method == http.MethodGet {
 			w.WriteHeader(http.StatusForbidden)
-			tmpl(w, r, "tmpl/auth.html", nil)
+			tmpl.Render(w, r, "tmpl/auth.html", nil)
 			return
 		}
 
@@ -119,7 +175,7 @@ func expand(w http.ResponseWriter, r *http.Request) {
 		if hash(decrypt) != link.EncryptionHash {
 			flashMessage(w, r, "danger", "invalid decryption string provided")
 			w.WriteHeader(http.StatusForbidden)
-			tmpl(w, r, "tmpl/auth.html", nil)
+			tmpl.Render(w, r, "tmpl/auth.html", nil)
 			return
 		}
 
@@ -146,11 +202,11 @@ func addForm(w http.ResponseWriter, r *http.Request) {
 	if err := link.Create(nil); err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
 		flashMessage(w, r, "danger", err.Error())
-		tmpl(w, r, "tmpl/index.html", nil)
+		tmpl.Render(w, r, "tmpl/index.html", nil)
 		return
 	}
 
-	tmpl(w, r, "tmpl/index.html", map[string]interface{}{"link": link})
+	tmpl.Render(w, r, "tmpl/index.html", pt.M{"link": link})
 }
 
 func addAPI(w http.ResponseWriter, r *http.Request) {
@@ -171,12 +227,12 @@ func addAPI(w http.ResponseWriter, r *http.Request) {
 
 	if err := link.Create(nil); err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
-		w.Write(mustJSON(HTTPResp{Success: false, Message: err.Error()}))
+		pt.JSON(w, r, httpResp{Success: false, Message: err.Error()})
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(mustJSON(HTTPResp{Success: true, URL: link.Short()}))
+	pt.JSON(w, r, httpResp{Success: true, URL: link.Short()})
 }
 
 var validSchemes = []string{
