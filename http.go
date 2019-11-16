@@ -15,15 +15,11 @@ import (
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	gctx "github.com/gorilla/context"
-	"github.com/gorilla/securecookie"
-	"github.com/gorilla/sessions"
 	"github.com/lrstanley/pt"
 	"github.com/timshannon/bolthold"
 )
 
 var (
-	sess sessions.Store
 	tmpl *pt.Loader
 )
 
@@ -36,14 +32,8 @@ func httpServer() {
 		NotFoundHandler: http.NotFound,
 	})
 
-	gob.Register(FlashMessage{})
+	gob.Register(flashMessage{})
 	updateGlobalStats(nil)
-
-	if conf.SessionDir != "" {
-		sess = sessions.NewFilesystemStore(conf.SessionDir, securecookie.GenerateRandomKey(32))
-	} else {
-		sess = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
-	}
 
 	r := chi.NewRouter()
 
@@ -74,7 +64,7 @@ func httpServer() {
 
 	srv := &http.Server{
 		Addr:         conf.HTTP,
-		Handler:      gctx.ClearHandler(r),
+		Handler:      r,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
@@ -89,17 +79,6 @@ func httpServer() {
 }
 
 func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]interface{}) {
-	session, _ := sess.Get(r, defaultSessionID)
-	defer gctx.Clear(r)
-	messages := session.Flashes("messages")
-
-	// We have to save the session, otherwise the flashes aren't properly
-	// cleared either.
-	err := session.Save(r, w)
-	if err != nil {
-		panic(err)
-	}
-
 	if ctx == nil {
 		ctx = make(map[string]interface{})
 	}
@@ -113,8 +92,6 @@ func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]inte
 	ctx = pt.M{
 		"full_url":          r.URL.String(),
 		"url":               r.URL,
-		"sess":              session.Values,
-		"messages":          messages,
 		"commit":            commit,
 		"version":           version,
 		"stats":             &stats,
@@ -125,20 +102,9 @@ func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]inte
 	return ctx
 }
 
-type FlashMessage struct {
+type flashMessage struct {
 	Type string
 	Text string
-}
-
-const defaultSessionID = "sessionid"
-
-func flashMessage(w http.ResponseWriter, r *http.Request, status, message string) {
-	session, _ := sess.Get(r, defaultSessionID)
-	session.AddFlash(FlashMessage{status, message}, "messages")
-	err := session.Save(r, w)
-	if err != nil {
-		panic(err)
-	}
 }
 
 type httpResp struct {
@@ -173,9 +139,8 @@ func expand(w http.ResponseWriter, r *http.Request) {
 		decrypt := r.PostFormValue("decrypt")
 
 		if hash(decrypt) != link.EncryptionHash {
-			flashMessage(w, r, "danger", "invalid decryption string provided")
 			w.WriteHeader(http.StatusForbidden)
-			tmpl.Render(w, r, "tmpl/auth.html", nil)
+			tmpl.Render(w, r, "tmpl/auth.html", pt.M{"message": flashMessage{"danger", "invalid decryption string provided"}})
 			return
 		}
 
@@ -201,8 +166,7 @@ func addForm(w http.ResponseWriter, r *http.Request) {
 
 	if err := link.Create(nil); err != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
-		flashMessage(w, r, "danger", err.Error())
-		tmpl.Render(w, r, "tmpl/index.html", nil)
+		tmpl.Render(w, r, "tmpl/index.html", pt.M{"message": flashMessage{"danger", err.Error()}})
 		return
 	}
 

@@ -7,9 +7,8 @@ require (
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4 // indirect
 	github.com/go-chi/chi v4.0.2+incompatible
-	github.com/gorilla/context v1.1.1
-	github.com/gorilla/securecookie v1.1.1
-	github.com/gorilla/sessions v1.2.0
+	github.com/gorilla/context v1.1.1 // indirect
+	github.com/gorilla/sessions v1.2.0 // indirect
 	github.com/jessevdk/go-flags v1.4.1-0.20180331124232-1c38ed7ad0cc
 	github.com/juju/errors v0.0.0-20190806202954-0232dcc7464d // indirect
 	github.com/lrstanley/go-sempool v0.0.0-20181215043219-1ee81530e9dd

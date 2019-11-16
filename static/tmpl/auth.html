@@ -3,7 +3,7 @@
 {% block content %}
 <div class="main flex-ct">
     <div class="wrap-sm flex-column">
-        {% for msg in messages %}<div class="alert alert-{{msg.Type}} text-center mt-2" role="alert">{{msg.Text}}</div>{% endfor %}
+        {% if message %}<div class="alert alert-{{message.Type}} text-center mt-2" role="alert">{{message.Text}}</div>{% endif %}
 
         <div class="card">
             <div class="card-header text-center"><i class="fa fa-lock"></i> Authentication Required</div>
