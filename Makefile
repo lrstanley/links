@@ -6,8 +6,6 @@ BINARY=links
 VERSION=$(shell git describe --tags --always --abbrev=0 --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
 VERSION_FULL=$(shell git describe --tags --always --dirty --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
 
-COMPRESS_CONC ?= $(shell nproc)
-
 RSRC=README_TPL.md
 ROUT=README.md
 
@@ -25,12 +23,6 @@ fetch: ## Fetches the necessary dependencies to build.
 	go mod download
 	go mod tidy
 	go mod vendor
-
-upgrade-deps-patch: ## Upgrades all dependencies to the latest available patch versions and saves them.
-	$(BIN)/govendor fetch -v +vendor
-
-upgrade-deps-all: ## Upgrades all dependencies to the latest available minor/patch versions and saves them.
-	$(BIN)/govendor fetch -v +vendor
 
 readme-gen: ## Generates readme from template file.
 	cp -av "${RSRC}" "${ROUT}"
@@ -50,9 +42,6 @@ clean: ## Cleans up generated files/folders from the build.
 
 generate: ## Generates the Go files that allow assets to be embedded.
 	$(BIN)/rice -v embed-go
-
-compress: ## Uses upx to compress release binaries (if installed, uses all cores/parallel comp.)
-	(which upx > /dev/null && find dist/*/* | xargs -I{} -n1 -P ${COMPRESS_CONC} upx --best "{}") || echo "not using upx for binary compression"
 
 build: fetch clean generate ## Compile and generate a binary with static assets embedded.
 	go build -ldflags '-d -s -w' -tags netgo -installsuffix netgo -v -o "${BINARY}-${VERSION_FULL}"

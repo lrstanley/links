@@ -4,12 +4,11 @@ build:
   binary: links
   goos:
     - linux
+    - windows
     - freebsd
   goarch:
     - amd64
   ldflags: -s -w -X main.version=v{{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
-  hooks:
-    post: make compress
 nfpms:
   - homepage: https://github.com/lrstanley/links
     maintainer: Liam Stanley <me@liamstanley.io>
@@ -21,6 +20,9 @@ nfpms:
 archives:
   - id: tgz
     format: tar.gz
+  - id: windows
+    goos: windows
+    format: zip
 release:
   draft: true
 snapshot:
