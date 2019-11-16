@@ -3,7 +3,7 @@
 {% block content %}
 <div class="main flex-ct">
     <div class="wrap flex-column">
-        <div class="card">
+        <div class="card mx-3">
             <div class="card-body">
                 <form method="POST" action="/">
                     <div class="row">
@@ -16,10 +16,13 @@
                         <div class="col-sm-12 col-md-9">
                             <div class="input-group">
                                 <input type="text" name="url" class="form-control form-control-lg input-focus" placeholder="Shorten a link" required autofocus>
-                                <div class="input-group-append">
+                                <div class="input-group-append d-none d-md-flex">
                                     <button class="btn btn-primary" type="submit"><i class="fa fa-compress"></i> Shorten</button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-sm-12 d-sm-block d-md-none mt-2">
+                            <button class="btn btn-lg btn-block btn-primary" type="submit"><i class="fa fa-compress"></i> Shorten</button>
                         </div>
                     </div>
                 </form>
@@ -29,7 +32,7 @@
         </div>
 
         {% if link %}
-            <div class="alert alert-success show mt-2 text-center" role="alert">
+            <div class="alert alert-success show mt-2 mx-3 text-center" role="alert">
                 <strong>Shortened link</strong>: <code><a href="{{link.URL}}">{{link.URL|truncatechars:30}}</a></code> -&gt; <code><a href="{{link.Short}}">{{link.Short}}</a></code>
                 <button class="btn btn-sm btn-primary clip" data-clipboard-text="{{link.Short}}"><i class="fa fa-clipboard"></i> copy to clipboard</button>
             </div>

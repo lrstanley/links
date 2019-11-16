@@ -47,4 +47,4 @@ build: fetch clean generate ## Compile and generate a binary with static assets 
 	go build -ldflags '-d -s -w' -tags netgo -installsuffix netgo -v -o "${BINARY}-${VERSION_FULL}"
 
 debug: clean
-	go run -v *.go --site-name "http://localhost:8080" --debug --http ":8080"
+	go run -v *.go --site-name "http://0.0.0.0:8080" --debug --http ":8080"

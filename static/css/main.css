@@ -1,6 +1,8 @@
 html, body, .main {
     height: 100%;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .flex-ct {
@@ -11,7 +13,6 @@ html, body, .main {
     -webkit-align-items: center;
     -webkit-box-align: center;
     align-items: center;
-    height: 100vh;
 }
 
 .wrap {
@@ -29,8 +30,8 @@ html, body, .main {
 @media (max-width: 1050px) {
     .wrap {
         max-width: 900px;
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
