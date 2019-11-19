@@ -33,7 +33,7 @@ type Config struct {
 		Key    string `short:"k" long:"key" description:"path to ssl key file"`
 	} `group:"TLS Options" namespace:"tls"`
 	DBPath          string `short:"d" long:"db" default:"store.db" description:"path to database file"`
-	KeyLength       int    `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
+	KeyLength       int64  `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
 	HTTPPreInclude  string `long:"http-pre-include" description:"HTTP include which is included directly after css is included (near top of the page)"`
 	HTTPPostInclude string `long:"http-post-include" description:"HTTP include which is included directly after js is included (near bottom of the page)"`
 
@@ -80,6 +80,7 @@ func main() {
 	if conf.KeyLength < 4 {
 		conf.KeyLength = 4
 	}
+
 	conf.Site = strings.TrimRight(conf.Site, "/")
 
 	initLogger()

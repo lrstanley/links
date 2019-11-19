@@ -18,11 +18,14 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/timshannon/bolthold"
 	bolt "go.etcd.io/bbolt"
 )
+
+const collisionMax = 20
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
@@ -30,7 +33,7 @@ func init() {
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-func uuid(n int) string {
+func uuid(n int64) string {
 	b := make([]byte, n)
 	for i := range b {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
@@ -89,7 +92,7 @@ func updateGlobalStats(db *bolthold.Store) {
 
 // Link represents a url that we are shortening.
 type Link struct {
-	UID            string    `boltholdKey`
+	UID            string    `boltholdKey:"UID"`
 	URL            string    // The URL we're expanding.
 	Created        time.Time // When the link was submitted.
 	Hits           int       // How many times we've expanded for users.
@@ -128,13 +131,24 @@ func (l *Link) Create(db *bolthold.Store) error {
 		return db.Insert(l.UID, l)
 	}
 
+	var collisionCount int
 	for {
-		l.UID = uuid(4)
+		l.UID = uuid(atomic.LoadInt64(&conf.KeyLength))
 		err = db.Insert(l.UID, l)
 		if err != nil {
 			if err == bolthold.ErrKeyExists {
 				// Keep looping through until we're able to store one which
 				// doesn't collide with a pre-existing key.
+				collisionCount++
+				if collisionCount >= collisionMax {
+					// If we continue to get collisions in a row, bump the global
+					// key value to one higher. Worst case if the collision max is
+					// hit, it will only be computationally difficult on the first
+					// shortened link upon restart.
+					collisionCount = 0
+					newKeyLength := atomic.AddInt64(&conf.KeyLength, 1)
+					debug.Printf("collision maximum hit (count: %d); increasing global key length from %d to %d", collisionMax, newKeyLength-1, newKeyLength)
+				}
 				continue
 			}
 
@@ -180,8 +194,9 @@ func hash(input string) string {
 
 func newDB(readOnly bool) *bolthold.Store {
 	store, err := bolthold.Open(conf.DBPath, 0660, &bolthold.Options{Options: &bolt.Options{
-		ReadOnly: readOnly,
-		Timeout:  10 * time.Second,
+		FreelistType: bolt.FreelistMapType,
+		ReadOnly:     readOnly,
+		Timeout:      25 * time.Second,
 	}})
 	if err != nil {
 		panic(fmt.Sprintf("unable to open db: %s", err))
