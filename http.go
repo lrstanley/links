@@ -56,7 +56,7 @@ func httpServer() {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Render(w, r, "tmpl/index.html", nil)
 	})
-	r.Get("/abuse", func(w http.ResponseWriter, r *http.Request) { tmpl.Render(w, r, "tmpl/abuse.html", nil) })
+	r.Get("/-/abuse", func(w http.ResponseWriter, r *http.Request) { tmpl.Render(w, r, "tmpl/abuse.html", nil) })
 	r.Get("/{uid}", expand)
 	r.Post("/{uid}", expand)
 	r.Post("/", addForm)
