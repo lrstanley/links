@@ -29,30 +29,30 @@ the utility.
 ### Ubuntu/Debian
 
 ```bash
-$ wget https://liam.sh/ghr/links_0.3.2_linux_amd64.deb
-$ dpkg -i links_0.3.2_linux_amd64.deb
+$ wget https://liam.sh/ghr/links_0.4.0_linux_amd64.deb
+$ dpkg -i links_0.4.0_linux_amd64.deb
 $ links --help
 ```
 
 ### CentOS/Redhat
 
 ```bash
-$ yum localinstall https://liam.sh/ghr/links_0.3.2_linux_amd64.rpm
+$ yum localinstall https://liam.sh/ghr/links_0.4.0_linux_amd64.rpm
 $ links --help
 ```
 
 Some older CentOS versions may require (if you get `Cannot open: <url>. Skipping.`):
 
 ```console
-$ wget https://liam.sh/ghr/links_0.3.2_linux_amd64.rpm
-$ yum localinstall links_0.3.2_linux_amd64.rpm
+$ wget https://liam.sh/ghr/links_0.4.0_linux_amd64.rpm
+$ yum localinstall links_0.4.0_linux_amd64.rpm
 ```
 
 ### Manual Install
 
 ```bash
-$ wget https://liam.sh/ghr/links_0.3.2_linux_amd64.tar.gz
-$ tar -C /usr/bin/ -xzvf links_0.3.2_linux_amd64.tar.gz links
+$ wget https://liam.sh/ghr/links_0.4.0_linux_amd64.tar.gz
+$ tar -C /usr/bin/ -xzvf links_0.4.0_linux_amd64.tar.gz links
 $ chmod +x /usr/bin/links
 $ links --help
 ```
