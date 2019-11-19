@@ -19,7 +19,7 @@ help:
 
 fetch: ## Fetches the necessary dependencies to build.
 	which $(BIN)/rice 2>&1 > /dev/null || go get -v github.com/GeertJohan/go.rice/rice
-	which $(BIN)/goreleaser 2>&1 > /dev/null || wget -qO- "https://github.com/goreleaser/goreleaser/releases/download/v0.117.2/goreleaser_Linux_x86_64.tar.gz" | tar -xz -C $(BIN) goreleaser
+	which $(BIN)/goreleaser 2>&1 > /dev/null || wget -qO- "https://github.com/goreleaser/goreleaser/releases/download/v0.122.0/goreleaser_Linux_x86_64.tar.gz" | tar -xz -C $(BIN) goreleaser
 	go mod download
 	go mod tidy
 	go mod vendor

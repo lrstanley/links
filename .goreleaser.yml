@@ -20,9 +20,9 @@ nfpms:
 archives:
   - id: tgz
     format: tar.gz
-  - id: windows
-    goos: windows
-    format: zip
+    format_overrides:
+      - goos: windows
+        format: zip
 release:
   draft: true
 snapshot:
