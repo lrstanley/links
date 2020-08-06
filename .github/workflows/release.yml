@@ -1,0 +1,47 @@
+on:
+  push:
+    paths-ignore: ['.gitignore', '**/*.md']
+    branches: [master]
+    tags: ["*"]
+
+jobs:
+  goreleaser:
+    if: contains(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v2
+      with: { go-version: ^1.14 }
+    - uses: actions/checkout@v2
+      with: { fetch-depth: 0 }
+    - name: build
+      run: make fetch generate
+    - name: add footer release notes
+      run: go version >> notes-footer.md
+    - name: release
+      uses: goreleaser/goreleaser-action@v2
+      with:
+        version: latest
+        args: release --rm-dist --skip-validate --release-footer=notes-footer.md # have to skip validate, since we're writing files above
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  docker-publish-tags:
+    if: contains(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: lrstanley/links
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tag_semver: true
+  docker-publish-latest:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: lrstanley/links
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}

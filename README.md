@@ -1,8 +1,8 @@
 <p align="center">links -- Simple, fast link shortener</p>
 <p align="center">
-  <a href="https://github.com/lrstanley/links/releases"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/goreleaser.yml/badge.svg" alt="Release Status"></a>
+  <a href="https://github.com/lrstanley/links/releases"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/release.yml/badge.svg" alt="Release Status"></a>
   <a href="https://github.com/lrstanley/links/actions"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/build.yml/badge.svg" alt="Build Status"></a>
-  <a href="https://hub.docker.com/r/lrstanley/links"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/docker-publish.yml/badge.svg" alt="Docker"></a>
+  <a href="https://hub.docker.com/r/lrstanley/links/tags"><img src="https://img.shields.io/badge/Docker-lrstanley%2Flinks%3Alatest-blue.svg" alt="Docker"></a>
   <a href="https://liam.sh/chat"><img src="https://img.shields.io/badge/Community-Chat%20with%20us-green.svg" alt="Community Chat"></a>
 </p>
 
