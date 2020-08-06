@@ -26,11 +26,6 @@ jobs:
         args: release --rm-dist --skip-validate --release-header=notes-header.md --release-footer=notes-footer.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: Ilshidur/action-discord@0.2.0
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      with:
-        args: "${{ github.job }} has deployed a release to ${{ github.repository }} -- ref: ${{ github.ref }}"
   docker-publish-tags:
     if: contains(github.ref, 'refs/tags/v')
     needs: [goreleaser]
