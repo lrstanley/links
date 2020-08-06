@@ -1,7 +1,6 @@
 # goreleaser.yml
 project_name: links
 build:
-  binary: links
   goos:
     - linux
     - windows
@@ -11,8 +10,6 @@ build:
   ldflags: -s -w -X main.version=v{{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
 nfpms:
   - homepage: https://github.com/lrstanley/links
-    maintainer: Liam Stanley <me@liamstanley.io>
-    description: Links -- Link shortening service.
     license: MIT
     formats:
       - deb

@@ -16,13 +16,6 @@ RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 COPY --from=build /build/links /usr/local/bin/links
 
-LABEL org.opencontainers.image.title=links
-LABEL org.opencontainers.image.description="Links -- Link shortening service"
-LABEL org.opencontainers.image.url="https://https://github.com/lrstanley/links"
-LABEL org.opencontainers.image.documentation="https://github.com/lrstanley/links"
-LABEL org.opencontainers.image.source="https://github.com/lrstanley/links"
-LABEL org.opencontainers.image.licenses=MIT
-
 VOLUME /data
 EXPOSE 80
 WORKDIR /
