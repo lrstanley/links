@@ -6,6 +6,7 @@
 
 ## Table of Contents
 - [Installation](#installation)
+  - [Docker](#docker)
   - [Ubuntu/Debian](#ubuntudebian)
   - [CentOS/Redhat](#centosredhat)
   - [Manual Install](#manual-install)
@@ -25,6 +26,16 @@ Check out the [releases](https://github.com/lrstanley/links/releases)
 page for prebuilt versions. Links should work on ubuntu/debian,
 centos/redhat/fedora, etc. Below are example commands of how you would install
 the utility.
+
+### Docker
+
+```bash
+$ docker run -it --rm -p 8080:80 lrstanley/links:latest links --http :80 --db /data/store.db
+$ curl -I http://localhost:8080
+HTTP/1.1 200 OK
+Content-Type: text/html
+Date: Thu, 06 Aug 2020 00:55:21 GMT
+```
 
 ### Ubuntu/Debian
 

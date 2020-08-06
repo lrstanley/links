@@ -4,7 +4,6 @@ DIRS=bin dist
 BINARY=links
 
 VERSION=$(shell git describe --tags --always --abbrev=0 --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
-VERSION_FULL=$(shell git describe --tags --always --dirty --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
 
 RSRC=README_TPL.md
 ROUT=README.md
@@ -16,6 +15,14 @@ export GOBIN=$(CURDIR)/bin
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
+
+docker-build: fetch clean ## Compile within a docker container (no go or other dependencies required)
+	docker build --rm --force-rm -f Dockerfile -t lrstanley/links:${VERSION} -t lrstanley/links:latest .
+
+docker-push: ## Push docker images to <version> and latest
+	docker rmi $(shell docker images -f "dangling=true" -q) || true
+	docker push lrstanley/links:${VERSION}
+	docker push lrstanley/links:latest
 
 fetch: ## Fetches the necessary dependencies to build.
 	which $(BIN)/rice 2>&1 > /dev/null || go get -v github.com/GeertJohan/go.rice/rice
@@ -38,13 +45,13 @@ publish: clean fetch generate ## Generate a release, and publish to GitHub.
 	$(BIN)/goreleaser
 
 clean: ## Cleans up generated files/folders from the build.
-	/bin/rm -rfv "dist/" "${BINARY}-${VERSION_FULL}" rice-box.go
+	/bin/rm -rfv "dist/" "${BINARY}" rice-box.go
 
 generate: ## Generates the Go files that allow assets to be embedded.
 	$(BIN)/rice -v embed-go
 
 build: fetch clean generate ## Compile and generate a binary with static assets embedded.
-	go build -ldflags '-d -s -w' -tags netgo -installsuffix netgo -v -o "${BINARY}-${VERSION_FULL}"
+	go build -ldflags '-d -s -w' -tags netgo -installsuffix netgo -v -o "${BINARY}"
 
 debug: clean
 	go run -v *.go --site-name "http://0.0.0.0:8080" --debug --http ":8080"

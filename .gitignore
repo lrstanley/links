@@ -12,3 +12,4 @@ rice-box*
 *.prof
 vendor/*
 links
+links-*
