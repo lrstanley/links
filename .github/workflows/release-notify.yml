@@ -8,4 +8,6 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        args: "${{ github.event.release.author.login }} has ${{ github.event.action }} a release to ${{ github.event.repository.full_name }}\ntag: ${{ github.event.release.tag_name }} -- ${{ github.event.release.html_url }}"
+        args: |
+          ${{ github.event.release.author.login }} has ${{ github.event.action }} a release to ${{ github.event.repository.full_name }}
+          tag: ${{ github.event.release.tag_name }} -- ${{ github.event.release.html_url }}
