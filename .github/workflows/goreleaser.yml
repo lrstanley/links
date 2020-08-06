@@ -20,6 +20,6 @@ jobs:
       uses: goreleaser/goreleaser-action@v2
       with:
         version: latest
-        args: release --rm-dist
+        args: release --rm-dist --skip-validate # have to skip validate, since we're writing files above
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
