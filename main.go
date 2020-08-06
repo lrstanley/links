@@ -21,21 +21,21 @@ var (
 )
 
 type Config struct {
-	Site       string `short:"s" long:"site-name" default:"https://links.wtf" description:"site url, used for url generation"`
-	SessionDir string `long:"session-dir" description:"optional location to store temporary sessions"`
-	Quiet      bool   `short:"q" long:"quiet" description:"don't log to stdout"`
-	Debug      bool   `long:"debug" description:"enable debugging (pprof endpoints)"`
-	HTTP       string `short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
-	Proxy      bool   `short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
+	Site       string `env:"SITE_URL" short:"s" long:"site-name" default:"https://links.wtf" description:"site url, used for url generation"`
+	SessionDir string `env:"SESSION_DIR" long:"session-dir" description:"optional location to store temporary sessions"`
+	Quiet      bool   `env:"QUIET" short:"q" long:"quiet" description:"don't log to stdout"`
+	Debug      bool   `env:"DEBUG" long:"debug" description:"enable debugging (pprof endpoints)"`
+	HTTP       string `env:"HTTP" short:"b" long:"http" default:":8080" description:"ip:port pair to bind to"`
+	Proxy      bool   `env:"PROXY" short:"p" long:"behind-proxy" description:"if X-Forwarded-For headers should be trusted"`
 	TLS        struct {
-		Enable bool   `long:"enable" description:"run tls server rather than standard http"`
-		Cert   string `short:"c" long:"cert" description:"path to ssl cert file"`
-		Key    string `short:"k" long:"key" description:"path to ssl key file"`
+		Enable bool   `env:"TLS_ENABLE" long:"enable" description:"run tls server rather than standard http"`
+		Cert   string `env:"TLS_CERT_PATH" short:"c" long:"cert" description:"path to ssl cert file"`
+		Key    string `env:"TLS_KEY_PATH" short:"k" long:"key" description:"path to ssl key file"`
 	} `group:"TLS Options" namespace:"tls"`
-	DBPath          string `short:"d" long:"db" default:"store.db" description:"path to database file"`
-	KeyLength       int64  `long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
-	HTTPPreInclude  string `long:"http-pre-include" description:"HTTP include which is included directly after css is included (near top of the page)"`
-	HTTPPostInclude string `long:"http-post-include" description:"HTTP include which is included directly after js is included (near bottom of the page)"`
+	DBPath          string `env:"DB_PATH" short:"d" long:"db" default:"store.db" description:"path to database file"`
+	KeyLength       int64  `env:"KEY_LENGTH" long:"key-length" default:"4" description:"default length of key (uuid) for generated urls"`
+	HTTPPreInclude  string `env:"HTTP_PRE_INCLUDE" long:"http-pre-include" description:"HTTP include which is included directly after css is included (near top of the page)"`
+	HTTPPostInclude string `env:"HTTP_POST_INCLUDE" long:"http-post-include" description:"HTTP include which is included directly after js is included (near bottom of the page)"`
 
 	ExportFile string `short:"e" long:"export-file" default:"links.export" description:"file to export db to"`
 	ExportJSON bool   `long:"export-json" description:"export db to json elements"`

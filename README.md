@@ -88,29 +88,27 @@ Usage:
   links [OPTIONS] [add | delete]
 
 Application Options:
-  -s, --site-name=     site url, used for url generation (default: https://links.wtf)
-      --session-dir=   optional location to store temporary sessions
-  -q, --quiet          don't log to stdout
-      --debug          enable debugging (pprof endpoints)
-  -b, --http=          ip:port pair to bind to (default: :8080)
-  -p, --behind-proxy   if X-Forwarded-For headers should be trusted
-  -d, --db=            path to database file (default: store.db)
-      --key-length=    default length of key (uuid) for generated urls (default: 4)
-      --http-preclude= HTTP include which is included directly after css is included
-                       (near top of the page)
-      --http-include=  HTTP include which is included directly after js is included
-                       (near bottom of the page)
-  -e, --export-file=   file to export db to (default: links.export)
-      --export-json    export db to json elements
-  -v, --version        display the version of links.wtf and exit
+  -s, --site-name=         site url, used for url generation (default: https://links.wtf) [$SITE_URL]
+      --session-dir=       optional location to store temporary sessions [$SESSION_DIR]
+  -q, --quiet              don't log to stdout [$QUIET]
+      --debug              enable debugging (pprof endpoints) [$DEBUG]
+  -b, --http=              ip:port pair to bind to (default: :8080) [$HTTP]
+  -p, --behind-proxy       if X-Forwarded-For headers should be trusted [$PROXY]
+  -d, --db=                path to database file (default: store.db) [$DB_PATH]
+      --key-length=        default length of key (uuid) for generated urls (default: 4) [$KEY_LENGTH]
+      --http-pre-include=  HTTP include which is included directly after css is included (near top of the page) [$HTTP_PRE_INCLUDE]
+      --http-post-include= HTTP include which is included directly after js is included (near bottom of the page) [$HTTP_POST_INCLUDE]
+  -e, --export-file=       file to export db to (default: links.export)
+      --export-json        export db to json elements
+  -v, --version            display the version of links.wtf and exit
 
 TLS Options:
-      --tls.enable     run tls server rather than standard http
-  -c, --tls.cert=      path to ssl cert file
-  -k, --tls.key=       path to ssl key file
+      --tls.enable         run tls server rather than standard http [$TLS_ENABLE]
+  -c, --tls.cert=          path to ssl cert file [$TLS_CERT_PATH]
+  -k, --tls.key=           path to ssl key file [$TLS_KEY_PATH]
 
 Help Options:
-  -h, --help           Show this help message
+  -h, --help               Show this help message
 
 Available commands:
   add     add a link
