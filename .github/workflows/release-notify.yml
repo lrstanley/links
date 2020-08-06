@@ -1,6 +1,6 @@
 on:
   release:
-    types: [published, unpublished]
+    types: [released, prereleased, deleted]
 
 jobs:
   release-notify:
