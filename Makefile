@@ -16,14 +16,6 @@ export GOBIN=$(CURDIR)/bin
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
-docker-build: fetch clean ## Compile within a docker container (no go or other dependencies required)
-	docker build --rm --force-rm -f Dockerfile -t lrstanley/links:${VERSION} -t lrstanley/links:latest .
-
-docker-push: ## Push docker images to <version> and latest
-	docker rmi $(shell docker images -f "dangling=true" -q) || true
-	docker push lrstanley/links:${VERSION}
-	docker push lrstanley/links:latest
-
 fetch: ## Fetches the necessary dependencies to build.
 	which $(BIN)/rice 2>&1 > /dev/null || go get -v github.com/GeertJohan/go.rice/rice
 	which $(BIN)/goreleaser 2>&1 > /dev/null || wget -qO- "https://github.com/goreleaser/goreleaser/releases/download/v0.122.0/goreleaser_Linux_x86_64.tar.gz" | tar -xz -C $(BIN) goreleaser
