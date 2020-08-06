@@ -1,6 +1,6 @@
 on:
   release:
-    types: [released, prereleased, deleted]
+    types: [published, unpublished]
 
 jobs:
   release-notify:
@@ -11,5 +11,5 @@ jobs:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
         args: |
-          ${{ github.event.release.author.login }} has ${{ github.event.action }} a release to ${{ github.event.repository.full_name }}
-          tag: ${{ github.event.release.tag_name }} -- ${{ github.event.release.html_url }}
+          ${{ github.event.release.author.login }} has ${{ github.event.action }} a release for ${{ github.event.repository.full_name }}
+          ${{ github.event.release.tag_name }}: ${{ github.event.release.html_url }}
