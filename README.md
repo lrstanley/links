@@ -1,7 +1,8 @@
 <p align="center">links -- Simple, fast link shortener</p>
 <p align="center">
   <a href="https://travis-ci.org/lrstanley/links"><img src="https://travis-ci.org/lrstanley/links.svg?branch=master" alt="Build Status"></a>
-  <a href="https://byteirc.org/channel/%23%2Fdev%2Fnull"><img src="https://img.shields.io/badge/ByteIRC-%23%2Fdev%2Fnull-blue.svg" alt="IRC Chat"></a>
+  <a href="https://hub.docker.com/r/lrstanley/links"><img src="https://img.shields.io/badge/Docker-lrstanley%2Flinks-blue.svg" alt="Docker"></a>
+  <a href="https://liam.sh/chat"><img src="https://img.shields.io/badge/Community-Chat%20with%20us-green.svg" alt="Community Chat"></a>
 </p>
 
 ## Table of Contents

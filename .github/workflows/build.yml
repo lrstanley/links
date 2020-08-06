@@ -1,0 +1,21 @@
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: setup-go
+      uses: actions/setup-go@v2
+      with: { go-version: ^1.14 }
+      id: go
+    - uses: actions/checkout@master
+    - name: build
+      run: make
