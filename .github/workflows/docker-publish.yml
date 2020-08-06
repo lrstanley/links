@@ -1,6 +1,3 @@
-# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: docker-publish
-
 on: [push]
 
 jobs:
