@@ -15,13 +15,15 @@ jobs:
       with: { fetch-depth: 0 }
     - name: build
       run: make fetch generate
-    - name: add footer release notes
-      run: go version >> notes-footer.md
+    - name: add release note context
+      run: |
+        "Docker Releases are [located here](https://hub.docker.com/repository/docker/lrstanley/links/tags)." >> nodes-header.md
+        go version >> notes-footer.md
     - name: release
       uses: goreleaser/goreleaser-action@v2
       with:
         version: latest
-        args: release --rm-dist --skip-validate --release-footer=notes-footer.md # have to skip validate, since we're writing files above
+        args: release --rm-dist --skip-validate --release-header=notes-header.md --release-footer=notes-footer.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   docker-publish-tags:
