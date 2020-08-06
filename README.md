@@ -1,7 +1,8 @@
 <p align="center">links -- Simple, fast link shortener</p>
 <p align="center">
-  <a href="https://travis-ci.org/lrstanley/links"><img src="https://travis-ci.org/lrstanley/links.svg?branch=master" alt="Build Status"></a>
-  <a href="https://hub.docker.com/r/lrstanley/links"><img src="https://img.shields.io/badge/Docker-lrstanley%2Flinks-blue.svg" alt="Docker"></a>
+  <a href="https://github.com/lrstanley/links/releases"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/goreleaser.yml/badge.svg" alt="Release Status"></a>
+  <a href="https://github.com/lrstanley/links/actions"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/build.yml/badge.svg" alt="Build Status"></a>
+  <a href="https://hub.docker.com/r/lrstanley/links"><img src="https://github.com/lrstanley/links/workflows/.github/workflows/docker-publish.yml/badge.svg" alt="Docker"></a>
   <a href="https://liam.sh/chat"><img src="https://img.shields.io/badge/Community-Chat%20with%20us-green.svg" alt="Community Chat"></a>
 </p>
 
@@ -41,30 +42,30 @@ Date: Thu, 06 Aug 2020 00:55:21 GMT
 ### Ubuntu/Debian
 
 ```bash
-$ wget https://liam.sh/ghr/links_0.4.0_linux_amd64.deb
-$ dpkg -i links_0.4.0_linux_amd64.deb
+$ wget https://liam.sh/ghr/links_<version>_linux_amd64.deb
+$ dpkg -i links_<version>_linux_amd64.deb
 $ links --help
 ```
 
 ### CentOS/Redhat
 
 ```bash
-$ yum localinstall https://liam.sh/ghr/links_0.4.0_linux_amd64.rpm
+$ yum localinstall https://liam.sh/ghr/links_<version>_linux_amd64.rpm
 $ links --help
 ```
 
 Some older CentOS versions may require (if you get `Cannot open: <url>. Skipping.`):
 
 ```console
-$ wget https://liam.sh/ghr/links_0.4.0_linux_amd64.rpm
-$ yum localinstall links_0.4.0_linux_amd64.rpm
+$ wget https://liam.sh/ghr/links_<version>_linux_amd64.rpm
+$ yum localinstall links_<version>_linux_amd64.rpm
 ```
 
 ### Manual Install
 
 ```bash
-$ wget https://liam.sh/ghr/links_0.4.0_linux_amd64.tar.gz
-$ tar -C /usr/bin/ -xzvf links_0.4.0_linux_amd64.tar.gz links
+$ wget https://liam.sh/ghr/links_<version>_linux_amd64.tar.gz
+$ tar -C /usr/bin/ -xzvf links_<version>_linux_amd64.tar.gz links
 $ chmod +x /usr/bin/links
 $ links --help
 ```

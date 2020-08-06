@@ -1,12 +1,9 @@
 .DEFAULT_GOAL := build
 
-DIRS=bin dist
+DIRS=bin
 BINARY=links
 
 VERSION=$(shell git describe --tags --always --abbrev=0 --match=v* 2> /dev/null | sed -r "s:^v::g" || echo 0)
-
-RSRC=README_TPL.md
-ROUT=README.md
 
 $(info $(shell mkdir -p $(DIRS)))
 BIN=$(CURDIR)/bin
@@ -18,23 +15,9 @@ help:
 
 fetch: ## Fetches the necessary dependencies to build.
 	which $(BIN)/rice 2>&1 > /dev/null || go get -v github.com/GeertJohan/go.rice/rice
-	which $(BIN)/goreleaser 2>&1 > /dev/null || wget -qO- "https://github.com/goreleaser/goreleaser/releases/download/v0.122.0/goreleaser_Linux_x86_64.tar.gz" | tar -xz -C $(BIN) goreleaser
 	go mod download
 	go mod tidy
 	go mod vendor
-
-readme-gen: ## Generates readme from template file.
-	cp -av "${RSRC}" "${ROUT}"
-	sed -ri -e "s:\[\[tag\]\]:${VERSION}:g" -e "s:\[\[os\]\]:linux:g" -e "s:\[\[arch\]\]:amd64:g" "${ROUT}"
-
-snapshot: clean fetch generate ## Generate a snapshot release.
-	$(BIN)/goreleaser --snapshot --skip-validate --skip-publish
-
-release: clean fetch generate ## Generate a release, but don't publish to GitHub.
-	$(BIN)/goreleaser --skip-validate --skip-publish
-
-publish: clean fetch generate ## Generate a release, and publish to GitHub.
-	$(BIN)/goreleaser
 
 clean: ## Cleans up generated files/folders from the build.
 	/bin/rm -rfv "dist/" "${BINARY}" rice-box.go
