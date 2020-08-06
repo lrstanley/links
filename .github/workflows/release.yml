@@ -17,7 +17,7 @@ jobs:
       run: make fetch generate
     - name: add release note context
       run: |
-        echo "Docker Releases are [located here](https://hub.docker.com/repository/docker/lrstanley/links/tags)." >> notes-header.md
+        echo "Docker Releases are [located here](https://hub.docker.com/r/lrstanley/links/tags)." >> notes-header.md
         go version >> notes-footer.md
     - name: release
       uses: goreleaser/goreleaser-action@v2
