@@ -17,7 +17,6 @@ fetch: ## Fetches the necessary dependencies to build.
 	which $(BIN)/rice 2>&1 > /dev/null || go get -v github.com/GeertJohan/go.rice/rice
 	go mod download
 	go mod tidy
-	go mod vendor
 
 clean: ## Cleans up generated files/folders from the build.
 	/bin/rm -rfv "dist/" "${BINARY}" rice-box.go
