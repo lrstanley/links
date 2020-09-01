@@ -187,7 +187,7 @@ func expand(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if len(threats) > 0 {
+		if len(threats) > 0 && threats[0] != nil {
 			tmpl.Render(w, r, "tmpl/safebrowsing.html", pt.M{"threats": threats[0], "link": link.URL})
 			return
 		}
