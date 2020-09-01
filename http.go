@@ -41,6 +41,12 @@ func httpServer(ctx context.Context, closer chan struct{}) {
 	if conf.Proxy {
 		r.Use(middleware.RealIP)
 	}
+
+	r.Use(middleware.SetHeader("Content-Security-Policy", "script-src 'self'"))
+	r.Use(middleware.SetHeader("X-Frame-Options", "DENY"))
+	r.Use(middleware.SetHeader("X-Content-Type-Options", "nosniff"))
+	r.Use(middleware.SetHeader("Referrer-Policy", "same-origin"))
+
 	r.Use(middleware.DefaultCompress)
 	r.Use(middleware.DefaultLogger)
 	r.Use(middleware.Timeout(30 * time.Second))
