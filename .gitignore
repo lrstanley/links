@@ -13,3 +13,4 @@ rice-box*
 vendor/*
 links
 links-*
+.env

@@ -13,4 +13,5 @@ vendor
 rice*.go
 .git
 bin
+.env
 **/*.md

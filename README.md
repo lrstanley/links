@@ -14,6 +14,7 @@
   - [Manual Install](#manual-install)
   - [Build from source](#build-from-source)
 - [Usage](#usage)
+  - [Dot-env](#dot-env)
   - [Example](#example)
 - [Using as a library](#using-as-a-library)
   - [Example](#example-1)
@@ -114,6 +115,15 @@ Available commands:
   add     add a link
   delete  delete a link, id, or link matching an author
 
+```
+
+### Dot-env
+
+Links also supports a `.env` file for loading environment variables. Example:
+
+```
+SAFEBROWSING_API_KEY=<your-secret-key>
+FOO=BAR
 ```
 
 ### Example
