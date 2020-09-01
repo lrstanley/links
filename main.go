@@ -5,11 +5,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"runtime"
 	"strings"
+	"syscall"
+	"time"
 
 	flags "github.com/jessevdk/go-flags"
 	_ "github.com/joho/godotenv/autoload"
@@ -40,6 +44,13 @@ type Config struct {
 
 	ExportFile string `short:"e" long:"export-file" default:"links.export" description:"file to export db to"`
 	ExportJSON bool   `long:"export-json" description:"export db to json elements"`
+
+	SafeBrowsing struct {
+		APIKey           string        `env:"SAFEBROWSING_API_KEY" long:"api-key" description:"Google API Key used for querying SafeBrowsing, disabled if not provided (see: https://github.com/lrstanley/links#google-safebrowsing)"`
+		DBPath           string        `env:"SAFEBROWSING_DB_PATH" long:"db" default:"safebrowsing.db" description:"path to SafeBrowsing database file"`
+		UpdatePeriod     time.Duration `env:"SAFEBROWSING_UPDATE_PERIOD" long:"update-period" default:"1h" description:"duration between updates to the SafeBrowsing API local database"`
+		RedirectFallback bool          `env:"SAFEBROWSING_REDIRECT_FALLBACK" long:"redirect-fallback" description:"if the SafeBrowsing request fails (local cache, and remote hit), this still lets the redirect happen"`
+	} `group:"Safe Browsing Support" namespace:"safebrowsing"`
 
 	VersionFlag bool `short:"v" long:"version" description:"display the version of links.wtf and exit"`
 
@@ -95,6 +106,35 @@ func main() {
 		return
 	}
 
+	// Google SafeBrowsing.
+	initSafeBrowsing()
+
+	ctx, ctxClose := context.WithCancel(context.Background())
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+
 	// Initialize the http/https server.
-	httpServer()
+	httpCloser := make(chan struct{})
+	go httpServer(ctx, httpCloser)
+
+	fmt.Println("listening for signal. CTRL+C to quit.")
+
+	select {
+	case <-signals:
+		fmt.Println("signal received, shutting down")
+	case <-httpCloser:
+		fmt.Println("http server stopped, shutting down")
+	}
+
+	ctxClose()
+	<-httpCloser
+
+	if safeBrowser != nil {
+		if err = safeBrowser.Close(); err != nil {
+			debug.Fatalf("error closing google safebrowsing: %v", err)
+		}
+	}
+
+	debug.Println("shutdown complete")
 }

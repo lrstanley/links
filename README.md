@@ -16,6 +16,7 @@
 - [Usage](#usage)
   - [Dot-env](#dot-env)
   - [Example](#example)
+  - [Google SafeBrowsing](#google-safebrowsing)
 - [Using as a library](#using-as-a-library)
   - [Example](#example-1)
 - [API](#api)
@@ -89,27 +90,33 @@ Usage:
   links [OPTIONS] [add | delete]
 
 Application Options:
-  -s, --site-name=         site url, used for url generation (default: https://links.wtf) [$SITE_URL]
-      --session-dir=       optional location to store temporary sessions [$SESSION_DIR]
-  -q, --quiet              don't log to stdout [$QUIET]
-      --debug              enable debugging (pprof endpoints) [$DEBUG]
-  -b, --http=              ip:port pair to bind to (default: :8080) [$HTTP]
-  -p, --behind-proxy       if X-Forwarded-For headers should be trusted [$PROXY]
-  -d, --db=                path to database file (default: store.db) [$DB_PATH]
-      --key-length=        default length of key (uuid) for generated urls (default: 4) [$KEY_LENGTH]
-      --http-pre-include=  HTTP include which is included directly after css is included (near top of the page) [$HTTP_PRE_INCLUDE]
-      --http-post-include= HTTP include which is included directly after js is included (near bottom of the page) [$HTTP_POST_INCLUDE]
-  -e, --export-file=       file to export db to (default: links.export)
-      --export-json        export db to json elements
-  -v, --version            display the version of links.wtf and exit
+  -s, --site-name=                      site url, used for url generation (default: https://links.wtf) [$SITE_URL]
+      --session-dir=                    optional location to store temporary sessions [$SESSION_DIR]
+  -q, --quiet                           don't log to stdout [$QUIET]
+      --debug                           enable debugging (pprof endpoints) [$DEBUG]
+  -b, --http=                           ip:port pair to bind to (default: :8080) [$HTTP]
+  -p, --behind-proxy                    if X-Forwarded-For headers should be trusted [$PROXY]
+  -d, --db=                             path to database file (default: store.db) [$DB_PATH]
+      --key-length=                     default length of key (uuid) for generated urls (default: 4) [$KEY_LENGTH]
+      --http-pre-include=               HTTP include which is included directly after css is included (near top of the page) [$HTTP_PRE_INCLUDE]
+      --http-post-include=              HTTP include which is included directly after js is included (near bottom of the page) [$HTTP_POST_INCLUDE]
+  -e, --export-file=                    file to export db to (default: links.export)
+      --export-json                     export db to json elements
+  -v, --version                         display the version of links.wtf and exit
 
 TLS Options:
-      --tls.enable         run tls server rather than standard http [$TLS_ENABLE]
-  -c, --tls.cert=          path to ssl cert file [$TLS_CERT_PATH]
-  -k, --tls.key=           path to ssl key file [$TLS_KEY_PATH]
+      --tls.enable                      run tls server rather than standard http [$TLS_ENABLE]
+  -c, --tls.cert=                       path to ssl cert file [$TLS_CERT_PATH]
+  -k, --tls.key=                        path to ssl key file [$TLS_KEY_PATH]
+
+Safe Browsing Support:
+      --safebrowsing.api-key=           Google API Key used for querying SafeBrowsing, disabled if not provided (see: https://github.com/lrstanley/links#google-safebrowsing) [$SAFEBROWSING_API_KEY]
+      --safebrowsing.db=                path to SafeBrowsing database file (default: safebrowsing.db) [$SAFEBROWSING_DB_PATH]
+      --safebrowsing.update-period=     duration between updates to the SafeBrowsing API local database (default: 1h) [$SAFEBROWSING_UPDATE_PERIOD]
+      --safebrowsing.redirect-fallback  if the SafeBrowsing request fails (local cache, and remote hit), this still lets the redirect happen [$SAFEBROWSING_REDIRECT_FALLBACK]
 
 Help Options:
-  -h, --help               Show this help message
+  -h, --help                            Show this help message
 
 Available commands:
   add     add a link
@@ -131,6 +138,21 @@ FOO=BAR
 ```
 $ links -s "http://your-domain.com" -b "0.0.0.0:80" -d links.db
 ```
+
+### Google SafeBrowsing
+
+Links supports utilizing [Google SafeBrowsing](https://safebrowsing.google.com/),
+(see `Safe Browsing Support` under ##Usage). This helps prevent users being
+redirected to malicious or otherwise harmful websites. It does require a Google
+Developer account (free).
+
+   1. Go to the [Google Developer Console](https://console.developers.google.com/)
+   2. Create a new project (dropdown top left, click `NEW PROJECT`)
+   3. Enable the "Safe Browsing" API
+   4. Create a new credential (API key)
+
+Screenshot example:
+![](https://i.imgur.com/VHyPYqi.png)
 
 ## Using as a library
 

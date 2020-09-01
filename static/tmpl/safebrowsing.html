@@ -1,0 +1,50 @@
+{% extends "/partials/base.html" %}
+{% block title %}Dangerous Link{% endblock title %}
+{% block content %}
+<div class="main flex-ct">
+    <div class="wrap-md flex-column">
+        <div class="card">
+            <div class="card-header text-center text-danger"><strong><i class="fa fa-shield"></i> Google Safe Browsing Warning for {{ link | truncatechars:35 }}</strong></div>
+            <div class="card-body">
+                <p>
+                    <a href="https://github.com/lrstanley/links" target="_blank">Links</a> scans and reviews all shortened links,
+                    checking them against Google <a href="https://safebrowsing.google.com/" target="_blank">Safe Browsing</a>, to
+                    protect users from malware, phishing, and other forms of dangerous websites. Upon review, the link in mention
+                    has been flagged as potentially dangerous</strong>. Please review the below information and <strong>continue
+                    at your own risk</strong>.
+                </p>
+
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pattern match</th>
+                            <th scope="col">Threat type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for threat in threats %}
+                            <tr>
+                                <td>{{ threat.Pattern }}</td>
+                                <td><span class="badge badge-secondary">{{ threat.ThreatDescriptor.ThreatType }}</span></td>
+                                <td><span class="badge badge-warning">{{ threat.ThreatDescriptor.ThreatType | threatdefinition }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="row pt-4">
+                    <div class="d-sm-none d-md-block col-md-6">
+                        <a class="badge badge-info" href="https://transparencyreport.google.com/safe-browsing/search" target="_blank">Safe Search lookup tool</a><br>
+                        <a class="badge badge-info" href="https://safebrowsing.google.com/safebrowsing/report_error/?hl=en" target="_blank">Report incorrect result</a>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <a class="btn btn-block btn-danger btn-lg" href="{{ link }}"><i class="fa fa-exclamation-circle"></i> Proceed (caution)</a>
+                    </div>
+                </div>
+            </div>
+            {% include "/partials/card_footer.html" %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

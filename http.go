@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"encoding/gob"
 	"net"
 	"net/http"
@@ -23,7 +24,7 @@ var (
 	tmpl *pt.Loader
 )
 
-func httpServer() {
+func httpServer(ctx context.Context, closer chan struct{}) {
 	tmpl = pt.New("", pt.Config{
 		CacheParsed:     !conf.Debug,
 		Loader:          rice.MustFindBox("static").Bytes,
@@ -69,13 +70,32 @@ func httpServer() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	if conf.TLS.Enable {
-		debug.Printf("initializing https server on %s", conf.HTTP)
-		debug.Fatal(srv.ListenAndServeTLS(conf.TLS.Cert, conf.TLS.Key))
-	}
+	go func() {
+		debug.Printf("initializing http server on %s", conf.HTTP)
 
-	debug.Printf("initializing http server on %s", conf.HTTP)
-	debug.Fatal(srv.ListenAndServe())
+		var err error
+		if conf.TLS.Enable {
+			err = srv.ListenAndServeTLS(conf.TLS.Cert, conf.TLS.Key)
+		} else {
+			err = srv.ListenAndServe()
+		}
+
+		if err != nil && err != http.ErrServerClosed {
+			debug.Printf("http error: %v", err)
+		}
+
+		close(closer)
+	}()
+
+	// Wait for parent to ask to shutdown.
+	<-ctx.Done()
+
+	debug.Printf("requesting http server to shutdown")
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil && err != http.ErrServerClosed {
+		debug.Fatalf("unable to shutdown http server: %v", err)
+	}
 }
 
 func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]interface{}) {
@@ -149,6 +169,26 @@ func expand(w http.ResponseWriter, r *http.Request) {
 	}
 
 	link.AddHit()
+
+	if conf.SafeBrowsing.APIKey != "" {
+		threats, err := safeBrowser.LookupURLs([]string{link.URL})
+		if err != nil {
+			debug.Printf("safebrowsing error: %v", err)
+
+			if conf.SafeBrowsing.RedirectFallback {
+				http.Redirect(w, r, link.URL, http.StatusFound)
+				return
+			}
+
+			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
+		}
+
+		if len(threats) > 0 {
+			tmpl.Render(w, r, "tmpl/safebrowsing.html", pt.M{"threats": threats[0], "link": link.URL})
+			return
+		}
+	}
 
 	http.Redirect(w, r, link.URL, http.StatusFound)
 }
