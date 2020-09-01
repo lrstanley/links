@@ -57,7 +57,10 @@ func httpServer(ctx context.Context, closer chan struct{}) {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Render(w, r, "tmpl/index.html", nil)
 	})
-	r.Get("/-/abuse", func(w http.ResponseWriter, r *http.Request) { tmpl.Render(w, r, "tmpl/abuse.html", nil) })
+	r.Get("/-/abuse", func(w http.ResponseWriter, r *http.Request) {
+		tmpl.Render(w, r, "tmpl/abuse.html", pt.M{"safebrowsing": conf.SafeBrowsing.APIKey != ""})
+	})
+
 	r.Get("/{uid}", expand)
 	r.Post("/{uid}", expand)
 	r.Post("/", addForm)

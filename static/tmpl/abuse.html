@@ -4,14 +4,23 @@
 <div class="main flex-ct">
     <div class="wrap-sm flex-column">
         <div class="card">
-            <div class="card-header text-center"><i class="fa fa-ban"></i> Abuse Information &amp; Contact</div>
+            <div class="card-header text-center"><i class="fa fa-question-circle"></i> Abuse Information &amp; Contact</div>
             <div class="card-body">
                 This site is a hosted version of <a href="https://github.com/lrstanley/links" target="_blank">Links</a>,
-                a link shortening http service. This service does not host any user-provided
-                content.
-                <br><br>
-                Any shortened links, redirecting to malicious or otherwise illegal content,
-                should be forwarded to the provider and host of the target domains server.
+                a link shortening http service. <strong>This service does not host any user-provided
+                content.</strong>
+
+                <div class="alert alert-danger mt-3" role="alert">
+                    Any shortened links, redirecting to malicious or otherwise illegal content
+                    should be forwarded to the provider and host of the <strong>target hosting provider</strong>.
+                </div>
+
+                {% if safebrowsing %}
+                <div class="alert alert-success" role="alert">
+                    This version of links supports querying <a href="https://safebrowsing.google.com/">Google Safe Browsing</a>,
+                    to help protect users against potentially malicious or otherwise dangerous websites.
+                </div>
+                {% endif %}
             </div>
 
             {% include "/partials/card_footer.html" %}
