@@ -12,6 +12,7 @@ import (
 	"os/signal"
 	"runtime"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -109,26 +110,24 @@ func main() {
 	// Google SafeBrowsing.
 	initSafeBrowsing()
 
-	ctx, ctxClose := context.WithCancel(context.Background())
+	// Setup methods to allow signaling to all children methods that we're stopping.
+	ctx, closer := context.WithCancel(context.Background())
+	wg := &sync.WaitGroup{}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 
 	// Initialize the http/https server.
-	httpCloser := make(chan struct{})
-	go httpServer(ctx, httpCloser)
+	go httpServer(ctx, wg)
 
 	fmt.Println("listening for signal. CTRL+C to quit.")
 
-	select {
-	case <-signals:
-		fmt.Println("signal received, shutting down")
-	case <-httpCloser:
-		fmt.Println("http server stopped, shutting down")
-	}
+	<-signals
+	fmt.Println("\nsignal received, shutting down")
 
-	ctxClose()
-	<-httpCloser
+	// Signal to exit, and wait for all goroutines/processes to exit.
+	closer()
+	wg.Wait()
 
 	if safeBrowser != nil {
 		if err = safeBrowser.Close(); err != nil {

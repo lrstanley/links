@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	rice "github.com/GeertJohan/go.rice"
@@ -24,7 +25,7 @@ var (
 	tmpl *pt.Loader
 )
 
-func httpServer(ctx context.Context, closer chan struct{}) {
+func httpServer(ctx context.Context, wg *sync.WaitGroup) {
 	tmpl = pt.New("", pt.Config{
 		CacheParsed:     !conf.Debug,
 		Loader:          rice.MustFindBox("static").Bytes,
@@ -80,6 +81,9 @@ func httpServer(ctx context.Context, closer chan struct{}) {
 	}
 
 	go func() {
+		wg.Add(1)
+		defer wg.Done()
+
 		debug.Printf("initializing http server on %s", conf.HTTP)
 
 		var err error
@@ -92,17 +96,13 @@ func httpServer(ctx context.Context, closer chan struct{}) {
 		if err != nil && err != http.ErrServerClosed {
 			debug.Printf("http error: %v", err)
 		}
-
-		close(closer)
 	}()
 
 	// Wait for parent to ask to shutdown.
 	<-ctx.Done()
 
 	debug.Printf("requesting http server to shutdown")
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	if err := srv.Shutdown(shutdownCtx); err != nil && err != http.ErrServerClosed {
+	if err := srv.Shutdown(context.Background()); err != nil && err != http.ErrServerClosed {
 		debug.Fatalf("unable to shutdown http server: %v", err)
 	}
 }
