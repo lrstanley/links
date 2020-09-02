@@ -65,6 +65,11 @@ func initMetrics(ctx context.Context, wg *sync.WaitGroup, errors chan<- error, r
 	mux.Use(middleware.Throttle(5))
 	mux.Use(middleware.Recoverer)
 
+	mux.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `<a href="%s">see metrics</a>`, conf.Prometheus.Endpoint)
+	})
+
 	mux.Handle(conf.Prometheus.Endpoint, promhttp.Handler())
 
 	srv := &http.Server{
@@ -78,7 +83,7 @@ func initMetrics(ctx context.Context, wg *sync.WaitGroup, errors chan<- error, r
 		wg.Add(1)
 		defer wg.Done()
 
-		debug.Printf("initializing metrics server on %s", conf.HTTP)
+		debug.Printf("initializing metrics server on %s", conf.Prometheus.Addr)
 
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			errors <- fmt.Errorf("metrics error: %v", err)
