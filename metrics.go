@@ -90,10 +90,15 @@ func initMetrics(ctx context.Context, wg *sync.WaitGroup, errors chan<- error, r
 		}
 	}()
 
-	<-ctx.Done()
+	go func() {
+		wg.Add(1)
+		defer wg.Done()
 
-	debug.Printf("requesting metrics server to shutdown")
-	if err := srv.Shutdown(context.Background()); err != nil && err != http.ErrServerClosed {
-		errors <- fmt.Errorf("unable to shutdown metrics server: %v", err)
-	}
+		<-ctx.Done()
+
+		debug.Printf("requesting metrics server to shutdown")
+		if err := srv.Shutdown(context.Background()); err != nil && err != http.ErrServerClosed {
+			errors <- fmt.Errorf("unable to shutdown metrics server: %v", err)
+		}
+	}()
 }
