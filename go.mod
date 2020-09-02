@@ -14,8 +14,8 @@ require (
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/lrstanley/go-sempool v0.0.0-20181215043219-1ee81530e9dd
 	github.com/lrstanley/pt v0.0.0-20180304040151-203b3db5ff8f
+	github.com/prometheus/client_golang v1.7.1
 	github.com/timshannon/bolthold v0.0.0-20191009161117-ccb01ed9dec4
 	go.etcd.io/bbolt v1.3.3
 	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect
-	golang.org/x/sys v0.0.0-20190904154756-749cb33beabd // indirect
 )

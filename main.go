@@ -53,6 +53,12 @@ type Config struct {
 		RedirectFallback bool          `env:"SAFEBROWSING_REDIRECT_FALLBACK" long:"redirect-fallback" description:"if the SafeBrowsing request fails (local cache, and remote hit), this still lets the redirect happen"`
 	} `group:"Safe Browsing Support" namespace:"safebrowsing"`
 
+	Prometheus struct {
+		Enabled  bool   `env:"PROM_ENABLED" long:"enabled" description:"enable exposing of prometheus metrics (on std port, or --prometheus.addr)"`
+		Addr     string `env:"PROM_ADDR" long:"addr" description:"expose on custom address/port, e.g. ':9001' (all ips) or 'localhost:9001' (local only)"`
+		Endpoint string `env:"PROM_ENDPOINT" long:"endpoint" default:"/metrics" description:"endpoint to expose metrics on"`
+	} `group:"Prometheus Metrics" namespace:"prom"`
+
 	VersionFlag bool `short:"v" long:"version" description:"display the version of links.wtf and exit"`
 
 	CommandAdd    CommandAdd    `command:"add" description:"add a link"`
@@ -112,21 +118,33 @@ func main() {
 
 	// Setup methods to allow signaling to all children methods that we're stopping.
 	ctx, closer := context.WithCancel(context.Background())
+	errors := make(chan error)
 	wg := &sync.WaitGroup{}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 
 	// Initialize the http/https server.
-	go httpServer(ctx, wg)
+	go httpServer(ctx, wg, errors)
 
 	fmt.Println("listening for signal. CTRL+C to quit.")
 
-	<-signals
-	fmt.Println("\nsignal received, shutting down")
+	go func() {
+		for {
+			select {
+			case <-signals:
+				fmt.Println("\nsignal received, shutting down")
+			case <-errors:
+				debug.Println(err)
+			}
 
-	// Signal to exit, and wait for all goroutines/processes to exit.
-	closer()
+			// Signal to exit.
+			closer()
+		}
+	}()
+
+	// Wait for the context to close, and wait for all goroutines/processes to exit.
+	<-ctx.Done()
 	wg.Wait()
 
 	if safeBrowser != nil {

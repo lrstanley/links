@@ -88,6 +88,9 @@ func updateGlobalStats(db *bolthold.Store) {
 	cachedGlobalStats.Redirects = tmp.Redirects
 	cachedGlobalStats.Shortened = tmp.Shortened
 	cachedGlobalStats.mu.Unlock()
+
+	metricRedirected.Set(float64(tmp.Redirects))
+	metricShortened.Set(float64(tmp.Shortened))
 }
 
 // Link represents a url that we are shortening.

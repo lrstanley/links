@@ -7,6 +7,7 @@ package main
 import (
 	"context"
 	"encoding/gob"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
@@ -25,7 +26,7 @@ var (
 	tmpl *pt.Loader
 )
 
-func httpServer(ctx context.Context, wg *sync.WaitGroup) {
+func httpServer(ctx context.Context, wg *sync.WaitGroup, errors chan<- error) {
 	tmpl = pt.New("", pt.Config{
 		CacheParsed:     !conf.Debug,
 		Loader:          rice.MustFindBox("static").Bytes,
@@ -73,6 +74,8 @@ func httpServer(ctx context.Context, wg *sync.WaitGroup) {
 	r.Post("/", addForm)
 	r.Post("/add", addAPI)
 
+	initMetrics(ctx, wg, errors, r)
+
 	srv := &http.Server{
 		Addr:         conf.HTTP,
 		Handler:      r,
@@ -94,7 +97,7 @@ func httpServer(ctx context.Context, wg *sync.WaitGroup) {
 		}
 
 		if err != nil && err != http.ErrServerClosed {
-			debug.Printf("http error: %v", err)
+			errors <- fmt.Errorf("http error: %v", err)
 		}
 	}()
 
@@ -103,7 +106,7 @@ func httpServer(ctx context.Context, wg *sync.WaitGroup) {
 
 	debug.Printf("requesting http server to shutdown")
 	if err := srv.Shutdown(context.Background()); err != nil && err != http.ErrServerClosed {
-		debug.Fatalf("unable to shutdown http server: %v", err)
+		errors <- fmt.Errorf("unable to shutdown http server: %v", err)
 	}
 }
 
@@ -113,9 +116,8 @@ func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]inte
 	}
 
 	cachedGlobalStats.mu.RLock()
-	// Note that this copies a mutex, but it should never be re-locked, as
-	// it's only being used in a template.
-	stats := cachedGlobalStats
+	shortened := cachedGlobalStats.Shortened
+	redirected := cachedGlobalStats.Redirects
 	cachedGlobalStats.mu.RUnlock()
 
 	ctx = pt.M{
@@ -123,7 +125,8 @@ func tmplDefaultCtx(w http.ResponseWriter, r *http.Request) (ctx map[string]inte
 		"url":               r.URL,
 		"commit":            commit,
 		"version":           version,
-		"stats":             &stats,
+		"stats_shortened":   shortened,
+		"stats_redirects":   redirected,
 		"http_pre_include":  conf.HTTPPreInclude,
 		"http_post_include": conf.HTTPPostInclude,
 	}
