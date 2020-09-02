@@ -65,7 +65,7 @@ func httpServer(ctx context.Context, wg *sync.WaitGroup) {
 		tmpl.Render(w, r, "tmpl/index.html", nil)
 	})
 	r.Get("/-/abuse", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Render(w, r, "tmpl/abuse.html", pt.M{"safebrowsing": conf.SafeBrowsing.APIKey != ""})
+		tmpl.Render(w, r, "tmpl/abuse.html", pt.M{"safebrowsing": safeBrowser != nil})
 	})
 
 	r.Get("/{uid}", expand)
@@ -179,7 +179,7 @@ func expand(w http.ResponseWriter, r *http.Request) {
 
 	link.AddHit()
 
-	if conf.SafeBrowsing.APIKey != "" {
+	if safeBrowser != nil {
 		threats, err := safeBrowser.LookupURLs([]string{link.URL})
 		if err != nil {
 			debug.Printf("safebrowsing error: %v", err)
