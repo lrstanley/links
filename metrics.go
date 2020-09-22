@@ -56,7 +56,7 @@ func initMetrics(ctx context.Context, wg *sync.WaitGroup, errors chan<- error, r
 	// Custom http server specifically for metrics (makes it easier to firewall off).
 	mux := chi.NewRouter()
 	if conf.Proxy {
-		r.Use(middleware.RealIP)
+		mux.Use(middleware.RealIP)
 	}
 
 	mux.Use(middleware.DefaultCompress)
