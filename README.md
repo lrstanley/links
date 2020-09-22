@@ -98,8 +98,10 @@ Application Options:
   -p, --behind-proxy                    if X-Forwarded-For headers should be trusted [$PROXY]
   -d, --db=                             path to database file (default: store.db) [$DB_PATH]
       --key-length=                     default length of key (uuid) for generated urls (default: 4) [$KEY_LENGTH]
-      --http-pre-include=               HTTP include which is included directly after css is included (near top of the page) [$HTTP_PRE_INCLUDE]
-      --http-post-include=              HTTP include which is included directly after js is included (near bottom of the page) [$HTTP_POST_INCLUDE]
+      --http-pre-include=               HTTP include which is included directly after css is included (near top of the page)
+                                        [$HTTP_PRE_INCLUDE]
+      --http-post-include=              HTTP include which is included directly after js is included (near bottom of the page)
+                                        [$HTTP_POST_INCLUDE]
   -e, --export-file=                    file to export db to (default: links.export)
       --export-json                     export db to json elements
   -v, --version                         display the version of links.wtf and exit
@@ -110,10 +112,19 @@ TLS Options:
   -k, --tls.key=                        path to ssl key file [$TLS_KEY_PATH]
 
 Safe Browsing Support:
-      --safebrowsing.api-key=           Google API Key used for querying SafeBrowsing, disabled if not provided (see: https://github.com/lrstanley/links#google-safebrowsing) [$SAFEBROWSING_API_KEY]
+      --safebrowsing.api-key=           Google API Key used for querying SafeBrowsing, disabled if not provided (see:
+                                        https://github.com/lrstanley/links#google-safebrowsing) [$SAFEBROWSING_API_KEY]
       --safebrowsing.db=                path to SafeBrowsing database file (default: safebrowsing.db) [$SAFEBROWSING_DB_PATH]
-      --safebrowsing.update-period=     duration between updates to the SafeBrowsing API local database (default: 1h) [$SAFEBROWSING_UPDATE_PERIOD]
-      --safebrowsing.redirect-fallback  if the SafeBrowsing request fails (local cache, and remote hit), this still lets the redirect happen [$SAFEBROWSING_REDIRECT_FALLBACK]
+      --safebrowsing.update-period=     duration between updates to the SafeBrowsing API local database (default: 1h)
+                                        [$SAFEBROWSING_UPDATE_PERIOD]
+      --safebrowsing.redirect-fallback  if the SafeBrowsing request fails (local cache, and remote hit), this still lets the
+                                        redirect happen [$SAFEBROWSING_REDIRECT_FALLBACK]
+
+Prometheus Metrics:
+      --prom.enabled                    enable exposing of prometheus metrics (on std port, or --prometheus.addr) [$PROM_ENABLED]
+      --prom.addr=                      expose on custom address/port, e.g. ':9001' (all ips) or 'localhost:9001' (local only)
+                                        [$PROM_ADDR]
+      --prom.endpoint=                  endpoint to expose metrics on (default: /metrics) [$PROM_ENDPOINT]
 
 Help Options:
   -h, --help                            Show this help message
