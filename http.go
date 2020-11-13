@@ -49,7 +49,7 @@ func httpServer(ctx context.Context, wg *sync.WaitGroup, errors chan<- error) {
 	r.Use(middleware.SetHeader("X-Content-Type-Options", "nosniff"))
 	r.Use(middleware.SetHeader("Referrer-Policy", "same-origin"))
 
-	r.Use(middleware.DefaultCompress)
+	r.Use(middleware.Compress(5))
 	r.Use(middleware.DefaultLogger)
 	r.Use(middleware.Timeout(30 * time.Second))
 	r.Use(middleware.Recoverer)

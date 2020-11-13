@@ -59,7 +59,7 @@ func initMetrics(ctx context.Context, wg *sync.WaitGroup, errors chan<- error, r
 		mux.Use(middleware.RealIP)
 	}
 
-	mux.Use(middleware.DefaultCompress)
+	mux.Use(middleware.Compress(5))
 	mux.Use(middleware.DefaultLogger)
 	mux.Use(middleware.Timeout(10 * time.Second))
 	mux.Use(middleware.Throttle(5))
