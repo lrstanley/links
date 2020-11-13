@@ -18,6 +18,12 @@ fetch: ## Fetches the necessary dependencies to build.
 	go mod download
 	go mod tidy
 
+upgrade-deps: ## Upgrade all dependencies to the latest version.
+	go get -u ./...
+
+upgrade-deps-patch: ## Upgrade all dependencies to the latest patch release.
+	go get -u=patch ./...
+
 clean: ## Cleans up generated files/folders from the build.
 	/bin/rm -rfv "dist/" "${BINARY}" rice-box.go
 
