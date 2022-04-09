@@ -16,7 +16,7 @@ jobs:
         echo ::set-output name=version::$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | sed -rn 's/.*"version": "([0-9]\.[0-9]+(\.[0-9]+)?)".*/\1/p' | head -1)
     - uses: actions/setup-go@v2
       with: { go-version: "${{ steps.goversion.outputs.version }}" }
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with: { fetch-depth: 0 }
     - name: build
       run: make fetch generate
@@ -36,7 +36,7 @@ jobs:
     needs: [goreleaser]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: lrstanley/links
@@ -47,7 +47,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: lrstanley/links
