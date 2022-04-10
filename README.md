@@ -56,6 +56,7 @@
 ## :link: Table of Contents
 
   - [Installation](#computer-installation)
+    - [Container Images (ghcr)](#whale-container-images-ghcr)
     - [Source](#toolbox-source)
   - [Usage](#gear-usage)
     - [Dot-env](#dot-env)
@@ -77,7 +78,13 @@ page for prebuilt versions.
 
 <!-- template:begin:ghcr -->
 <!-- do not edit anything in this "template" block, its auto-generated -->
+### :whale: Container Images (ghcr)
 
+```console
+$ docker run -it --rm ghcr.io/lrstanley/links:0.6.0
+$ docker run -it --rm ghcr.io/lrstanley/links:latest
+$ docker run -it --rm ghcr.io/lrstanley/links:master
+```
 <!-- template:end:ghcr -->
 
 ### :toolbox: Source
