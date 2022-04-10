@@ -38,7 +38,7 @@
     <img alt="Feature requests" src="https://img.shields.io/github/issues/lrstanley/links/enhancement?label=feature%20requests&style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/pulls">
-    <img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/lrstanley/links?style=flat-square">
+    <img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/lrstanley/links?label=prs&style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/releases">
     <img alt="Latest Semver Release" src="https://img.shields.io/github/v/release/lrstanley/links?style=flat-square">
