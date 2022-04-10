@@ -210,12 +210,12 @@ func main() {
 
 ## API
 
-Shortening a link is quite easy. simply send a `POST` request to `https://links.wtf/add`,
+Shortening a link is quite easy. simply send a `POST` request to `https://example.com/add`,
 which will return JSON-safe information as shown below:
 
 ```
-$ curl --data "url=http://google.com" https://links.wtf/add
-{"url": "https://links.wtf/27f4", "success": true}
+$ curl --data "url=http://google.com" https://example.com/add
+{"url": "https://example.com/27f4", "success": true}
 ```
 
 #### Password protection
@@ -223,8 +223,8 @@ $ curl --data "url=http://google.com" https://links.wtf/add
 You can also password protect a link, simply by adding a `password` variable to the payload:
 
 ```
-$ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://links.wtf/add
-{"url": "https://links.wtf/abc123", "success": true}
+$ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://example.com/add
+{"url": "https://example.com/abc123", "success": true}
 ```
 
 <!-- template:begin:support -->
