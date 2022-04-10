@@ -71,7 +71,7 @@ func safeTypeToString(t safebrowsing.ThreatType) string {
 	return "Unknown threat"
 }
 
-func safeTypeToStringFilter(in *pongo2.Value, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+func safeTypeToStringFilter(in, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	input := in.Integer()
 	t := safebrowsing.ThreatType(input)
 	return pongo2.AsValue(safeTypeToString(t)), nil

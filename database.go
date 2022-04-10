@@ -196,7 +196,7 @@ func hash(input string) string {
 }
 
 func newDB(readOnly bool) *bolthold.Store {
-	store, err := bolthold.Open(conf.DBPath, 0660, &bolthold.Options{Options: &bolt.Options{
+	store, err := bolthold.Open(conf.DBPath, 0o660, &bolthold.Options{Options: &bolt.Options{
 		FreelistType: bolt.FreelistMapType,
 		ReadOnly:     readOnly,
 		Timeout:      25 * time.Second,
