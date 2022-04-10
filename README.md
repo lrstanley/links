@@ -3,51 +3,51 @@
 <p align="center">links -- Simple, fast link shortener</p>
 <p align="center">
   <a href="https://github.com/lrstanley/links/releases">
-    <img alt="Release Downloads" src="https://img.shields.io/github/downloads/lrstanley/links/total?style=flat-square">
+    <img title="Release Downloads" src="https://img.shields.io/github/downloads/lrstanley/links/total?style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/tags">
-    <img alt="Latest Semver Tag" src="https://img.shields.io/github/v/tag/lrstanley/links?style=flat-square">
+    <img title="Latest Semver Tag" src="https://img.shields.io/github/v/tag/lrstanley/links?style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/commits/master">
-    <img alt="Last commit" src="https://img.shields.io/github/last-commit/lrstanley/links?style=flat-square">
+    <img title="Last commit" src="https://img.shields.io/github/last-commit/lrstanley/links?style=flat-square">
   </a>
 
 
 
 
   <a href="https://github.com/lrstanley/links/actions?query=workflow%3Atest+event%3Apush">
-    <img alt="GitHub Workflow Status (test @ master)" src="https://img.shields.io/github/workflow/status/lrstanley/links/test/master?label=test&style=flat-square&event=push">
+    <img title="GitHub Workflow Status (test @ master)" src="https://img.shields.io/github/workflow/status/lrstanley/links/test/master?label=test&style=flat-square&event=push">
   </a>
 
   <a href="https://codecov.io/gh/lrstanley/links">
-    <img alt="Code Coverage" src="https://img.shields.io/codecov/c/github/lrstanley/links/master?style=flat-square">
+    <img title="Code Coverage" src="https://img.shields.io/codecov/c/github/lrstanley/links/master?style=flat-square">
   </a>
 
   <a href="https://pkg.go.dev/github.com/lrstanley/links">
-    <img alt="Go Documentation" src="https://pkg.go.dev/badge/github.com/lrstanley/links?style=flat-square">
+    <img title="Go Documentation" src="https://pkg.go.dev/badge/github.com/lrstanley/links?style=flat-square">
   </a>
   <a href="https://goreportcard.com/report/github.com/lrstanley/links">
-    <img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/lrstanley/links?style=flat-square">
+    <img title="Go Report Card" src="https://goreportcard.com/badge/github.com/lrstanley/links?style=flat-square">
   </a>
 </p>
 <p align="center">
   <a href="https://github.com/lrstanley/links/issues?q=is:open+is:issue+label:bug">
-    <img alt="Bug reports" src="https://img.shields.io/github/issues/lrstanley/links/bug?label=issues&style=flat-square">
+    <img title="Bug reports" src="https://img.shields.io/github/issues/lrstanley/links/bug?label=issues&style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/issues?q=is:open+is:issue+label:enhancement">
-    <img alt="Feature requests" src="https://img.shields.io/github/issues/lrstanley/links/enhancement?label=feature%20requests&style=flat-square">
+    <img title="Feature requests" src="https://img.shields.io/github/issues/lrstanley/links/enhancement?label=feature%20requests&style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/pulls">
-    <img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/lrstanley/links?label=prs&style=flat-square">
+    <img title="Open Pull Requests" src="https://img.shields.io/github/issues-pr/lrstanley/links?label=prs&style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/releases">
-    <img alt="Latest Semver Release" src="https://img.shields.io/github/v/release/lrstanley/links?style=flat-square">
-    <img alt="Latest Release Date" src="https://img.shields.io/github/release-date/lrstanley/links?style=flat-square">
+    <img title="Latest Semver Release" src="https://img.shields.io/github/v/release/lrstanley/links?style=flat-square">
+    <img title="Latest Release Date" src="https://img.shields.io/github/release-date/lrstanley/links?label=date&style=flat-square">
   </a>
   <a href="https://github.com/lrstanley/links/discussions/new?category=q-a">
-    <img alt="Ask a Question" src="https://img.shields.io/badge/discussions-ask_a_question!-blue?style=flat-square">
+    <img title="Ask a Question" src="https://img.shields.io/badge/support-ask_a_question!-blue?style=flat-square">
   </a>
-  <a href="https://liam.sh/chat"><img src="https://img.shields.io/badge/discord-bytecord-blue.svg?style=flat-square" alt="Discord Chat"></a>
+  <a href="https://liam.sh/chat"><img src="https://img.shields.io/badge/discord-bytecord-blue.svg?style=flat-square" title="Discord Chat"></a>
 </p>
 <!-- template:end:header -->
 
