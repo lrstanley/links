@@ -9,7 +9,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/google/safebrowsing v0.0.0-20190624211811-bbf0d20d26b3
 	github.com/jessevdk/go-flags v1.4.1-0.20180331124232-1c38ed7ad0cc
-	github.com/joho/godotenv v1.3.0
+	github.com/joho/godotenv v1.4.0
 	github.com/lrstanley/go-sempool v0.0.0-20181215043219-1ee81530e9dd
 	github.com/lrstanley/pt v0.0.0-20180304040151-203b3db5ff8f
 	github.com/prometheus/client_golang v1.12.1
