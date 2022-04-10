@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -55,7 +55,7 @@ func Shorten(link, passwd string, httpClient *http.Client) (uri *url.URL, err er
 		defer resp.Body.Close()
 	}
 
-	raw, err := ioutil.ReadAll(resp.Body)
+	raw, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

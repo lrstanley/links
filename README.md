@@ -1,88 +1,28 @@
-<p align="center">links -- Simple, fast link shortener</p>
-<p align="center">
-  <a href="https://github.com/lrstanley/links/releases"><img src="https://github.com/lrstanley/links/workflows/release/badge.svg" alt="Release Status"></a>
-  <a href="https://github.com/lrstanley/links/actions"><img src="https://github.com/lrstanley/links/workflows/build/badge.svg" alt="Build Status"></a>
-  <a href="https://hub.docker.com/r/lrstanley/links/tags"><img src="https://img.shields.io/badge/Docker-lrstanley%2Flinks%3Alatest-blue.svg" alt="Docker"></a>
-  <a href="https://liam.sh/chat"><img src="https://img.shields.io/badge/Community-Chat%20with%20us-green.svg" alt="Community Chat"></a>
-</p>
+<!-- template:begin:header -->
+<!-- template:end:header -->
 
-## Table of Contents
-- [Installation](#installation)
-  - [Docker](#docker)
-  - [Ubuntu/Debian](#ubuntudebian)
-  - [CentOS/Redhat](#centosredhat)
-  - [Manual Install](#manual-install)
-  - [Build from source](#build-from-source)
-- [Usage](#usage)
-  - [Dot-env](#dot-env)
-  - [Example](#example)
-  - [Google SafeBrowsing](#google-safebrowsing)
-- [Using as a library](#using-as-a-library)
-  - [Example](#example-1)
-- [API](#api)
-    - [Password protection](#password-protection)
-- [Contributing](#contributing)
-- [License](#license)
+<!-- template:begin:toc -->
+<!-- template:end:toc -->
 
-## Installation
+## :computer: Installation
 
 Check out the [releases](https://github.com/lrstanley/links/releases)
-page for prebuilt versions. Links should work on ubuntu/debian,
-centos/redhat/fedora, etc. Below are example commands of how you would install
-the utility.
+page for prebuilt versions.
 
-### Docker
+<!-- template:begin:ghcr -->
+<!-- template:end:ghcr -->
 
-```bash
-$ docker run -it --rm -p 8080:80 lrstanley/links:latest links --http :80 --db /data/store.db
-$ curl -I http://localhost:8080
-HTTP/1.1 200 OK
-Content-Type: text/html
-Date: Thu, 06 Aug 2020 00:55:21 GMT
-```
+### :toolbox: Source
 
-### Ubuntu/Debian
-
-```bash
-$ wget https://liam.sh/ghr/links_<version>_linux_amd64.deb
-$ dpkg -i links_<version>_linux_amd64.deb
-$ links --help
-```
-
-### CentOS/Redhat
-
-```bash
-$ yum localinstall https://liam.sh/ghr/links_<version>_linux_amd64.rpm
-$ links --help
-```
-
-Some older CentOS versions may require (if you get `Cannot open: <url>. Skipping.`):
+Note that you must have [Go](https://golang.org/doc/install) installed (latest is usually best).
 
 ```console
-$ wget https://liam.sh/ghr/links_<version>_linux_amd64.rpm
-$ yum localinstall links_<version>_linux_amd64.rpm
+$ git clone https://github.com/lrstanley/links.git && cd links
+$ make
+$ ./links --help
 ```
 
-### Manual Install
-
-```bash
-$ wget https://liam.sh/ghr/links_<version>_linux_amd64.tar.gz
-$ tar -C /usr/bin/ -xzvf links_<version>_linux_amd64.tar.gz links
-$ chmod +x /usr/bin/links
-$ links --help
-```
-
-### Source
-
-Note that you must have [Go](https://golang.org/doc/install) installed and
-a fully working `$GOPATH` setup.
-
-    $ go get -d -u github.com/lrstanley/links
-    $ cd $GOPATH/src/github.com/lrstanley/links
-    $ make
-    $ ./links --help
-
-## Usage
+## :gear: Usage
 
 ```
 $ links --help
@@ -218,32 +158,11 @@ $ curl --data 'url=https://google.com/example&encrypt=y0urp4$$w0rd' https://link
 {"url": "https://links.wtf/abc123", "success": true}
 ```
 
-## Contributing
+<!-- template:begin:support -->
+<!-- template:end:support -->
 
-Please review the [CONTRIBUTING](CONTRIBUTING.md) doc for submitting issues/a guide
-on submitting pull requests and helping out.
+<!-- template:begin:contributing -->
+<!-- template:end:contributing -->
 
-## License
-
-```
-LICENSE: The MIT License (MIT)
-Copyright (c) 2016 Liam Stanley <me@liamstanley.io>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+<!-- template:begin:license -->
+<!-- template:end:license -->

@@ -1,0 +1,6 @@
+goreleaser:
+  post:
+    nfpms:
+      - homepage: https://github.com/lrstanley/links
+        license: MIT
+        formats: [deb, rpm]
