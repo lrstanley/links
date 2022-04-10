@@ -19,7 +19,7 @@ clean: ## Cleans up generated files/folders from the build.
 	/bin/rm -rfv "dist/" "${BINARY}" rice-box.go
 
 generate: ## Generates the Go files that allow assets to be embedded.
-	$(BIN)/rice -v embed-go
+	rice -v embed-go
 
 prepare: fetch clean generate ## Prepare the dependencies needed for a build.
 	@echo
