@@ -3,7 +3,7 @@ module github.com/lrstanley/links
 go 1.15
 
 require (
-	github.com/GeertJohan/go.rice v1.0.0
+	github.com/GeertJohan/go.rice v1.0.2
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
 	github.com/go-chi/chi v4.1.2+incompatible
