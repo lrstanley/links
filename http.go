@@ -6,8 +6,10 @@ package main
 
 import (
 	"context"
+	"embed"
 	"encoding/gob"
 	"fmt"
+	"io/fs"
 	"net"
 	"net/http"
 	"os"
@@ -15,21 +17,35 @@ import (
 	"sync"
 	"time"
 
-	rice "github.com/GeertJohan/go.rice"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/lrstanley/pt"
 	"github.com/timshannon/bolthold"
 )
 
 var (
 	tmpl *pt.Loader
+
+	//go:embed all:static
+	staticEmbed embed.FS
 )
 
 func httpServer(ctx context.Context, wg *sync.WaitGroup, errors chan<- error) {
+	var static fs.FS
+	var err error
+
+	if conf.Debug {
+		static = os.DirFS("static")
+	} else {
+		static, err = fs.Sub(staticEmbed, "static")
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	tmpl = pt.New("", pt.Config{
 		CacheParsed:     !conf.Debug,
-		Loader:          rice.MustFindBox("static").Bytes,
+		FS:              static,
 		ErrorLogger:     os.Stderr,
 		DefaultCtx:      tmplDefaultCtx,
 		NotFoundHandler: http.NotFound,
@@ -56,7 +72,7 @@ func httpServer(ctx context.Context, wg *sync.WaitGroup, errors chan<- error) {
 	r.Use(middleware.GetHead)
 
 	// Mount the static directory (in-memory and disk) to the /static route.
-	pt.FileServer(r, "/static", rice.MustFindBox("static").HTTPBox())
+	pt.FileServer(r, "/static", http.FS(static))
 
 	if conf.Debug {
 		r.Mount("/debug", middleware.Profiler())

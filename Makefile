@@ -5,7 +5,6 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 fetch: ## Fetches the necessary dependencies to build.
-	which $(BIN)/rice 2>&1 > /dev/null || go install github.com/GeertJohan/go.rice/rice@latest
 	go mod download
 	go mod tidy
 
@@ -16,10 +15,10 @@ upgrade-deps-patch: ## Upgrade all dependencies to the latest patch release.
 	go get -u=patch ./...
 
 clean: ## Cleans up generated files/folders from the build.
-	/bin/rm -rfv "dist/" "${BINARY}" rice-box.go
+	/bin/rm -rfv "dist/" "${BINARY}"
 
 generate: ## Generates the Go files that allow assets to be embedded.
-	rice -v embed-go
+	@echo
 
 prepare: fetch clean generate ## Prepare the dependencies needed for a build.
 	@echo
