@@ -1,7 +1,13 @@
+<!-- template:define:options
+{
+  "nodescription": true
+}
+-->
+![logo](https://liam.sh/-/gh/svg/lrstanley/links?icon=ph%3Alink-simple&icon.height=65&layout=left&icon.color=rgba%280%2C+184%2C+126%2C+1%29&font=1.3)
+
 <!-- template:begin:header -->
 <!-- do not edit anything in this "template" block, its auto-generated -->
 
-<p align="center">links -- Simple, fast link shortener</p>
 <p align="center">
   <a href="https://github.com/lrstanley/links/releases">
     <img title="Release Downloads" src="https://img.shields.io/github/downloads/lrstanley/links/total?style=flat-square">
