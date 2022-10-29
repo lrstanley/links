@@ -88,9 +88,9 @@ page for prebuilt versions.
 ### :whale: Container Images (ghcr)
 
 ```console
+$ docker run -it --rm ghcr.io/lrstanley/links:master
 $ docker run -it --rm ghcr.io/lrstanley/links:0.7.0
 $ docker run -it --rm ghcr.io/lrstanley/links:latest
-$ docker run -it --rm ghcr.io/lrstanley/links:master
 $ docker run -it --rm ghcr.io/lrstanley/links:0.6.0
 ```
 <!-- template:end:ghcr -->
