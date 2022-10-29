@@ -1,30 +1,52 @@
-.DEFAULT_GOAL := build
-BINARY=links
+.DEFAULT_GOAL := build-all
 
-help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
+export PROJECT := "links"
+export PACKAGE := "github.com/lrstanley/links"
 
-fetch: ## Fetches the necessary dependencies to build.
+license:
+	curl -sL https://liam.sh/-/gh/g/license-header.sh | bash -s
+
+build-all: clean go-fetch go-build
+	@echo
+
+up: go-upgrade-deps
+	@echo
+
+clean:
+	/bin/rm -rfv "dist/" "${PROJECT}"
+
+go-prepare: license go-fetch
+	go generate -x ./...
+
+go-fetch:
 	go mod download
 	go mod tidy
 
-upgrade-deps: ## Upgrade all dependencies to the latest version.
+go-upgrade-deps:
 	go get -u ./...
+	go mod tidy
 
-upgrade-deps-patch: ## Upgrade all dependencies to the latest patch release.
+go-upgrade-deps-patch:
 	go get -u=patch ./...
+	go mod tidy
 
-clean: ## Cleans up generated files/folders from the build.
-	/bin/rm -rfv "dist/" "${BINARY}"
+go-dlv: go-prepare
+	dlv debug \
+		--headless --listen=:2345 \
+		--api-version=2 --log \
+		--allow-non-terminal-interactive \
+		${PACKAGE} -- --site-name "http://localhost:8080" --debug --http ":8080" --prom.enabled
 
-generate: ## Generates the Go files that allow assets to be embedded.
-	@echo
+go-debug: go-prepare
+	go run ${PACKAGE} --site-name "http://localhost:8080" --debug --http ":8080" --prom.enabled
 
-prepare: fetch clean generate ## Prepare the dependencies needed for a build.
-	@echo
-
-build: prepare ## Compile and generate a binary with static assets embedded.
-	CGO_ENABLED=0 go build -ldflags '-d -s -w -extldflags=-static' -tags=netgo,osusergo,static_build -installsuffix netgo -buildvcs=false -trimpath  -o "${BINARY}"
-
-debug: clean
-	go run -v *.go --site-name "http://localhost:8080" --debug --http ":8080" --prom.enabled
+go-build: go-prepare go-fetch
+	CGO_ENABLED=0 \
+	go build \
+		-ldflags '-d -s -w -extldflags=-static' \
+		-tags=netgo,osusergo,static_build \
+		-installsuffix netgo \
+		-buildvcs=false \
+		-trimpath \
+		-o ${PROJECT} \
+		${PACKAGE}
