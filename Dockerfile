@@ -2,7 +2,7 @@
 # build image
 FROM golang:alpine as build
 WORKDIR /build
-RUN apk add --no-cache g++ make
+RUN apk add --no-cache g++ make curl
 COPY go.sum go.mod Makefile /build/
 RUN make go-fetch
 COPY . /build/
