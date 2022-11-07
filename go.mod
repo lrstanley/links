@@ -10,7 +10,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/lrstanley/go-sempool v0.0.0-20220507183223-1b08ce19f0b9
 	github.com/lrstanley/pt v0.0.0-20220507183230-e1a34c050693
-	github.com/prometheus/client_golang v1.13.0
+	github.com/prometheus/client_golang v1.13.1
 	github.com/timshannon/bolthold v0.0.0-20210913165410-232392fc8a6a
 	go.etcd.io/bbolt v1.3.6
 )
