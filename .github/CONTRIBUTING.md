@@ -122,6 +122,6 @@ Below are a few guidelines if you would like to contribute:
 [discussions]: https://github.com/lrstanley/links/discussions
 [issues]: https://github.com/lrstanley/links/issues/new/choose
 [license]: https://github.com/lrstanley/links/blob/master/LICENSE
-[pull-requests]: https://github.com/lrstanley/links/issues/new/choose
+[pull-requests]: https://github.com/lrstanley/links/pulls?q=is%3Aopen+is%3Apr
 [security]: https://github.com/lrstanley/links/security/policy
 [support]: https://github.com/lrstanley/links/blob/master/.github/SUPPORT.md
