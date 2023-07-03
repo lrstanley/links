@@ -65,7 +65,7 @@
   - [💻 Installation](#computer-installation)
     - [Container Images (ghcr)](#whale-container-images-ghcr)
     - [🧰 Source](#toolbox-source)
-  - [⚙️ Usage](#gear-usage)
+  - [Usage](#gear-usage)
     - [Dot-env](#dot-env)
     - [Example](#example)
     - [Google SafeBrowsing](#google-safebrowsing)
