@@ -63,9 +63,9 @@
 ## :link: Table of Contents
 
   - [Installation](#computer-installation)
-    - [Container Images (ghcr)](#whale-container-images-ghcr)
+    - [🐳 Container Images (ghcr)](#whale-container-images-ghcr)
     - [Source](#toolbox-source)
-  - [Usage](#gear-usage)
+  - [⚙️ Usage](#gear-usage)
     - [Dot-env](#dot-env)
     - [Example](#example)
     - [Google SafeBrowsing](#google-safebrowsing)
@@ -75,7 +75,7 @@
       - [Password protection](#password-protection)
   - [Support &amp; Assistance](#raising_hand_man-support--assistance)
   - [🤝 Contributing](#handshake-contributing)
-  - [⚖️ License](#balance_scale-license)
+  - [License](#balance_scale-license)
 <!-- template:end:toc -->
 
 ## :computer: Installation
