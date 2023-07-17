@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.0.10
 	github.com/google/safebrowsing v0.0.0-20190624211811-bbf0d20d26b3
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/joho/godotenv v1.5.1
