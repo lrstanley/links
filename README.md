@@ -62,8 +62,8 @@
 <!-- do not edit anything in this "template" block, its auto-generated -->
 ## :link: Table of Contents
 
-  - [Installation](#computer-installation)
-    - [🐳 Container Images (ghcr)](#whale-container-images-ghcr)
+  - [💻 Installation](#computer-installation)
+    - [Container Images (ghcr)](#whale-container-images-ghcr)
     - [Source](#toolbox-source)
   - [⚙️ Usage](#gear-usage)
     - [Dot-env](#dot-env)
