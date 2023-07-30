@@ -62,7 +62,7 @@
 <!-- do not edit anything in this "template" block, its auto-generated -->
 ## :link: Table of Contents
 
-  - [Installation](#computer-installation)
+  - [💻 Installation](#computer-installation)
     - [Container Images (ghcr)](#whale-container-images-ghcr)
     - [Source](#toolbox-source)
   - [Usage](#gear-usage)
@@ -74,8 +74,8 @@
   - [API](#api)
       - [Password protection](#password-protection)
   - [🙋‍♂️ Support &amp; Assistance](#raising_hand_man-support--assistance)
-  - [🤝 Contributing](#handshake-contributing)
-  - [License](#balance_scale-license)
+  - [Contributing](#handshake-contributing)
+  - [⚖️ License](#balance_scale-license)
 <!-- template:end:toc -->
 
 ## :computer: Installation
