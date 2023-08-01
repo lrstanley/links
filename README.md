@@ -63,7 +63,7 @@
 ## :link: Table of Contents
 
   - [Installation](#computer-installation)
-    - [🐳 Container Images (ghcr)](#whale-container-images-ghcr)
+    - [Container Images (ghcr)](#whale-container-images-ghcr)
     - [Source](#toolbox-source)
   - [Usage](#gear-usage)
     - [Dot-env](#dot-env)
