@@ -12,7 +12,7 @@ require (
 	github.com/lrstanley/pt v0.0.0-20230911164821-9ce7753ac40e
 	github.com/prometheus/client_golang v1.16.0
 	github.com/timshannon/bolthold v0.0.0-20210913165410-232392fc8a6a
-	go.etcd.io/bbolt v1.3.7
+	go.etcd.io/bbolt v1.3.8
 )
 
 require (
