@@ -9,7 +9,7 @@ require (
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854
-	github.com/lrstanley/pt v0.0.0-20230911164821-9ce7753ac40e
+	github.com/lrstanley/pt v0.0.0-20250101082311-aa14889de735
 	github.com/prometheus/client_golang v1.17.0
 	github.com/timshannon/bolthold v0.0.0-20210913165410-232392fc8a6a
 	go.etcd.io/bbolt v1.3.8
@@ -18,7 +18,7 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/flosch/pongo2/v5 v5.0.0 // indirect
+	github.com/flosch/pongo2/v6 v6.0.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/prometheus/client_model v0.4.1-0.20230718164431-9a2bf3000d16 // indirect
