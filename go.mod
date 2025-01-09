@@ -6,7 +6,7 @@ require (
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/google/safebrowsing v0.0.0-20190624211811-bbf0d20d26b3
-	github.com/jessevdk/go-flags v1.5.0
+	github.com/jessevdk/go-flags v1.6.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854
 	github.com/lrstanley/pt v0.0.0-20230911164821-9ce7753ac40e
@@ -25,7 +25,7 @@ require (
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
 	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 )
