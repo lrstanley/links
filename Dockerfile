@@ -9,7 +9,7 @@ COPY . /build/
 RUN make
 
 # runtime image
-FROM alpine:3.18
+FROM alpine:3.21
 RUN apk add --no-cache ca-certificates
 COPY --from=build /build/links /usr/local/bin/links
 
