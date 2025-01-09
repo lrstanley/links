@@ -11,7 +11,7 @@ require (
 	github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854
 	github.com/lrstanley/pt v0.0.0-20230911164821-9ce7753ac40e
 	github.com/prometheus/client_golang v1.17.0
-	github.com/timshannon/bolthold v0.0.0-20210913165410-232392fc8a6a
+	github.com/timshannon/bolthold v0.0.0-20240314194003-30aac6950928
 	go.etcd.io/bbolt v1.3.8
 )
 
@@ -25,7 +25,7 @@ require (
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
 	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 )
