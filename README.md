@@ -94,7 +94,6 @@ page for prebuilt versions.
 $ docker run -it --rm ghcr.io/lrstanley/links:master
 $ docker run -it --rm ghcr.io/lrstanley/links:0.9.0
 $ docker run -it --rm ghcr.io/lrstanley/links:latest
-$ docker run -it --rm ghcr.io/lrstanley/links:0.8.0
 ```
 <!-- template:end:ghcr -->
 
