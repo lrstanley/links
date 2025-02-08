@@ -92,8 +92,6 @@ page for prebuilt versions.
 
 ```console
 $ docker run -it --rm ghcr.io/lrstanley/links:master
-$ docker run -it --rm ghcr.io/lrstanley/links:0.9.0
-$ docker run -it --rm ghcr.io/lrstanley/links:latest
 ```
 <!-- template:end:ghcr -->
 
