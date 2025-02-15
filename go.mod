@@ -2,7 +2,7 @@ module github.com/lrstanley/links
 
 go 1.23
 
-toolchain go1.23.6
+toolchain go1.24.0
 
 require (
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
