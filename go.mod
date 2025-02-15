@@ -1,6 +1,6 @@
 module github.com/lrstanley/links
 
-go 1.22
+go 1.23
 
 toolchain go1.23.6
 
@@ -14,7 +14,7 @@ require (
 	github.com/lrstanley/pt v0.0.0-20250101082311-aa14889de735
 	github.com/prometheus/client_golang v1.20.5
 	github.com/timshannon/bolthold v0.0.0-20240314194003-30aac6950928
-	go.etcd.io/bbolt v1.3.11
+	go.etcd.io/bbolt v1.4.0
 )
 
 require (
