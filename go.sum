@@ -33,8 +33,8 @@ github.com/kylelemons/godebug v1.1.0 h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0
 github.com/kylelemons/godebug v1.1.0/go.mod h1:9/0rRGxNHcop5bhtWyNeEfOS8JIWk580+fNqagV/RAw=
 github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854 h1:JZ3xNW+iBFtlB/SYh0YvdKkdTCiFcwkSq9opGOfKizw=
 github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854/go.mod h1:P02r0Kf+TlgNvBMPfFQglsEPJ13ooIIKR+747c/nlCo=
-github.com/lrstanley/pt v0.0.0-20250101082311-aa14889de735 h1:6mz731HBYwjVgmqbfkDe41XpMN17/t1VoX4NLo/lhH0=
-github.com/lrstanley/pt v0.0.0-20250101082311-aa14889de735/go.mod h1:2Kos4MYSAR176in5ymjyN3HRaBNJdL7svHjIbMWYPQo=
+github.com/lrstanley/pt v0.0.0-20250219025843-a8d6eceec9fa h1:eSLQEJLsKDaw/YqUtB14mkFgmk6ab8CB1EpyvM0AT1Q=
+github.com/lrstanley/pt v0.0.0-20250219025843-a8d6eceec9fa/go.mod h1:2Kos4MYSAR176in5ymjyN3HRaBNJdL7svHjIbMWYPQo=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
