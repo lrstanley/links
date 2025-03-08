@@ -2,7 +2,7 @@ module github.com/lrstanley/links
 
 go 1.23
 
-toolchain go1.24.0
+toolchain go1.24.1
 
 require (
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
@@ -12,7 +12,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854
 	github.com/lrstanley/pt v0.0.0-20250101082311-aa14889de735
-	github.com/prometheus/client_golang v1.21.0
+	github.com/prometheus/client_golang v1.21.1
 	github.com/timshannon/bolthold v0.0.0-20240314194003-30aac6950928
 	go.etcd.io/bbolt v1.4.0
 )
