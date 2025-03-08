@@ -11,7 +11,7 @@ require (
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lrstanley/go-sempool v0.0.0-20230116155332-a03d0c109854
-	github.com/lrstanley/pt v0.0.0-20250101082311-aa14889de735
+	github.com/lrstanley/pt v0.0.0-20250219025843-a8d6eceec9fa
 	github.com/prometheus/client_golang v1.21.1
 	github.com/timshannon/bolthold v0.0.0-20240314194003-30aac6950928
 	go.etcd.io/bbolt v1.4.0
